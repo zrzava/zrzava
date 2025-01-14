@@ -5,9 +5,9 @@
     <meta name="locale" content="cs_CZ">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="eCommerce website about my creative activities">
-    <meta name="keywords" content="slova, oddÏlen·, Ë·rkami">
-    <meta name="author" content="Gabriela Praûsk·">
-    <meta name="copyright" content="© 2025 Gabriela Praûsk·">
+    <meta name="keywords" content="slova, odd√¨len√°, ƒç√°rkami">
+    <meta name="author" content="Gabriela Pra≈æsk√°">
+    <meta name="copyright" content="¬© 2025 Gabriela Prazska">
     <meta name="email" content="zrzava@gmail.com">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,11 +16,11 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="twitter:card" content="summary_large_image">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="URL obr·zku">
-    <meta property="og:title" content="N·zev pro soci·lnÌ mÈdia">
-    <meta property="og:description" content="Popis pro soci·lnÌ mÈdia">
-    <meta property="og:url" content="URL str·nky">
-    <title>Zrzav·</title>
+    <meta property="og:image" content="URL obr√°zku">
+    <meta property="og:title" content="N√°zev pro soci√°ln√≠ m√©dia">
+    <meta property="og:description" content="Popis pro soci√°ln√≠ m√©dia">
+    <meta property="og:url" content="URL str√°nky">
+    <title>Zrzava</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="img/favicon.ico">
@@ -45,89 +45,89 @@
     </footer>
 
     <script>
-        // Seznam obr·zk˘, kterÈ se budou postupnÏ zobrazovat p¯i kliknutÌ
+        // Seznam obr√°zk√π, kter√© se budou postupn√¨ zobrazovat p√∏i kliknut√≠
         const productImages = [
             'img/products/01.png',
             'img/products/01a.png',
             'img/products/01a.png'
         ];
 
-        let currentImageIndex = 0; // ZaËÌn·me na prvnÌm obr·zku
+        let currentImageIndex = 0; // Za√®√≠n√°me na prvn√≠m obr√°zku
 
         function nextImage() {
-            // P¯ejdi na dalöÌ obr·zek
+            // P√∏ejdi na dal≈°√≠ obr√°zek
             currentImageIndex = (currentImageIndex + 1) % productImages.length;
-            // ZmÏÚ obr·zek
+            // Zm√¨√≤ obr√°zek
             document.getElementById('main-product-img').src = productImages[currentImageIndex];
         }
     </script>
     <script>
-    // Nastavte Ëas do konce slevy (datum a Ëas)
-const countdownDate = new Date("2025-04-13T00:00:00").getTime(); // ZmÏÚte na vaöe datum
+    // Nastavte √®as do konce slevy (datum a √®as)
+const countdownDate = new Date("2025-04-13T00:00:00").getTime(); // Zm√¨√≤te na va≈°e datum
 
-// Funkce pro aktualizaci odpoËtu
+// Funkce pro aktualizaci odpo√®tu
 function updateCountdown() {
     const now = new Date().getTime();
     const timeRemaining = countdownDate - now;
 
-    // VypoËÌt·me dny, hodiny, minuty a sekundy
+    // Vypo√®√≠t√°me dny, hodiny, minuty a sekundy
     const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
     const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
 
-    // ZobrazÌme v˝sledek
+    // Zobraz√≠me v√Ωsledek
     const countdownElement = document.getElementById("countdown");
-    countdownElement.innerHTML = `konËÌ za ${days}d ${hours}h ${minutes}m ${seconds}s`;
+    countdownElement.innerHTML = `kon√®√≠ za ${days}d ${hours}h ${minutes}m ${seconds}s`;
 
-    // Pokud uû sleva vypröela
+    // Pokud u≈æ sleva vypr≈°ela
     if (timeRemaining < 0) {
         clearInterval(countdownInterval);
-        countdownElement.innerHTML = "Sleva vypröela!";
+        countdownElement.innerHTML = "Sleva vypr≈°ela!";
     }
 }
 
-// Aktualizujeme odpoËet kaûdou sekundu
+// Aktualizujeme odpo√®et ka≈ædou sekundu
 const countdownInterval = setInterval(updateCountdown, 1000);
     </script>
 
 <script>
-// V˝bÏr prvk˘
+// V√Ωb√¨r prvk√π
 const overlay = document.getElementById('overlay');
 const closeOverlay = document.getElementById('close-overlay');
 const overlaySections = document.querySelectorAll('.overlay-section');
 const overlayTriggers = document.querySelectorAll('.overlay-trigger');
 
-// Funkce pro zobrazenÌ overlaye s odpovÌdajÌcÌ sekcÌ
+// Funkce pro zobrazen√≠ overlaye s odpov√≠daj√≠c√≠ sekc√≠
 function showOverlay(sectionId) {
-    // SkrytÌ vöech sekcÌ
+    // Skryt√≠ v≈°ech sekc√≠
     overlaySections.forEach(section => {
         section.style.display = 'none';
     });
 
-    // ZobrazenÌ vybranÈ sekce
+    // Zobrazen√≠ vybran√© sekce
     const selectedSection = document.getElementById('overlay-' + sectionId);
     if (selectedSection) {
         selectedSection.style.display = 'block';
     }
 
-    // ZobrazenÌ overlaye
+    // Zobrazen√≠ overlaye
     overlay.style.display = 'flex';
 }
 
-// Zav¯enÌ overlaye
+// Zav√∏en√≠ overlaye
 closeOverlay.addEventListener('click', () => {
     overlay.style.display = 'none';
 });
 
-// Zav¯enÌ overlaye p¯i kliknutÌ mimo nÏj
+// Zav√∏en√≠ overlaye p√∏i kliknut√≠ mimo n√¨j
 window.addEventListener('click', (e) => {
     if (e.target === overlay) {
         overlay.style.display = 'none';
     }
 });
 
-// Zav¯enÌ overlaye p¯i stisknutÌ ESC
+// Zav√∏en√≠ overlaye p√∏i stisknut√≠ ESC
 window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         overlay.style.display = 'none';
@@ -147,7 +147,7 @@ overlayTriggers.forEach(trigger => {
 document.addEventListener("DOMContentLoaded", function () {
     const rssUrl = "https://gabrielaprazska.tumblr.com/rss";
     const proxyUrl = "https://api.rss2json.com/v1/api.json";
-    const apiKey = "5vhmrben5zufsv9iailditc3tansxvbzeee8wr19"; // ZÌsk·te na https://rss2json.com
+    const apiKey = "5vhmrben5zufsv9iailditc3tansxvbzeee8wr19"; // Z√≠sk√°te na https://rss2json.com
 
     fetch(`${proxyUrl}?rss_url=${encodeURIComponent(rssUrl)}&api_key=${apiKey}`)
         .then((response) => response.json())
@@ -163,38 +163,38 @@ document.addEventListener("DOMContentLoaded", function () {
                     rssList.appendChild(listItem);
                 });
             } else {
-                console.error("Nepoda¯ilo se naËÌst RSS data.");
+                console.error("Nepoda√∏ilo se na√®√≠st RSS data.");
             }
         })
-        .catch((error) => console.error("Chyba p¯i naËÌt·nÌ RSS:", error));
+        .catch((error) => console.error("Chyba p√∏i na√®√≠t√°n√≠ RSS:", error));
 });
 </script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const images = [
-        { url: "img/bg01.png", weight: 20 }, // dÌvka v oknÏ
+        { url: "img/bg01.png", weight: 20 }, // d√≠vka v okn√¨
         { url: "img/bg02.png", weight: 50 }, // terasa nad Prahou
-        { url: "img/bg03.png", weight: 40 }, // dÌvka a truck
+        { url: "img/bg03.png", weight: 40 }, // d√≠vka a truck
         { url: "img/bg04.png", weight: 5 }   // nic
     ];
 
-    // Funkce pro v˝bÏr obr·zku na z·kladÏ vah
+    // Funkce pro v√Ωb√¨r obr√°zku na z√°klad√¨ vah
     function getRandomImage(images) {
         const totalWeight = images.reduce((sum, image) => sum + image.weight, 0);
-        let random = Math.random() * totalWeight; // Generuje n·hodnÈ ËÌslo mezi 0 a totalWeight
+        let random = Math.random() * totalWeight; // Generuje n√°hodn√© √®√≠slo mezi 0 a totalWeight
 
         for (const image of images) {
-            random -= image.weight; // OdebÌr· v·hu obr·zku od n·hodnÈho ËÌsla
+            random -= image.weight; // Odeb√≠r√° v√°hu obr√°zku od n√°hodn√©ho √®√≠sla
             if (random <= 0) {
-                return image.url; // Kdyû n·hodnÈ ËÌslo klesne na nulu nebo pod, vybere se tento obr·zek
+                return image.url; // Kdy≈æ n√°hodn√© √®√≠slo klesne na nulu nebo pod, vybere se tento obr√°zek
             }
         }
     }
 
-    // V˝bÏr n·hodnÈho obr·zku
+    // V√Ωb√¨r n√°hodn√©ho obr√°zku
     const selectedImage = getRandomImage(images);
 
-    // NastavenÌ pozadÌ divu
+    // Nastaven√≠ pozad√≠ divu
     const section = document.querySelector(".section.product");
     section.style.backgroundImage = `url('${selectedImage}')`;
 });
