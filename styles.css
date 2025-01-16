@@ -108,6 +108,7 @@ a.hero.yellow:hover {background: #000;}
 .icon.reddit::before {background-image: url('img/ico_reddit.png');}
 .icon.globe::before {background-image: url('img/ico_globe.png');}
 .icon.kofi::before {background-image: url('img/ico_kofi.png');}
+.icon.stats::before {background-image: url('img/ico_stats.png');}
 
 
         .section {
