@@ -511,3 +511,20 @@ footer a:hover {
     font-size: 0.8rem;
 }
 
+
+        #random-text {
+            font-size: 1.5rem;
+            color: #fff;
+            margin: 20px auto;
+            max-width: 600px;
+            line-height: 1.6;
+            text-align: left;
+            position: relative;
+        }
+        .random-text-author {
+            display: block;
+            font-size: 1rem;
+            color: #ff5733;
+            text-align: right;
+            margin-top: 5px;
+        }
