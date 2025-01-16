@@ -5,9 +5,9 @@
     <meta name="locale" content="cs_CZ">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="eCommerce website about my creative activities">
-    <meta name="keywords" content="slova, oddìlená, čárkami">
+    <meta name="keywords" content="slova, oddělená, čárkami">
     <meta name="author" content="Gabriela Pražská">
-    <meta name="copyright" content="© 2025 Gabriela Prazska">
+    <meta name="copyright" content="© 2025 Gabriela Pražská">
     <meta name="email" content="zrzava@gmail.com">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -20,7 +20,7 @@
     <meta property="og:title" content="Název pro sociální média">
     <meta property="og:description" content="Popis pro sociální média">
     <meta property="og:url" content="URL stránky">
-    <title>Zrzava</title>
+    <title>Zrzavá</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="img/favicon.ico">
@@ -29,168 +29,51 @@
 </head>
 <body>
 
-    <!-- Sekce pro Produkt -->
+    <!-- Sekce pro Content -->
     <div class="section product">
         <div class="section-content product-text">
+            <h1>Welcome to Zrzava.com</h1>
             <p>Lorem ipsum dolor sit amet consectetuer Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum. Augue convallis enim pede non lorem Nulla eu.</p>
         </div>
     </div>
 
     <!-- Sekce pro Footer -->
-    <footer>
-        <div class="footer-content">
-            <p>Copyright &copy; 2025 Zrzava.com<br />Powered by <a href="https://zrzava.com/cms">ZrzavaCMS</a>, hosted on GitHub<br />All rights reserved.</p>
-        </div>
-    </footer>
+<footer>
+    <img src="img/logo-zrznobg.png" alt="Footer Logo" class="footer logo">
+    <div class="footer-text">
+        <p>
+            Copyright &copy; 2004-2025 Gabriela Prazska<br />
+            Powered by <a href="https://zrzava.com/cms" class="icon globe"s>ZrzavaCMS</a>, hosted on <a href="https://github.com" class="icon github">GitHub</a><br />
+            <span class="icon rss">RSS</span>: <a href="#">everything</a> | <a href="#">columns</a> | <a href="#">news</a>
+        </p>
+    </div>
+</footer>
 
-    <script>
-        // Seznam obrázkù, které se budou postupnì zobrazovat pøi kliknutí
-        const productImages = [
-            'img/products/01.png',
-            'img/products/01a.png',
-            'img/products/01a.png'
-        ];
 
-        let currentImageIndex = 0; // Zaèínáme na prvním obrázku
 
-        function nextImage() {
-            // Pøejdi na další obrázek
-            currentImageIndex = (currentImageIndex + 1) % productImages.length;
-            // Zmìò obrázek
-            document.getElementById('main-product-img').src = productImages[currentImageIndex];
-        }
-    </script>
-    <script>
-    // Nastavte èas do konce slevy (datum a èas)
-const countdownDate = new Date("2025-04-13T00:00:00").getTime(); // Zmìòte na vaše datum
-
-// Funkce pro aktualizaci odpoètu
-function updateCountdown() {
-    const now = new Date().getTime();
-    const timeRemaining = countdownDate - now;
-
-    // Vypoèítáme dny, hodiny, minuty a sekundy
-    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-    // Zobrazíme výsledek
-    const countdownElement = document.getElementById("countdown");
-    countdownElement.innerHTML = `konèí za ${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-    // Pokud už sleva vypršela
-    if (timeRemaining < 0) {
-        clearInterval(countdownInterval);
-        countdownElement.innerHTML = "Sleva vypršela!";
-    }
-}
-
-// Aktualizujeme odpoèet každou sekundu
-const countdownInterval = setInterval(updateCountdown, 1000);
-    </script>
-
-<script>
-// Výbìr prvkù
-const overlay = document.getElementById('overlay');
-const closeOverlay = document.getElementById('close-overlay');
-const overlaySections = document.querySelectorAll('.overlay-section');
-const overlayTriggers = document.querySelectorAll('.overlay-trigger');
-
-// Funkce pro zobrazení overlaye s odpovídající sekcí
-function showOverlay(sectionId) {
-    // Skrytí všech sekcí
-    overlaySections.forEach(section => {
-        section.style.display = 'none';
-    });
-
-    // Zobrazení vybrané sekce
-    const selectedSection = document.getElementById('overlay-' + sectionId);
-    if (selectedSection) {
-        selectedSection.style.display = 'block';
-    }
-
-    // Zobrazení overlaye
-    overlay.style.display = 'flex';
-}
-
-// Zavøení overlaye
-closeOverlay.addEventListener('click', () => {
-    overlay.style.display = 'none';
-});
-
-// Zavøení overlaye pøi kliknutí mimo nìj
-window.addEventListener('click', (e) => {
-    if (e.target === overlay) {
-        overlay.style.display = 'none';
-    }
-});
-
-// Zavøení overlaye pøi stisknutí ESC
-window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        overlay.style.display = 'none';
-    }
-});
-
-// Event listenery pro odkazy v navbaru
-overlayTriggers.forEach(trigger => {
-    trigger.addEventListener('click', (e) => {
-        e.preventDefault();
-        const sectionId = trigger.getAttribute('data-overlay');
-        showOverlay(sectionId);
-    });
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const rssUrl = "https://gabrielaprazska.tumblr.com/rss";
-    const proxyUrl = "https://api.rss2json.com/v1/api.json";
-    const apiKey = "5vhmrben5zufsv9iailditc3tansxvbzeee8wr19"; // Získáte na https://rss2json.com
-
-    fetch(`${proxyUrl}?rss_url=${encodeURIComponent(rssUrl)}&api_key=${apiKey}`)
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.status === "ok") {
-                const rssList = document.getElementById("rss-list");
-                data.items.slice(0, 5).forEach((item) => {
-                    const listItem = document.createElement("li");
-                    listItem.innerHTML = `
-                        <a href="${item.link}" target="_blank">${item.title}</a>
-                        <span class="date">${new Date(item.pubDate).toLocaleDateString("cs-CZ")}</span>
-                    `;
-                    rssList.appendChild(listItem);
-                });
-            } else {
-                console.error("Nepodaøilo se naèíst RSS data.");
-            }
-        })
-        .catch((error) => console.error("Chyba pøi naèítání RSS:", error));
-});
-</script>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const images = [
-        { url: "img/bg01.png", weight: 20 }, // dívka v oknì
+        { url: "img/bg01.png", weight: 20 }, // dívka v okně
         { url: "img/bg02.png", weight: 50 }, // terasa nad Prahou
         { url: "img/bg03.png", weight: 40 }, // dívka a truck
         { url: "img/bg04.png", weight: 5 }   // nic
     ];
 
-    // Funkce pro výbìr obrázku na základì vah
+    // Funkce pro výběr obrázku na základě vah
     function getRandomImage(images) {
         const totalWeight = images.reduce((sum, image) => sum + image.weight, 0);
-        let random = Math.random() * totalWeight; // Generuje náhodné èíslo mezi 0 a totalWeight
+        let random = Math.random() * totalWeight; // Generuje náhodné číslo mezi 0 a totalWeight
 
         for (const image of images) {
-            random -= image.weight; // Odebírá váhu obrázku od náhodného èísla
+            random -= image.weight; // Odebírá váhu obrázku od náhodného čísla
             if (random <= 0) {
-                return image.url; // Když náhodné èíslo klesne na nulu nebo pod, vybere se tento obrázek
+                return image.url; // Když náhodné číslo klesne na nulu nebo pod, vybere se tento obrázek
             }
         }
     }
 
-    // Výbìr náhodného obrázku
+    // Výběr náhodného obrázku
     const selectedImage = getRandomImage(images);
 
     // Nastavení pozadí divu
@@ -202,4 +85,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </body>
 </html>
-
