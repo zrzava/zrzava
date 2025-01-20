@@ -59,23 +59,23 @@
             background: #570301;
         }
 
+a.hero.red {background: #C91E1E;}
+a.hero.red:hover {background: #570301;}
+
 a.hero.blue {background: #0A7FE7;}
-a.hero.blue:hover {background: #000;}
+a.hero.blue:hover {background: #054ba1;}
 
 a.hero.purple {background: #B230B1;}
-a.hero.purple:hover {background: #000;}
+a.hero.purple:hover {background: #711173;}
 
 a.hero.green {background: #27B03C;}
-a.hero.green:hover {background: #000;}
-
-a.hero.red {background: #C91E1E;}
-a.hero.red:hover {background: #000;}
+a.hero.green:hover {background: #175025;}
 
 a.hero.orange {background: #ff5733;}
 a.hero.orange:hover {background: #c13c24;}
 
 a.hero.yellow {background: #FCC324;}
-a.hero.yellow:hover {background: #000;}
+a.hero.yellow:hover {background: #b0891a;}
 
 .icon {
     display: inline-flex; /* Používá flexbox pro lepší zarovnání */
@@ -108,6 +108,7 @@ a.hero.yellow:hover {background: #000;}
 .icon.reddit::before {background-image: url('img/ico_reddit.png');}
 .icon.globe::before {background-image: url('img/ico_globe.png');}
 .icon.kofi::before {background-image: url('img/ico_kofi.png');}
+.icon.amateri::before {background-image: url('img/ico_amateri.png');}
 .icon.stats::before {background-image: url('img/ico_stats.png');}
 
 
@@ -511,7 +512,6 @@ footer a:hover {
     font-size: 0.8rem;
 }
 
-
         #random-text {
             font-size: 1.5rem;
             color: #fff;
@@ -528,3 +528,138 @@ footer a:hover {
             text-align: right;
             margin-top: 5px;
         }
+
+
+
+
+
+
+/* Styl pro burger menu */
+.burger {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.0); /* Průhledné pozadí */
+    padding: 10px 20px;
+    z-index: 100;
+    display: flex;
+    justify-content: right; /* Odkazy se řadí */
+    align-items: center;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.9);
+}
+
+.burger a {
+    color: #fff;
+    font-size: 1rem;
+    margin: 0 15px;
+    font-weight: bold;
+    font-size: 3.0rem; /* Velikost křížku */
+    color: white; /* Barva křížku */
+    border: none; /* Žádné ohraničení */
+    cursor: pointer; /* Ukazatel na ruku při najetí */
+    z-index: 100; /* Nad ostatní obsah overlay */
+    transition: transform 0.3s ease, color 0.3s ease; /* Animace pro hover efekt */
+    text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.9);
+}
+
+.burger a:hover {
+    color: #ff5733; /* Změna barvy při najetí */
+    transform: scale(1.2); /* Zvýraznění při najetí */
+    text-decoration: none;
+}
+
+/* Styl pro overlay burgermenu */
+.burgermenu {
+    position: fixed;
+    top: 0; /* Vzdálenost pod navbar */
+    right: 0;
+    width: 340px;
+    background-color: rgba(0, 0, 0, 0.5); /* Průhledné pozadí */
+    display: none;
+    text-align: justify;
+    z-index: 99;
+    color: white;
+    font-size: 1.2rem;
+    padding: 20px;
+    box-sizing: border-box;
+    min-height: calc(100vh); /* Omezí výšku na % okna minus výška navbara */
+    overflow-y: auto; /* Povolení scrollování pouze v overlay */
+    transition: max-height 0.3s ease-in-out;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(5px); /* Rozmazání pozadí pod overlay */
+}
+
+.burgermenu-content {
+    position: relative;
+    padding: 20px;
+    margin-top: -24px;
+    margin-bottom: 40px;
+    max-width: 300px;
+    min-width: 300px;
+    max-height: 80vh;  /* Omezuje maximální výšku na % výšky okna */
+    overflow-y: auto; /* Povolení scrollování uvnitř overlay */
+}
+
+.burgermenu a {
+    color: #ff5733;
+    font-weight: bold;
+    border: none; /* Žádné ohraničení */
+    cursor: pointer; /* Ukazatel na ruku při najetí */
+    z-index: 100; /* Nad ostatní obsah overlay */
+    transition: transform 0.3s ease, color 0.3s ease; /* Animace pro hover efekt */
+    text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.9);
+}
+
+.burgermenu a:hover {
+    color: #C13C24; /* Změna barvy při najetí */
+    transform: scale(1.2); /* Zvýraznění při najetí */
+    text-decoration: none;
+}
+
+.burgermenu-content::-webkit-scrollbar {
+    display: none; /* Skrytí scrollbar */
+}
+
+.burgermenu-content {
+    -ms-overflow-style: none;  /* Pro IE a Edge */
+    scrollbar-width: none; /* Pro Firefox */
+}
+
+#burgermenu-text {
+    max-width: 100%;
+    padding-bottom: 20px;
+}
+
+#burgermenu h1 {
+    font-size: 2.5rem;
+    color: white;
+    text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.9);
+}
+
+.close-burgermenu {
+    position: absolute; /* Umístění relativní k overlay */
+    top: 8px; /* Vzdálenost od horního okraje */
+    right: 25px; /* Vzdálenost od pravého okraje */
+    font-size: 3.5rem; /* Velikost křížku */
+    color: white; /* Barva křížku */
+    background-color: transparent; /* Průhledné pozadí */
+    border: none; /* Žádné ohraničení */
+    cursor: pointer; /* Ukazatel na ruku při najetí */
+    z-index: 100; /* Nad ostatní obsah overlay */
+    transition: transform 0.3s ease, color 0.3s ease; /* Animace pro hover efekt */
+    text-shadow: 4px 4px 5px rgba(0, 0, 0, 0.9);
+}
+
+.close-burgermenu:hover {
+    color: #ff5733; /* Změna barvy při najetí */
+    transform: scale(1.2); /* Zvýraznění při najetí */
+}
+
+.copy {
+    color: #fff;
+    font-size: 0.8rem;
+    text-align: center;
+    margin-top: 20px;
+}
+
