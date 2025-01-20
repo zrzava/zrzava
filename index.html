@@ -29,11 +29,29 @@
 </head>
 <body>
 
+            <!-- Lišta s menu -->
+            <div class="burger">    
+                <a href="#" class="burgermenu-trigger" data-overlay="menu">&equiv;</a>  
+            </div>
+            <!-- Overlay -->
+            <div id="burgermenu" class="burgermenu">    
+                <div class="burgermenu-content">        
+                    <span id="close-burgermenu" class="close-burgermenu"></span>                  
+                    <div id="burgermenu-menu" class="burgermenu-section">            
+                        <h1>Menu</h1>            
+                        <ul style="margin-top: 10px;">            
+                            <li><a href="#welcome">Welcome</a></li>         
+                        </ul>        
+                        <p class="copy">Copyright &copy; 2004-<span class="current-year"></span> Gabriela Prazska</p>
+                    </div>                 
+                </div>
+            </div>
+
     <!-- Sekce pro Content -->
     <div class="section product">
         <div class="section-content product-text">
             <div id="random-text"></div>
-            <p>Feel free to follow me on <a href="https://instagram.com/zrzkaodvedle" class="icon instagram">Instagram</a> or my <a href="https://whatsapp.com/channel/0029VagArSoLNSaBgSehPc0r" class="icon whatsapp">WhatsApp Channel</a> — and if you'd like to show some love, I'd truly appreciate it if you'd invite me to coffee via <a href="https://ko-fi.com/gabbiexoxo" class="icon kofi">ko-fi</a> donation!</p>
+            <p>Feel free to follow me on <a href="https://instagram.com/zrzkaodvedle" class="icon instagram">Instagram</a> or join my <a href="https://whatsapp.com/channel/0029VagArSoLNSaBgSehPc0r" class="icon whatsapp">WhatsApp</a> channel. If you'd like to support me, I'd truly appreciate it if you treated me to a coffee via a <a href="https://ko-fi.com/gabbiexoxo" class="icon kofi">Ko-fi donation</a>!</p>
         </div>
     </div>
 
@@ -42,7 +60,7 @@
     <img src="img/logo-zrznobg.png" alt="Footer Logo" class="footer logo">
     <div class="footer-text">
         <p>
-            Copyright &copy; 2004-2025 Gabriela Prazska<br />
+            Copyright &copy; 2004-<span class="current-year"></span> Gabriela Prazska<br />
             Powered by <a href="https://zrzava.com/cms" class="icon globe"s>ZrzavaCMS</a>, hosted on <a href="https://github.com" class="icon github">GitHub</a><br />
             <a href="https://www.toplist.cz/stat/1837112/" class="icon stats"></a> <span class="icon rss">RSS</span>: <a href="#">everything</a> | <a href="#">columns</a> | <a href="#">news</a>
 <a href="https://www.toplist.cz/stat/1837112/" id="toplistcz1837112" title="TOPlist"><noscript><img src="https://toplist.cz/dot.asp?id=1837112&njs=1" border="0"
@@ -61,8 +79,8 @@ e(s.colorDepth)+'" width="1" height="1" border="0" alt="TOPlist" />';
         // Předdefinované texty s autory
         const texts = [
             "Too bad that all the people who know how to run the country are busy driving taxicabs and cutting hair. ~ George Burns",
-            "Lorem ipsum dolor sit amet consectetuer odio faucibus ac eu Mauris. Risus Nam et eget sem metus. ~ Neznámý autor",
-            " In cursus et elit elit. Adipiscing nibh nec venenatis dolor semper congue Nullam venenatis et mattis. Orci elit. ~ Leonardo da Vinci"
+            "You can wear jeans and look like you just stepped off the cover of a rich person's fashion magazine. I only have two options – either I look like a slut, or like a boy with delayed puberty. ~ from my upcoming book",
+            "Tarik, I’m a woman. For us, there’s no 'comfortable,' just different levels of suffering. I assume this has never happened to your polo shirt.. ~ from my upcoming book"
         ];
 
         // Funkce pro generování náhodného textu
@@ -79,7 +97,7 @@ e(s.colorDepth)+'" width="1" height="1" border="0" alt="TOPlist" />';
             <span class="random-text-author">~ ${randomText.author}</span>
         `;
     </script>
-    
+           
     <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
 <script>
   kofiWidgetOverlay.draw('gabbiexoxo', {
@@ -91,13 +109,51 @@ e(s.colorDepth)+'" width="1" height="1" border="0" alt="TOPlist" />';
 </script>
 
 
+
+<script>
+// OVERLAY aka burgermenu 
+const overlay = document.getElementById('burgermenu');
+const closeOverlay = document.getElementById('close-burgermenu');
+const overlayLinks = document.querySelectorAll('#burgermenu-menu a');
+const burgerMenuTrigger = document.querySelector('.burgermenu-trigger');
+
+// Funkce pro zobrazení/skrytí overlay menu
+function toggleOverlay() {
+    if (overlay.style.display === 'flex') {
+        overlay.style.display = 'none';
+    } else {
+        overlay.style.display = 'flex';
+    }
+}
+
+// Otevření menu kliknutím na burger ikonu
+burgerMenuTrigger.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleOverlay();  // Toggle pro zobrazení/skrytí menu
+});
+
+// Zavření menu po kliknutí na odkaz
+overlayLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        overlay.style.display = 'none';
+    });
+});
+
+// Zavření menu stiskem klávesy Escape
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        overlay.style.display = 'none';
+    }
+});
+
+</script>
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const images = [
         { url: "img/bg01.png", weight: 20 }, // dívka v okně
         { url: "img/bg02.png", weight: 50 }, // terasa nad Prahou
-        { url: "img/bg03.png", weight: 40 }, // dívka a truck
-        { url: "img/bg04.png", weight: 5 }   // nic
+        { url: "img/bg03.png", weight: 60 } // dívka a truck
     ];
 
     // Funkce pro výběr obrázku na základě vah
@@ -123,5 +179,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </script>
 
+<script>
+// CURRENT YEAR COPYRIGHT
+document.addEventListener("DOMContentLoaded", function () {
+    const currentYear = new Date().getFullYear(); // Získání aktuálního roku
+    const yearElements = document.querySelectorAll(".current-year"); // Vyhledání všech elementů s třídou "current-year"
+    yearElements.forEach(function(yearElement) {
+        yearElement.textContent = currentYear; // Nastavení aktuálního roku do každého elementu
+    });
+});
+</script>
 </body>
 </html>
