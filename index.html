@@ -133,10 +133,25 @@ function getQueryParam(param) {
 // Načtení JSON souboru
 async function fetchListData(listId) {
     const fileName = listMap[listId];
-    if (!fileName) return null;
+    if (!fileName) {
+        console.error("Neplatné ID seznamu:", listId);
+        return null;
+    }
 
-    const response = await fetch(fileName);
-    return response.json();
+    console.log("Načítám data z:", fileName);
+
+    try {
+        const response = await fetch(fileName);
+        if (!response.ok) {
+            throw new Error(`HTTP chyba! Stav: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Data úspěšně načtena:", data);
+        return data;
+    } catch (error) {
+        console.error("Chyba při načítání dat:", error);
+        return null;
+    }
 }
 
 // Funkce pro vykreslení položek
@@ -146,7 +161,7 @@ function renderItems() {
 
     if (isMobileView) {
         // Na mobilu zobrazujeme všechny položky v jednom seznamu
-        allMovies.forEach((movie) => {
+        allMovies.items.forEach((movie) => {
             const li = document.createElement("li");
             li.innerHTML = `${movie.title} <a href="${movie.link}" target="_blank">${allMovies.linkLabel}</a>`;
             list1.appendChild(li);
@@ -158,12 +173,14 @@ function renderItems() {
         const startIndex = currentPage * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
 
+        // První sloupec
         for (let i = startIndex; i < Math.min(startIndex + itemsPerPage / 2, allMovies.items.length); i++) {
             const li = document.createElement("li");
             li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
             list1.appendChild(li);
         }
 
+        // Druhý sloupec
         for (let i = startIndex + itemsPerPage / 2; i < Math.min(endIndex, allMovies.items.length); i++) {
             const li = document.createElement("li");
             li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
@@ -181,7 +198,6 @@ function goToPreviousPage() {
     if (currentPage > 0) {
         currentPage--;
         renderItems();
-    }
 }
 
 // Funkce pro přechod na další stránku
