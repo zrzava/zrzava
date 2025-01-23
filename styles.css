@@ -24,6 +24,11 @@
     pointer-events: none; /* Zajistí, že záclona nebude blokovat interakce */
 }
 
+        h1 {
+           margin-bottom: 15px;
+           text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.9);
+        }
+
         #content {
             max-width: 1005px;
             margin: 0 auto;
@@ -555,7 +560,6 @@ footer a:hover {
     margin: 0 15px;
     font-weight: bold;
     font-size: 3.0rem; /* Velikost křížku */
-    color: white; /* Barva křížku */
     border: none; /* Žádné ohraničení */
     cursor: pointer; /* Ukazatel na ruku při najetí */
     z-index: 100; /* Nad ostatní obsah overlay */
@@ -663,3 +667,54 @@ footer a:hover {
     margin-top: 20px;
 }
 
+
+
+    #list-container {
+      font-size: 1rem;
+      display: flex;
+      justify-content: space-between;
+      min-width: 100vh;
+      min-height: 70vh;
+    }
+    .column {
+      width: 48%;
+    }
+    
+    /* Základní styl pro zobrazení dvou sloupců */
+#list-1, #list-2 {
+  display: inline-block;
+  vertical-align: top;
+  margin: 10px;
+}
+
+#pagination {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 10px;
+  min-height: 50px;
+}
+
+.column {
+  width: 48%;
+}
+
+@media (max-width: 768px) {
+  #list-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .column {
+    width: 100%;
+  }
+  #list-2 {
+    display: none; /* Druhý sloupec je skrytý na mobilu */
+  }
+  #list-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  #list-1 {
+    width: 100%;
+  }
+}
