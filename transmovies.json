@@ -2,19 +2,17 @@
     "title": "Transgender Movies List",
     "linkLabel": "imdb",
     "items": [
-        { "title": "The Danish Girl (2015, UK)", "link": "https://www.imdb.com/title/tt0810819/" },
-        { "title": "Boys Don't Cry (1999, USA)", "link": "https://www.imdb.com/title/tt0171804/" },
-        { "title": "Paris Is Burning (1990, USA)", "link": "https://www.imdb.com/title/tt0100332/" },
-        { "title": "Disclosure (2020, USA)", "link": "https://www.imdb.com/title/tt8637504/" },
-        { "title": "A Fantastic Woman (2017, Chile)", "link": "https://www.imdb.com/title/tt5639354/" },
         { "title": "Will & Harper (2024, USA)", "link": "https://www.imdb.com/title/tt30321133/" },
         { "title": "\"The Life You Wanted\" (2024, IT)", "link": "https://www.imdb.com/title/tt28019927/" },
         { "title": "No Ordinary Man (2020, CA)", "link": "https://www.imdb.com/title/tt10719864/" },
+        { "title": "Disclosure (2020, USA)", "link": "https://www.imdb.com/title/tt8637504/" },
         { "title": "The World to Come (2020, USA)", "link": "https://www.imdb.com/title/tt9738716/" },
         { "title": "\"Most!\" (2018, CZ)", "link": "https://www.imdb.com/title/tt8610916/" },
         { "title": "Lola (2018, BE)", "link": "https://www.imdb.com/title/tt8356178/" },
+        { "title": "A Fantastic Woman (2017, Chile)", "link": "https://www.imdb.com/title/tt5639354/" },
         { "title": "Just Charlie (2017, UK)", "link": "https://www.imdb.com/title/tt3713030/" },
         { "title": "Tangerine (2015, USA)", "link": "https://www.imdb.com/title/tt3824458/" },
+        { "title": "The Danish Girl (2015, UK)", "link": "https://www.imdb.com/title/tt0810819/" },
         { "title": "Boy Meets Girl (2014, USA)", "link": "https://www.imdb.com/title/tt3007302/" },
         { "title": "\"Transparent\" (2014–2019, USA)", "link": "https://www.imdb.com/title/tt3502262/" },
         { "title": "\"Pose\" (2018–2021, USA)", "link": "https://www.imdb.com/title/tt7562112/" },
@@ -30,8 +28,10 @@
         { "title": "Soldier's Girl (2003, USA)", "link": "https://www.imdb.com/title/tt0324013/" },
         { "title": "Southern Comfort (2001, USA)", "link": "https://www.imdb.com/title/tt0276515/" },
         { "title": "Hedwig and the Angry Inch (2001, USA)", "link": "https://www.imdb.com/title/tt0248845/" },
+        { "title": "Boys Don't Cry (1999, USA)", "link": "https://www.imdb.com/title/tt0171804/" },
         { "title": "Ma Vie en Rose (1997, FR)", "link": "https://www.imdb.com/title/tt0119590/" },
         { "title": "The Crying Game (1992, UK)", "link": "https://www.imdb.com/title/tt0104036/" },
+        { "title": "Paris Is Burning (1990, USA)", "link": "https://www.imdb.com/title/tt0100332/" },
         { "title": "The Skin I Live In (2011, ES)", "link": "https://www.imdb.com/title/tt1189073/" },
         { "title": "Breakfast on Pluto (2005, UK)", "link": "https://www.imdb.com/title/tt0411195/" },
         { "title": "Priscilla, Queen of the Desert (1994, AU)", "link": "https://www.imdb.com/title/tt0109045/" },
@@ -42,7 +42,6 @@
         { "title": "Transhood (2020, USA)", "link": "https://www.imdb.com/title/tt12349162/" },
         { "title": "Cherry Pop (2017, USA)", "link": "https://www.imdb.com/title/tt5822558/" },
         { "title": "Myra Breckinridge (1970, USA)", "link": "https://www.imdb.com/title/tt0066115/" },
-        { "title": "Glen or Glenda (1953, USA)", "link": "https://www.imdb.com/title/tt0045826/" },
-        { "title": "Lorem Ipsum Dolor (1953, USA)", "link": "https://www.imdb.com/title/tt0045826/" }
+        { "title": "Glen or Glenda (1953, USA)", "link": "https://www.imdb.com/title/tt0045826/" }
     ]
 }
