@@ -40,51 +40,51 @@
                     <div id="burgermenu-menu" class="burgermenu-section">              
                         <h1>Menu</h1>
                         <div style="margin-top: 10px; margin-bottom: 15px;"> 
-                           <a href="empty.html">• Welcome</a> <br>
-                           <a href="transmovies.html">• Trans movies</a> <br><br>
-                           <a href="">• Instagram</a> <br>
-                           <a href="">• WhatsApp</a> <br>
-                           <a href="">• Ko-fi</a> <br>
+                           <a href="index.html">• Welcome</a> <br>
+                           <a href="?list=001">• Trans movies</a> <br><br>
+                           <a href="https://instagram.com/zrzkaodvedle" target="_blank">• Instagram</a> <br>
+                           <a href="https://whatsapp.com/channel/0029VagArSoLNSaBgSehPc0r" target="_blank">• WhatsApp</a> <br>
+                           <a href="https://ko-fi.com/gabbiexoxo" target="_blank">• Ko-fi</a> <br>
                         </div>      
                         <p class="copy">Copyright &copy; 2004-<span class="current-year"></span> Gabriela Prazska<br>All rights reserved. Copying, distribution, or redistribution without the author's consent is prohibited.</p>
                     </div>                 
                 </div>
             </div>
 
-    <!-- Sekce pro Content -->
-    <div class="section product">
-        <div class="section-content product-text" id="content-container">
-            <!-- Statická část -->
-            <div id="static-content">
-                <div id="random-text"></div>
-                <p>
-                    Feel free to follow me on 
-                    <a href="https://instagram.com/zrzkaodvedle" class="icon instagram">Instagram</a> 
-                    or join my 
-                    <a href="https://whatsapp.com/channel/0029VagArSoLNSaBgSehPc0r" class="icon whatsapp">WhatsApp</a> channel. 
-                    If you'd like to support me, I'd truly appreciate it if you treated me to a coffee via a 
-                    <a href="https://ko-fi.com/gabbiexoxo" class="icon kofi">Ko-fi donation</a>!
-                </p>
-            </div>
+<!-- Sekce pro Content -->
+<div class="section product">
+    <div class="section-content product-text" id="content-container">
+        <!-- Statická část -->
+        <div id="static-content">
+            <div id="random-text"></div>
+            <p>
+                Feel free to follow me on 
+                <a href="https://instagram.com/zrzkaodvedle" class="icon instagram" target="_blank">Instagram</a> 
+                or join my 
+                <a href="https://whatsapp.com/channel/0029VagArSoLNSaBgSehPc0r" class="icon whatsapp" target="_blank">WhatsApp</a> channel. 
+                If you'd like to support me, I'd truly appreciate it if you treated me to a coffee via a 
+                <a href="https://ko-fi.com/gabbiexoxo" class="icon kofi" target="_blank">Ko-fi donation</a>!
+            </p>
+        </div>
 
-            <!-- Dynamická část -->
-            <div id="dynamic-content" style="display: none;">
-                <h1 id="list-title"></h1>
-                <div id="list-container">
-                    <div class="column" id="column-1">
-                        <ul id="list-1"></ul>
-                    </div>
-                    <div class="column" id="column-2">
-                        <ul id="list-2"></ul>
-                    </div>
+        <!-- Dynamická část -->
+        <div id="dynamic-content" style="display: none;">
+            <h1 id="list-title"></h1>
+            <div id="list-container">
+                <div class="column" id="column-1">
+                    <ul id="list-1"></ul>
                 </div>
-                <div id="pagination">
-                    <a href="javascript:void(0);" class="hero" id="prev" onclick="goToPreviousPage()">Previous page</a>
-                    <a href="javascript:void(0);" class="hero" id="next" onclick="goToNextPage()">Next page</a>
+                <div class="column" id="column-2">
+                    <ul id="list-2"></ul>
                 </div>
+            </div>
+            <div id="pagination">
+                <a href="javascript:void(0);" class="hero" id="prev" onclick="goToPreviousPage()">Previous page</a>
+                <a href="javascript:void(0);" class="hero" id="next" onclick="goToNextPage()">Next page</a>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Sekce pro Footer -->
 <footer>
@@ -106,10 +106,9 @@ e(s.colorDepth)+'" width="1" height="1" border="0" alt="TOPlist" />';
     </div>
 </footer>
 
-
 <script>
 const listMap = {
-    "001": "transmovies.json",
+    "001": "transmovies.json", // Mapa pro různé seznamy
     "002": "ebooks.json"
 };
 
@@ -122,7 +121,7 @@ const list2 = document.getElementById("list-2");
 const prevButton = document.getElementById("prev");
 const nextButton = document.getElementById("next");
 
-let allMovies = [];
+let allMovies = []; // Pole pro uložení filmů
 
 // Pomocná funkce pro získání parametru z URL
 function getQueryParam(param) {
@@ -133,23 +132,16 @@ function getQueryParam(param) {
 // Načtení JSON souboru
 async function fetchListData(listId) {
     const fileName = listMap[listId];
-    if (!fileName) {
-        console.error("Neplatné ID seznamu:", listId);
-        return null;
-    }
-
-    console.log("Načítám data z:", fileName);
+    if (!fileName) return null;
 
     try {
         const response = await fetch(fileName);
         if (!response.ok) {
-            throw new Error(`HTTP chyba! Stav: ${response.status}`);
+            throw new Error('Soubor nenalezen');
         }
-        const data = await response.json();
-        console.log("Data úspěšně načtena:", data);
-        return data;
+        return await response.json();
     } catch (error) {
-        console.error("Chyba při načítání dat:", error);
+        document.getElementById("list-container").innerHTML = `<p>Chyba při načítání dat: ${error.message}</p>`;
         return null;
     }
 }
@@ -198,6 +190,7 @@ function goToPreviousPage() {
     if (currentPage > 0) {
         currentPage--;
         renderItems();
+    }
 }
 
 // Funkce pro přechod na další stránku
@@ -218,23 +211,30 @@ window.addEventListener("resize", () => {
 async function initializePage() {
     const listId = getQueryParam("list");
 
+    // Skrytí statického obsahu, pokud je parametr 'list' v URL
     if (listId) {
+        document.getElementById("static-content").style.display = "none";
+        document.getElementById("dynamic-content").style.display = "block";
+        
         const data = await fetchListData(listId);
         if (data) {
             allMovies = data;
             currentPage = 0;
+            document.getElementById("list-title").innerText = allMovies.title;
             renderItems();
         }
+    } else {
+        document.getElementById("static-content").style.display = "block";
+        document.getElementById("dynamic-content").style.display = "none";
     }
 }
 
-// Spuštění inicializace při načtení stránky
+// Spuštění inicializace při načítání stránky
 document.addEventListener("DOMContentLoaded", initializePage);
 
 // Přidání událostí pro stránkování
 prevButton.addEventListener("click", goToPreviousPage);
 nextButton.addEventListener("click", goToNextPage);
-
 </script>
 
         <script>
