@@ -156,6 +156,7 @@ function renderItems() {
     list2.innerHTML = "";
 
     const totalItems = allMovies.items.length; // Celkový počet položek
+    const totalPages = Math.ceil(totalItems / itemsPerPage); // Celkový počet stránek
 
     if (isMobileView) {
         // Na mobilu zobrazujeme všechny položky na jedné stránce
@@ -198,7 +199,7 @@ function renderItems() {
 
         // Správa tlačítek stránkování
         prevButton.style.display = currentPage > 0 ? "inline" : "none";
-        nextButton.style.display = endIndex < totalItems ? "inline" : "none";
+        nextButton.style.display = currentPage < totalPages - 1 ? "inline" : "none";
     }
 }
 
@@ -218,8 +219,6 @@ function goToPreviousPage() {
         renderItems();
     }
 }
-
-
 
 // Detekce změny velikosti obrazovky
 window.addEventListener("resize", () => {
@@ -260,6 +259,7 @@ document.addEventListener("DOMContentLoaded", initializePage);
 prevButton.addEventListener("click", goToPreviousPage);
 nextButton.addEventListener("click", goToNextPage);
 </script>
+
 
 
 
