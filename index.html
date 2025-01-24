@@ -109,7 +109,7 @@ e(s.colorDepth)+'" width="1" height="1" border="0" alt="TOPlist" />';
 
 <script>
 const listMap = {
-    "001": "lists.json", // Mapa pro různé seznamy
+    "001": "lists.json",
     "002": "favmovies.json",
     "003": "transmovies.json",
     "004": "roadmovies.json",
@@ -156,39 +156,39 @@ function renderItems() {
     list1.innerHTML = "";
     list2.innerHTML = "";
 
-    const startIndex = currentPage * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, allMovies.items.length);
-
-    if (startIndex >= allMovies.items.length) return; // Ochrana proti chybám
-
     if (isMobileView) {
-        // Na mobilu zobrazujeme všechny položky v jednom seznamu
-        for (let i = startIndex; i < endIndex; i++) {
+        // Na mobilu zobrazujeme všechny položky na jedné stránce
+        allMovies.items.forEach((item) => {
             const li = document.createElement("li");
-            li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
+            li.innerHTML = `${item.title} <a href="${item.link}" target="_blank">${allMovies.linkLabel}</a>`;
             list1.appendChild(li);
-        }
+        });
         prevButton.style.display = "none";
         nextButton.style.display = "none";
     } else {
-        // Na desktopu stránkujeme po dvou sloupcích
-        // První sloupec
-        for (let i = startIndex; i < Math.min(startIndex + itemsPerPage / 2, allMovies.items.length); i++) {
-            const li = document.createElement("li");
-            li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
-            list1.appendChild(li);
-        }
+        // Desktopové zobrazení s stránkováním
+        const startIndex = currentPage * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, allMovies.items.length);
 
-        // Druhý sloupec
-        for (let i = startIndex + itemsPerPage / 2; i < endIndex; i++) {
-            const li = document.createElement("li");
-            li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
-            list2.appendChild(li);
-        }
+        if (startIndex < allMovies.items.length) {
+            // První sloupec
+            for (let i = startIndex; i < Math.min(startIndex + itemsPerPage / 2, allMovies.items.length); i++) {
+                const li = document.createElement("li");
+                li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
+                list1.appendChild(li);
+            }
 
-        // Správa tlačítek stránkování
-        prevButton.style.display = currentPage === 0 ? "none" : "inline";
-        nextButton.style.display = endIndex >= allMovies.items.length ? "none" : "inline";
+            // Druhý sloupec
+            for (let i = startIndex + itemsPerPage / 2; i < endIndex; i++) {
+                const li = document.createElement("li");
+                li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
+                list2.appendChild(li);
+            }
+
+            // Správa tlačítek stránkování
+            prevButton.style.display = currentPage === 0 ? "none" : "inline";
+            nextButton.style.display = endIndex >= allMovies.items.length ? "none" : "inline";
+        }
     }
 }
 
@@ -247,6 +247,7 @@ document.addEventListener("DOMContentLoaded", initializePage);
 prevButton.addEventListener("click", goToPreviousPage);
 nextButton.addEventListener("click", goToNextPage);
 </script>
+
 
 
         <script>
