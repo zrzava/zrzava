@@ -151,7 +151,6 @@ async function fetchListData(listId) {
     }
 }
 
-// Funkce pro vykreslení položek
 function renderItems() {
     list1.innerHTML = "";
     list2.innerHTML = "";
@@ -167,31 +166,49 @@ function renderItems() {
         nextButton.style.display = "none";
     } else {
         // Desktopové zobrazení s stránkováním
-        const startIndex = currentPage * itemsPerPage;
-        const endIndex = Math.min(startIndex + itemsPerPage, allMovies.items.length);
+        const totalItems = allMovies.items.length; // Celkový počet záznamů
+        const startIndex = currentPage * itemsPerPage; // Počáteční index
+        const endIndex = Math.min(startIndex + itemsPerPage, totalItems); // Koncový index pro aktuální stránku
 
-        const midIndex = Math.min(startIndex + itemsPerPage / 2, endIndex);
+        // Ověření, že startIndex nepřesahuje počet záznamů
+        if (startIndex >= totalItems) return;
+
+        const midIndex = startIndex + Math.floor((endIndex - startIndex) / 2); // Rozdělení mezi dva sloupce
 
         // První sloupec
         for (let i = startIndex; i < midIndex; i++) {
-            const li = document.createElement("li");
-            li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
-            list1.appendChild(li);
+            if (i < totalItems) {
+                const li = document.createElement("li");
+                li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
+                list1.appendChild(li);
+            }
         }
 
         // Druhý sloupec
         for (let i = midIndex; i < endIndex; i++) {
-            const li = document.createElement("li");
-            li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
-            list2.appendChild(li);
+            if (i < totalItems) {
+                const li = document.createElement("li");
+                li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
+                list2.appendChild(li);
+            }
         }
 
         // Správa tlačítek stránkování
         prevButton.style.display = currentPage === 0 ? "none" : "inline";
-        nextButton.style.display = endIndex >= allMovies.items.length ? "none" : "inline";
+        nextButton.style.display = endIndex >= totalItems ? "none" : "inline";
     }
 }
 
+// Funkce pro přechod na další stránku
+function goToNextPage() {
+    const totalItems = allMovies.items.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+    if (currentPage < totalPages - 1) {
+        currentPage++;
+        renderItems();
+    }
+}
 
 // Funkce pro přechod na předchozí stránku
 function goToPreviousPage() {
@@ -201,13 +218,6 @@ function goToPreviousPage() {
     }
 }
 
-// Funkce pro přechod na další stránku
-function goToNextPage() {
-    if ((currentPage + 1) * itemsPerPage < allMovies.items.length) {
-        currentPage++;
-        renderItems();
-    }
-}
 
 // Detekce změny velikosti obrazovky
 window.addEventListener("resize", () => {
