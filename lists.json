@@ -1,0 +1,13 @@
+{
+    "title": "List of Lists",
+    "linkLabel": "list",
+    "items": [
+        { "title": "List of Lists", "link": "?list=001" },
+        { "title": "List of My Fav Movies", "link": "?list=002" },
+        { "title": "List of Transgender Movies", "link": "?list=003" },
+        { "title": "List of Road Movies", "link": "?list=004" },
+        { "title": "List of Mafia Movies", "link": "?list=005" },
+        { "title": "List of Ebooks", "link": "?list=006" }
+    ]
+}
+
