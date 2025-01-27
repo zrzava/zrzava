@@ -144,30 +144,46 @@ async function fetchListData(listId) {
 
 // Funkce pro vykreslení položek
 function renderItems() {
-    const startIndex = currentPage * itemsPerPage;
-    const endIndex = Math.min((currentPage + 1) * itemsPerPage, allMovies.items.length);
+    const isMobile = window.innerWidth <= 768; // Zkontrolujeme, jestli je zařízení mobilní
 
     // Vyčistíme seznamy
     list1.innerHTML = "";
     list2.innerHTML = "";
 
-    // První sloupec
-    for (let i = startIndex; i < Math.min(startIndex + itemsPerPage / 2, endIndex); i++) {
-        const li = document.createElement("li");
-        li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
-        list1.appendChild(li);
-    }
+    // Pokud je mobilní zařízení, zobrazíme všechny položky v jednom sloupci
+    if (isMobile) {
+        allMovies.items.forEach(item => {
+            const li = document.createElement("li");
+            li.innerHTML = `${item.title} <a href="${item.link}" target="_blank">${allMovies.linkLabel}</a>`;
+            list1.appendChild(li); // Pouze list1 pro mobilní zařízení
+        });
 
-    // Druhý sloupec
-    for (let i = startIndex + itemsPerPage / 2; i < endIndex; i++) {
-        const li = document.createElement("li");
-        li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
-        list2.appendChild(li);
-    }
+        // Skrytí tlačítek pro stránkování
+        prevButton.style.display = "none";
+        nextButton.style.display = "none";
+    } else {
+        // Pokud není mobilní zařízení, použijeme stránkování
+        const startIndex = currentPage * itemsPerPage;
+        const endIndex = Math.min((currentPage + 1) * itemsPerPage, allMovies.items.length);
 
-    // Skrytí tlačítek "Next" a "Previous" pokud není co zobrazit
-    prevButton.style.display = currentPage > 0 ? "inline" : "none";
-    nextButton.style.display = (currentPage + 1) * itemsPerPage < allMovies.items.length ? "inline" : "none";
+        // První sloupec
+        for (let i = startIndex; i < Math.min(startIndex + itemsPerPage / 2, endIndex); i++) {
+            const li = document.createElement("li");
+            li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
+            list1.appendChild(li);
+        }
+
+        // Druhý sloupec
+        for (let i = startIndex + itemsPerPage / 2; i < endIndex; i++) {
+            const li = document.createElement("li");
+            li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
+            list2.appendChild(li);
+        }
+
+        // Skrytí tlačítek pro stránkování, pokud není co zobrazit
+        prevButton.style.display = currentPage > 0 ? "inline" : "none";
+        nextButton.style.display = (currentPage + 1) * itemsPerPage < allMovies.items.length ? "inline" : "none";
+    }
 }
 
 // Funkce pro stránkování na předchozí stránku
@@ -214,8 +230,17 @@ function getQueryParam(param) {
     return urlParams.get(param);
 }
 
+// Funkce pro opětovné načtení při změně šířky okna
+function onResize() {
+    renderItems(); // Po změně velikosti okna znovu vykreslíme obsah
+}
+
 // Spuštění inicializace při načítání stránky
 document.addEventListener("DOMContentLoaded", initializePage);
+
+// Přidání event listeneru pro změnu šířky okna
+window.addEventListener("resize", onResize);
+
 </script>
 
 
@@ -296,9 +321,9 @@ window.addEventListener('keydown', (e) => {
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const images = [
-        { url: "img/bg01.png", weight: 20 }, // dívka v okně
-        { url: "img/bg02.png", weight: 70 }, // terasa nad Prahou
-        { url: "img/bg03.png", weight: 40 } // dívka a truck
+        { url: "img/bg01.png", weight: 10 }, // dívka v okně
+        { url: "img/bg02.png", weight: 90 }, // terasa nad Prahou
+        { url: "img/bg03.png", weight: 10 } // dívka a truck
     ];
 
     // Funkce pro výběr obrázku na základě vah
