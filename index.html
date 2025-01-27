@@ -81,8 +81,8 @@
                 </div>
             </div>
             <div id="pagination">
-                <a href="javascript:void(0);" class="hero" id="prev" onclick="goToPreviousPage()">Previous page</a>
-                <a href="javascript:void(0);" class="hero" id="next" onclick="goToNextPage()">Next page</a>
+                <a href="javascript:void(0);" class="hero" id="prev" onclick="goToPrevious()">Previous page</a>
+                <a href="javascript:void(0);" class="hero" id="next" onclick="goToNext()">Next page</a>
             </div>
         </div>
     </div>
@@ -117,24 +117,15 @@ const listMap = {
     "006": "postapomovies.json"
 };
 
-let currentPage = 0;
+let currentPage = 0; // Počáteční stránka
 const itemsPerPage = 40; // Počet položek na stránku
-let isMobileView = window.matchMedia("(max-width: 768px)").matches;
-
+let allMovies = []; // Pole pro uložení filmů
 const list1 = document.getElementById("list-1");
 const list2 = document.getElementById("list-2");
 const prevButton = document.getElementById("prev");
 const nextButton = document.getElementById("next");
 
-let allMovies = []; // Pole pro uložení filmů
-
-// Pomocná funkce pro získání parametru z URL
-function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-}
-
-// Načtení JSON souboru
+// Funkce pro načtení seznamu JSON
 async function fetchListData(listId) {
     const fileName = listMap[listId];
     if (!fileName) return null;
@@ -153,66 +144,49 @@ async function fetchListData(listId) {
 
 // Funkce pro vykreslení položek
 function renderItems() {
+    const startIndex = currentPage * itemsPerPage;
+    const endIndex = Math.min((currentPage + 1) * itemsPerPage, allMovies.items.length);
+
+    // Vyčistíme seznamy
     list1.innerHTML = "";
     list2.innerHTML = "";
 
-    if (isMobileView) {
-        // Na mobilu zobrazujeme všechny položky v jednom seznamu
-        allMovies.items.forEach((movie) => {
-            const li = document.createElement("li");
-            li.innerHTML = `${movie.title} <a href="${movie.link}" target="_blank">${allMovies.linkLabel}</a>`;
-            list1.appendChild(li);
-        });
-        prevButton.style.display = "none";
-        nextButton.style.display = "none";
-    } else {
-        // Na desktopu stránkujeme po dvou sloupcích
-        const startIndex = currentPage * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-
-        // První sloupec
-        for (let i = startIndex; i < Math.min(startIndex + itemsPerPage / 2, allMovies.items.length); i++) {
-            const li = document.createElement("li");
-            li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
-            list1.appendChild(li);
-        }
-
-        // Druhý sloupec
-        for (let i = startIndex + itemsPerPage / 2; i < Math.min(endIndex, allMovies.items.length); i++) {
-            const li = document.createElement("li");
-            li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
-            list2.appendChild(li);
-        }
-
-        // Správa tlačítek stránkování
-        prevButton.style.display = currentPage === 0 ? "none" : "inline";
-        nextButton.style.display = (currentPage + 1) * itemsPerPage >= allMovies.items.length ? "none" : "inline";
+    // První sloupec
+    for (let i = startIndex; i < Math.min(startIndex + itemsPerPage / 2, endIndex); i++) {
+        const li = document.createElement("li");
+        li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
+        list1.appendChild(li);
     }
+
+    // Druhý sloupec
+    for (let i = startIndex + itemsPerPage / 2; i < endIndex; i++) {
+        const li = document.createElement("li");
+        li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
+        list2.appendChild(li);
+    }
+
+    // Skrytí tlačítek "Next" a "Previous" pokud není co zobrazit
+    prevButton.style.display = currentPage > 0 ? "inline" : "none";
+    nextButton.style.display = (currentPage + 1) * itemsPerPage < allMovies.items.length ? "inline" : "none";
 }
 
-// Funkce pro přechod na předchozí stránku
-function goToPreviousPage() {
+// Funkce pro stránkování na předchozí stránku
+function goToPrevious() {
     if (currentPage > 0) {
         currentPage--;
         renderItems();
     }
 }
 
-// Funkce pro přechod na další stránku
-function goToNextPage() {
+// Funkce pro stránkování na další stránku
+function goToNext() {
     if ((currentPage + 1) * itemsPerPage < allMovies.items.length) {
         currentPage++;
         renderItems();
     }
 }
 
-// Detekce změny velikosti obrazovky
-window.addEventListener("resize", () => {
-    isMobileView = window.matchMedia("(max-width: 768px)").matches;
-    renderItems();
-});
-
-// Inicializace stránky
+// Inicializace stránky a načtení dat
 async function initializePage() {
     const listId = getQueryParam("list");
 
@@ -224,9 +198,9 @@ async function initializePage() {
         const data = await fetchListData(listId);
         if (data) {
             allMovies = data;
-            currentPage = 0;
+            currentPage = 0; // Reset stránky
             document.getElementById("list-title").innerText = allMovies.title;
-            renderItems();
+            renderItems(); // První vykreslení
         }
     } else {
         document.getElementById("static-content").style.display = "block";
@@ -234,13 +208,17 @@ async function initializePage() {
     }
 }
 
+// Pomocná funkce pro získání parametru z URL
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
 // Spuštění inicializace při načítání stránky
 document.addEventListener("DOMContentLoaded", initializePage);
-
-// Přidání událostí pro stránkování
-prevButton.addEventListener("click", goToPreviousPage);
-nextButton.addEventListener("click", goToNextPage);
 </script>
+
+
 
         <script>
         // Předdefinované texty s autory
