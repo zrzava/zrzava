@@ -445,6 +445,8 @@ function displayNews() {
   const newsHtml = paginatedNews.map(news => {
     // Zvolení správného odkazu na základě projektu
     let projectUrl = "";
+    let projectDisplay = news.project; // Předpokládáme, že název projektu bude zobrazen
+
     switch (news.project) {
       case "Homepage":
         projectUrl = "https://zrzava.com";
@@ -456,12 +458,16 @@ function displayNews() {
         projectUrl = "https://sissyshare.com";
         break;
       default:
-        projectUrl = "#"; // Defaultní odkaz, pokud projekt není definován
+        projectUrl = ""; // Pokud projekt není definován, odkaz nebude
+        projectDisplay = ""; // Skryje název projektu, pokud není definován odkaz
+        break;
     }
 
+    // Generování HTML pro novinku
     return `
       <div class="menu-news" style="margin-bottom: 10px;">
-        <p><a href="${projectUrl}" target="_blank">${news.project}</a> • ${news.date} UTC<br>${news.description}</p>
+        ${projectUrl ? `<p><a href="${projectUrl}" target="_blank">${projectDisplay}</a>` : `<p>${projectDisplay}` }
+        • ${news.date} UTC<br>${news.description}</p>
       </div>
     `;
   }).join("");
@@ -469,7 +475,7 @@ function displayNews() {
   // Zobrazení novinek v divu
   newsContainer.innerHTML += newsHtml;
 
-  // Generování odkazů na "Zobrazit starší" a "Zobrazit novější"
+  // Generování odkazů na "Zobrazit starší" a "Zobrazit novější" s vycentrováním
   let paginationHtml = '';
   if (endIndex < allNews.length) {
     paginationHtml += `<a href="#" onclick="nextPage()">Zobrazit starší</a>`;
@@ -478,7 +484,12 @@ function displayNews() {
     paginationHtml += `<a href="#" onclick="prevPage()">Zobrazit novější</a>`;
   }
 
-  newsContainer.innerHTML += `<div class="pagination">${paginationHtml}</div>`;
+  // Přidání inline stylu pro vycentrování
+  newsContainer.innerHTML += `
+    <div class="pagination" style="display: flex; justify-content: center; gap: 10px;">
+      ${paginationHtml}
+    </div>
+  `;
 }
 
 // Funkce pro zobrazení starších novinek
