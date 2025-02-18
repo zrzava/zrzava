@@ -475,18 +475,18 @@ function displayNews() {
   // Zobrazení novinek v divu
   newsContainer.innerHTML += newsHtml;
 
-  // Generování odkazů na "Zobrazit starší" a "Zobrazit novější" s vycentrováním
+  // Generování odkazů na "Zobrazit starší" a "Zobrazit novější" s vycentrováním a správným zarovnáním
   let paginationHtml = '';
   if (endIndex < allNews.length) {
-    paginationHtml += `<a href="#" onclick="nextPage()">Zobrazit starší</a>`;
+    paginationHtml += `<a href="#" onclick="nextPage()" style="float: right;">Zobrazit starší</a>`;
   }
   if (newsPage > 0) {
-    paginationHtml += `<a href="#" onclick="prevPage()">Zobrazit novější</a>`;
+    paginationHtml += `<a href="#" onclick="prevPage()" style="float: left;">Zobrazit novější</a>`;
   }
 
   // Přidání inline stylu pro vycentrování
   newsContainer.innerHTML += `
-    <div class="pagination" style="display: flex; justify-content: center; gap: 10px;">
+    <div class="pagination" style="display: flex; justify-content: center; width: 100%;">
       ${paginationHtml}
     </div>
   `;
