@@ -424,6 +424,7 @@ async function loadLatestNews() {
       )
       .sort((a, b) => new Date(b.date) - new Date(a.date));
 
+    // Po načtení a filtrování novinek zobrazíme první stránku
     displayNews();
   } catch (error) {
     document.getElementById("menu-news").innerHTML = "<p>Chyba při načítání novinek.</p>";
@@ -432,6 +433,19 @@ async function loadLatestNews() {
 
 // Funkce pro zobrazení novinek na aktuální stránce
 function displayNews() {
+  // Vyčištění divu před vykreslením nového obsahu
+  document.getElementById("menu-news").innerHTML = "";
+
+  // Přidání odkazů na filtry
+  const projects = [...new Set(allNews.map(item => item.project))];
+  const filterLinks = `
+    <a href="#" onclick="filterNews('all')">All</a> |
+    ${projects.map(project => `
+      <a href="#" onclick="filterNews('${project}')">${project}</a>
+    `).join(" | ")}
+  `;
+  document.getElementById("menu-news").innerHTML = filterLinks;
+
   // Výpočet indexů pro stránkování
   const startIndex = currentPage * newsPerPage;
   const endIndex = startIndex + newsPerPage;
@@ -476,11 +490,12 @@ function prevPage() {
 function filterNews(project) {
   selectedProject = project;
   currentPage = 0; // Reset na první stránku při změně filtru
-  loadLatestNews();
+  displayNews();
 }
 
 // Zavolání funkce po načtení stránky
 loadLatestNews();
+
 </script>
 
 </body>
