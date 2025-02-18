@@ -373,7 +373,6 @@ document.addEventListener("DOMContentLoaded", function () {
 // Nastavení jazyků a počtu novinek na stránku
 const languages = ["cs", "en"];
 const newsPerPage = 3; // Počet novinek na stránku
-let selectedProject = "all"; // Počáteční filtr na všechny projekty
 let newsPage = 0; // Počáteční stránka pro novinky
 let allNews = []; // Pole pro uložení všech novinek
 
@@ -396,44 +395,31 @@ async function loadLatestNews() {
     // Zajištění, že máme nejnovější novinku a přidáme aktuální čas, pokud není přítomný
     const savedDates = JSON.parse(localStorage.getItem("newsDates")) || {};
 
-    // Zjistíme první novinku (nejnovější)
-    const latestNews = data.news
-      .filter(item => languages.includes(item.language)) // Filtrujeme podle jazyka
-      .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+    // Funkce pro formátování data
+    const formatDate = (date) => {
+      const d = new Date(date);
+      return d.toISOString().slice(0, 19).replace("T", " "); // Formát: YYYY-MM-DD HH:MM:SS UTC
+    };
 
-    // Pokud máme nejnovější novinku, přidáme dynamicky čas
-    if (latestNews) {
-      const newsId = `${latestNews.project}-${latestNews.description}`; // Unikátní identifikátor
+    // Pokud některé novinky nemají datum, přidáme aktuální čas
+    data.news.forEach(news => {
+      const newsId = `${news.project}-${news.description}`; // Unikátní identifikátor pro novinku
 
-      // Pokud nemá novinka datum a není uložené, přidáme aktuální čas
-      if (!latestNews.date && !savedDates[newsId]) {
-        savedDates[newsId] = new Date().toISOString();
-        latestNews.date = savedDates[newsId];
+      if (!news.date && !savedDates[newsId]) {
+        const currentDate = formatDate(new Date()); // Formátovaný aktuální čas
+        savedDates[newsId] = currentDate; // Uložení aktuálního času
+        news.date = currentDate; // Přiřazení formátovaného data
       }
+    });
 
-      // Uložení aktualizovaných časů
-      localStorage.setItem("newsDates", JSON.stringify(savedDates));
-    }
+    // Uložení aktualizovaných časů
+    localStorage.setItem("newsDates", JSON.stringify(savedDates));
 
-    // Generování odkazů pro filtrování projektů
-    const projects = [...new Set(data.news.map(item => item.project))];
-    const filterLinks = ` 
-      <a href="#" onclick="filterNews('all')">All</a> |
-      ${projects.map(project => `
-        <a href="#" onclick="filterNews('${project}')">${project}</a>
-      `).join(" | ")}
-    `;
-    document.getElementById("menu-news").innerHTML = filterLinks;
+    // Filtrování novinek podle jazyka
+    allNews = data.news.filter(item => languages.includes(item.language))
+      .sort((a, b) => new Date(b.date) - new Date(a.date)); // Seřadíme novinky podle data
 
-    // Filtrování novinek podle jazyka a vybraného projektu
-    allNews = data.news
-      .filter(item =>
-        languages.includes(item.language) &&
-        (selectedProject === "all" || item.project === selectedProject)
-      )
-      .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-    // Po načtení a filtrování novinek zobrazíme první stránku
+    // Zobrazení novinek
     displayNews();
   } catch (error) {
     console.error(error);
@@ -505,13 +491,6 @@ function nextPage() {
 // Funkce pro zobrazení novějších novinek
 function prevPage() {
   newsPage--;
-  displayNews();
-}
-
-// Funkce pro filtrování novinek podle projektu
-function filterNews(project) {
-  selectedProject = project;
-  newsPage = 0; // Reset na první stránku při změně filtru
   displayNews();
 }
 
