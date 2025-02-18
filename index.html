@@ -478,15 +478,15 @@ function displayNews() {
   // Generování odkazů na "Zobrazit starší" a "Zobrazit novější" s vycentrováním a správným zarovnáním
   let paginationHtml = '';
   if (newsPage > 0) {
-    paginationHtml += `<a href="#" onclick="prevPage()">Zobrazit novější</a>`;
+    paginationHtml += `<a href="#" onclick="prevPage()">Zobrazit novější</a> &nbsp;`;
   }
   if (endIndex < allNews.length) {
-    paginationHtml += `<a href="#" onclick="nextPage()">Zobrazit starší</a>`;
+    paginationHtml += `&nbsp; <a href="#" onclick="nextPage()">Zobrazit starší</a>`;
   }
 
   // Přidání inline stylu pro vycentrování
   newsContainer.innerHTML += `
-    <div style="justify-content: center;">
+    <div style="text-align: center;">
       ${paginationHtml}
     </div>
   `;
