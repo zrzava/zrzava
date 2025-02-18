@@ -42,9 +42,8 @@
                         <h1>Menu</h1>
                         <div style="margin-top: 10px; margin-bottom: 15px;"> 
                            <a href="/">• Welcome</a> <br>
-                           <a href="?list=003">• Trans movies</a> <br><br>
+                           <a href="?list=003">• Trans movies</a> <br>
                         </div>      
-                        <div id="menu-filters" style="margin-bottom: 10px;"></div> 
                         <div id="menu-news" style="margin-top: 20px; font-size: 0.7rem; text-align: justify;"></div>
                     </div>                 
                 </div>
@@ -372,7 +371,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <script>
 // Nastavení jazyků a počtu novinek na stránku
 const languages = ["cs", "en"];
-const newsPerPage = 3; // Počet novinek na stránku
+const newsPerPage = 5; // Počet novinek na stránku
 let newsPage = 0; // Počáteční stránka pro novinky
 let allNews = []; // Pole pro uložení všech novinek
 
@@ -462,7 +461,7 @@ function displayNews() {
 
     return `
       <div class="menu-news" style="margin-bottom: 10px;">
-        <p><a href="${projectUrl}" target="_blank">${news.project}</a> • ${news.date} • <a href="https://zrzava.com">${news.author}</a><br>${news.description}</p>
+        <p><a href="${projectUrl}" target="_blank">${news.project}</a> • ${news.date} UTC<br>${news.description}</p>
       </div>
     `;
   }).join("");
