@@ -458,7 +458,7 @@ function displayNews() {
   // Generování HTML pro novinky
   const newsHtml = paginatedNews.map(news => `
     <div class="menu-news" style="margin-bottom: 10px;">
-      <p>${news.date} ${news.project} <a href="https://zrzava.com">${news.author}</a><br>${news.description}</p>
+      <p>${news.project} • ${news.date} • <a href="https://zrzava.com">${news.author}</a><br>${news.description}</p>
     </div>
   `).join("");
 
