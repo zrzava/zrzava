@@ -41,6 +41,20 @@
       "project": "Watch+",
       "language": "cs",
       "description": "Valentýnské spuštění Watch+"
+    },
+    {
+      "date": "2025-01-30 21:15:56",
+      "author": "Zrzka",
+      "project": "dreamofmoravia.cz",
+      "language": "cs",
+      "description": "Přidána galerie, která dynamicky načítá obsah složek s fotkami pro zobrazení."
+    },
+    {
+      "date": "2025-01-21 10:36:16",
+      "author": "Zrzka",
+      "project": "dreamofmoravia.cz",
+      "language": "cs",
+      "description": "Spuštěn projekt chovatelské stanice německých krátkosrstých ohařů."
     }
   ]
 }
