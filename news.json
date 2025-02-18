@@ -1,29 +1,25 @@
 ﻿{
   "news": [
     {
-      "id": "003",
-      "date": "2025-02-18",
+      "date": "2025-02-18 12:41 UTC",
       "author": "Zrzka",
       "project": "watch",
       "language": "cs",
-      "description": "Lorem ipsum dolor sit amet consectetuer nibh enim gravida Ut urna. Venenatis Nullam Suspendisse parturient Ut Mauris adipiscing elit turpis convallis congue. Pretium Morbi nec pede orci convallis Lorem ac sit urna quis. Urna Curabitur lobortis elit ipsum molestie lacus Quisque elit Curabitur semper. Augue tempus vitae consectetuer felis fringilla est porta Maecenas dui arcu. Elit convallis nibh quis eleifend nunc lacinia urna non parturient lacinia."
+      "description": "Překonán první milník, tj. 24 hodin celkového runtime (12 titulů)"
     },
     {
-      "id": "002",
-      "date": "2025-02-16",
+      "date": "2025-02-16 16:32 UTC",
       "author": "Zrzka",
       "project": "watch",
       "language": "cs",
-      "description": "Ut pulvinar urna feugiat Quisque amet pulvinar turpis pretium enim augue. Fames pharetra convallis eu Nam mauris cursus quis elit sagittis Nullam. Vitae Curabitur amet condimentum laoreet elit nascetur scelerisque Curabitur euismod volutpat. Aliquam Aenean Ut malesuada in In congue Morbi tempor rutrum consectetuer. Sit est nec volutpat wisi elit nisl metus adipiscing nisl mauris. Eros pellentesque egestas at Sed ligula laoreet enim Vestibulum elit porttitor."
+      "description": "Pod filtry v menu se nyní zobrazuje celkový runtime, poslední update a nové tituly od posledního příchodu na web"
     },
     {
-      "id": "001",
-      "date": "2025-02-14",
+      "date": "2025-02-14 22:58 UTC",
       "author": "Zrzka",
       "project": "watch",
       "language": "cs",
-      "description": "Ut pulvinar urna feugiat Quisque amet pulvinar turpis pretium enim augue. Fames pharetra convallis eu Nam mauris cursus quis elit sagittis Nullam. Vitae Curabitur amet condimentum laoreet elit nascetur scelerisque Curabitur euismod volutpat. Aliquam Aenean Ut malesuada in In congue Morbi tempor rutrum consectetuer. Sit est nec volutpat wisi elit nisl metus adipiscing nisl mauris. Eros pellentesque egestas at Sed ligula laoreet enim Vestibulum elit porttitor."
-    },
+      "description": "Valentýnské spuštění Watch+"
+    }
   ]
 }
-
