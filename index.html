@@ -370,10 +370,84 @@ document.addEventListener("DOMContentLoaded", function () {
 
     
 <script>
+// Nastavení jazyků a počtu novinek na stránku
+const languages = ["cs", "en"];
+const newsPerPage = 3; // Počet novinek na stránku
+let selectedProject = "all"; // Počáteční filtr na všechny projekty
+let newsPage = 0; // Počáteční stránka pro novinky
+let allNews = []; // Pole pro uložení všech novinek
+
+// Funkce pro načtení a zobrazení novinek
+async function loadLatestNews() {
+  try {
+    // Načítání novinek z JSON souboru
+    const response = await fetch("news.json");
+    if (!response.ok) {
+      throw new Error(`HTTP chyba! Status: ${response.status}`);
+    }
+    const data = await response.json();
+
+    // Kontrola, jestli data.news je pole
+    if (!Array.isArray(data.news)) {
+      console.error("data.news není pole");
+      return;
+    }
+
+    // Zajištění, že máme nejnovější novinku a přidáme aktuální čas, pokud není přítomný
+    const savedDates = JSON.parse(localStorage.getItem("newsDates")) || {};
+
+    // Zjistíme první novinku (nejnovější)
+    const latestNews = data.news
+      .filter(item => languages.includes(item.language)) // Filtrujeme podle jazyka
+      .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+
+    // Pokud máme nejnovější novinku, přidáme dynamicky čas
+    if (latestNews) {
+      const newsId = `${latestNews.project}-${latestNews.description}`; // Unikátní identifikátor
+
+      // Pokud nemá novinka datum a není uložené, přidáme aktuální čas
+      if (!latestNews.date && !savedDates[newsId]) {
+        savedDates[newsId] = new Date().toISOString();
+        latestNews.date = savedDates[newsId];
+      }
+
+      // Uložení aktualizovaných časů
+      localStorage.setItem("newsDates", JSON.stringify(savedDates));
+    }
+
+    // Generování odkazů pro filtrování projektů
+    const projects = [...new Set(data.news.map(item => item.project))];
+    const filterLinks = ` 
+      <a href="#" onclick="filterNews('all')">All</a> |
+      ${projects.map(project => `
+        <a href="#" onclick="filterNews('${project}')">${project}</a>
+      `).join(" | ")}
+    `;
+    document.getElementById("menu-news").innerHTML = filterLinks;
+
+    // Filtrování novinek podle jazyka a vybraného projektu
+    allNews = data.news
+      .filter(item =>
+        languages.includes(item.language) &&
+        (selectedProject === "all" || item.project === selectedProject)
+      )
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Po načtení a filtrování novinek zobrazíme první stránku
+    displayNews();
+  } catch (error) {
+    console.error(error);
+    document.getElementById("menu-news").innerHTML = "<p>Chyba při načítání novinek.</p>";
+  }
+}
+
 // Funkce pro zobrazení novinek na aktuální stránce
 function displayNews() {
   // Vyčištění předchozího obsahu
-  document.getElementById("menu-news").innerHTML = "";
+  const newsContainer = document.getElementById("menu-news");
+  if (!newsContainer) return; // Kontrola, jestli div existuje
+
+  newsContainer.innerHTML = ""; // Smazání předchozích novinek
 
   // Výpočet indexů pro stránkování
   const startIndex = newsPage * newsPerPage;
@@ -408,7 +482,7 @@ function displayNews() {
   }).join("");
 
   // Zobrazení novinek v divu
-  document.getElementById("menu-news").innerHTML += newsHtml;
+  newsContainer.innerHTML += newsHtml;
 
   // Generování odkazů na "Zobrazit starší" a "Zobrazit novější"
   let paginationHtml = '';
@@ -419,8 +493,30 @@ function displayNews() {
     paginationHtml += `<a href="#" onclick="prevPage()">Zobrazit novější</a>`;
   }
 
-  document.getElementById("menu-news").innerHTML += `<div class="pagination">${paginationHtml}</div>`;
+  newsContainer.innerHTML += `<div class="pagination">${paginationHtml}</div>`;
 }
+
+// Funkce pro zobrazení starších novinek
+function nextPage() {
+  newsPage++;
+  displayNews();
+}
+
+// Funkce pro zobrazení novějších novinek
+function prevPage() {
+  newsPage--;
+  displayNews();
+}
+
+// Funkce pro filtrování novinek podle projektu
+function filterNews(project) {
+  selectedProject = project;
+  newsPage = 0; // Reset na první stránku při změně filtru
+  displayNews();
+}
+
+// Zavolání funkce po načtení stránky
+loadLatestNews();
 
 </script>
 
