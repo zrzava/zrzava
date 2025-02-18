@@ -412,7 +412,7 @@ async function loadLatestNews() {
     }
 
     // Generování odkazů pro filtrování projektů
-    const projects = [...new Set(data.news.map(item => item.project))];
+    const projects = data.news && Array.isArray(data.news) ? [...new Set(data.news.map(item => item.project))] : [];
     const filterLinks = `
       <a href="#" onclick="filterNews('all')">All</a> |
       ${projects.map(project => `
