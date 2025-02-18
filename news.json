@@ -4,7 +4,7 @@
       "author": "Zrzka",
       "project": "Homepage",
       "language": "cs",
-      "description": "V menu stránky se teď zobrazují novinky o mých projektech. Tak bude celkový přehled o všech změnách."
+      "description": "V menu stránky se teď zobrazují novinky o mých projektech. Tak od teď bude celkový přehled o všech změnách."
     },
     {
       "date": "2025-02-18 12:41:48 UTC",
@@ -14,28 +14,28 @@
       "description": "Překonán první milník, tj. 24 hodin celkového runtime (12 titulů)"
     },
     {
-      "date": "2025-02-16 23:16:58 UTC",
+      "date": "2025-02-16 23:16:58",
       "author": "Zrzka",
       "project": "Watch+",
       "language": "cs",
       "description": "Po neúspěšném hledání titulků pro Mein Sohn Helen (2015) jsem vytvořila vlastní titulky. Moje vůbec první. Titul bude dostupný v dohledné době na Watch+."
     },
     {
-      "date": "2025-02-16 16:32:02 UTC",
+      "date": "2025-02-16 16:32:02",
       "author": "Zrzka",
       "project": "Watch+",
       "language": "cs",
       "description": "Pod filtry v menu se nyní zobrazuje celkový runtime, poslední update a nové tituly od posledního příchodu na web"
     },
     {
-      "date": "2025-02-15 20:03:46 UTC",
+      "date": "2025-02-15 20:03:46",
       "author": "Zrzka",
       "project": "Watch+",
       "language": "cs",
       "description": "V menu stránky se zobrazují filtry podle tagů jednotlivých titulů. A to v pořadí tag + type + language. Zároveň přibyla položka Similar u každého titulu, která zobrazuje na základě tagů podobné tituly."
     },
     {
-      "date": "2025-02-14 22:58:59 UTC",
+      "date": "2025-02-14 22:58:59",
       "author": "Zrzka",
       "project": "Watch+",
       "language": "cs",
