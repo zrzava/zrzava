@@ -83,6 +83,17 @@
                 <a href="javascript:void(0);" class="hero" id="next" onclick="goToNext()">Next page</a>
             </div>
         </div>
+
+<!-- Článek -->
+<div id="article-show" style="display: none;">
+    <h1 id="article-title"></h1>
+    <p id="article-content"></p>
+    <p id="article-date"></p>
+</div>
+
+<!-- Produkt -->
+<div id="product-show" style="display: none;"><!-- Produkty se načtou sem --></div>
+        
     </div>
 </div>
 
@@ -105,143 +116,7 @@ e(s.colorDepth)+'" width="1" height="1" border="0" alt="TOPlist" />';
     </div>
 </footer>
 
-<script>
-const listMap = {
-    "001": "lists.json", // Mapa pro různé seznamy
-    "002": "favmovies.json",
-    "003": "transmovies.json",
-    "004": "roadmovies.json",
-    "005": "mafiamovies.json",
-    "006": "postapomovies.json"
-};
-
-let currentPage = 0; // Počáteční stránka
-const itemsPerPage = 40; // Počet položek na stránku
-let allMovies = []; // Pole pro uložení filmů
-const list1 = document.getElementById("list-1");
-const list2 = document.getElementById("list-2");
-const prevButton = document.getElementById("prev");
-const nextButton = document.getElementById("next");
-
-// Funkce pro načtení seznamu JSON
-async function fetchListData(listId) {
-    const fileName = listMap[listId];
-    if (!fileName) return null;
-
-    try {
-        const response = await fetch(fileName);
-        if (!response.ok) {
-            throw new Error('Soubor nenalezen');
-        }
-        return await response.json();
-    } catch (error) {
-        document.getElementById("list-container").innerHTML = `<p>Chyba při načítání dat: ${error.message}</p>`;
-        return null;
-    }
-}
-
-// Funkce pro vykreslení položek
-function renderItems() {
-    const isMobile = window.innerWidth <= 768; // Zkontrolujeme, jestli je zařízení mobilní
-
-    // Vyčistíme seznamy
-    list1.innerHTML = "";
-    list2.innerHTML = "";
-
-    // Pokud je mobilní zařízení, zobrazíme všechny položky v jednom sloupci
-    if (isMobile) {
-        allMovies.items.forEach(item => {
-            const li = document.createElement("li");
-            li.innerHTML = `${item.title} <a href="${item.link}" target="_blank">${allMovies.linkLabel}</a>`;
-            list1.appendChild(li); // Pouze list1 pro mobilní zařízení
-        });
-
-        // Skrytí tlačítek pro stránkování
-        prevButton.style.display = "none";
-        nextButton.style.display = "none";
-    } else {
-        // Pokud není mobilní zařízení, použijeme stránkování
-        const startIndex = currentPage * itemsPerPage;
-        const endIndex = Math.min((currentPage + 1) * itemsPerPage, allMovies.items.length);
-
-        // První sloupec
-        for (let i = startIndex; i < Math.min(startIndex + itemsPerPage / 2, endIndex); i++) {
-            const li = document.createElement("li");
-            li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
-            list1.appendChild(li);
-        }
-
-        // Druhý sloupec
-        for (let i = startIndex + itemsPerPage / 2; i < endIndex; i++) {
-            const li = document.createElement("li");
-            li.innerHTML = `${allMovies.items[i].title} <a href="${allMovies.items[i].link}" target="_blank">${allMovies.linkLabel}</a>`;
-            list2.appendChild(li);
-        }
-
-        // Skrytí tlačítek pro stránkování, pokud není co zobrazit
-        prevButton.style.display = currentPage > 0 ? "inline" : "none";
-        nextButton.style.display = (currentPage + 1) * itemsPerPage < allMovies.items.length ? "inline" : "none";
-    }
-}
-
-// Funkce pro stránkování na předchozí stránku
-function goToPrevious() {
-    if (currentPage > 0) {
-        currentPage--;
-        renderItems();
-    }
-}
-
-// Funkce pro stránkování na další stránku
-function goToNext() {
-    if ((currentPage + 1) * itemsPerPage < allMovies.items.length) {
-        currentPage++;
-        renderItems();
-    }
-}
-
-// Inicializace stránky a načtení dat
-async function initializePage() {
-    const listId = getQueryParam("list");
-
-    // Skrytí statického obsahu, pokud je parametr 'list' v URL
-    if (listId) {
-        document.getElementById("static-content").style.display = "none";
-        document.getElementById("dynamic-content").style.display = "block";
-        
-        const data = await fetchListData(listId);
-        if (data) {
-            allMovies = data;
-            currentPage = 0; // Reset stránky
-            document.getElementById("list-title").innerText = allMovies.title;
-            renderItems(); // První vykreslení
-        }
-    } else {
-        document.getElementById("static-content").style.display = "block";
-        document.getElementById("dynamic-content").style.display = "none";
-    }
-}
-
-// Pomocná funkce pro získání parametru z URL
-function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
-}
-
-// Funkce pro opětovné načtení při změně šířky okna
-function onResize() {
-    renderItems(); // Po změně velikosti okna znovu vykreslíme obsah
-}
-
-// Spuštění inicializace při načítání stránky
-document.addEventListener("DOMContentLoaded", initializePage);
-
-// Přidání event listeneru pro změnu šířky okna
-window.addEventListener("resize", onResize);
-
-</script>
-
-
+<script src="content.js" defer></script>
 
         <script>
         // Předdefinované texty s autory
