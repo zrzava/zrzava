@@ -149,74 +149,121 @@ function displayArticle(article) {
 }
 
 // Funkce pro zobrazení produktu
+
+
+
+
+
+
+
+// 🛒 Funkce pro získání parametru z URL
+function getQueryParam(param) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(param);
+}
+
+// 📦 Funkce pro načtení dat o produktu ze souboru products.json
+async function fetchProductData() {
+    const productId = getQueryParam("product"); // Získáme ID produktu z URL
+
+    if (!productId) {
+        document.getElementById('product-show').innerHTML = '<p>Produkt nebyl nalezen. Zkontrolujte ID v URL.</p>';
+        return;
+    }
+
+    try {
+        const response = await fetch('products.json');
+        if (!response.ok) {
+            throw new Error('Soubor products.json nenalezen');
+        }
+        const data = await response.json();
+        const product = data.products.find(p => p.id === productId);
+
+        if (product) {
+            displayProduct(product);
+        } else {
+            document.getElementById('product-show').innerHTML = '<p>Produkt nenalezen.</p>';
+        }
+    } catch (error) {
+        document.getElementById('product-show').innerHTML = `<p>Chyba při načítání produktu: ${error.message}</p>`;
+    }
+}
+
+// 🎨 Funkce pro zobrazení produktu
 function displayProduct(product) {
-    if (product) {
-        const productHTML = `
-            <div class="section item">
-                <div class="section-content item-text">
-                    <h1 id="product-name">${product.name_en}</h1>
-                    <p id="product-description">${product.description_en}</p>
-                    <a id="buy-link" href="${product.link}" class="hero">Buy now!</a>
-                    <a id="shop-link" href="${product.link}" class="hero blue">More information</a>
-                </div>
-                <div class="item-container" id="item-images" data-images="${product.images.join(',')}">
-                    <img id="main-item-img" loading="lazy" src="${product.images[0]}" alt="${product.name_en}">
-                    <div class="price-tag" id="price-tag">
-                        <span id="price">${(product.discount === 'yes' ? (product.price * (1 - product.discount_percent / 100)).toFixed(2) : product.price.toFixed(2))} EUR</span>
-                        <div id="discount-info" style="font-size:10px; line-height: 1.2;">
-                            ${product.discount === 'yes' ? `
-                                <span id="discount-text">${product.discount_percent}% off, originally ${product.price.toFixed(2)} EUR</span>
-                                <div id="countdown"></div>
-                            ` : ''}
-                        </div>
+    if (!product) {
+        console.error("Product not found.");
+        return;
+    }
+
+    const productHTML = `
+        <div class="section item">
+            <div class="section-content item-text">
+                <h1 id="product-name">${product.name_en}</h1>
+                <p id="product-description">${product.description_en}</p>
+                <a id="buy-link" href="${product.link}" class="hero">Buy now!</a>
+                <a id="shop-link" href="${product.link}" class="hero blue">More information</a>
+            </div>
+            <div class="item-container" id="item-images" data-images="${product.images.join(',')}">
+                <img id="main-item-img" loading="lazy" src="${product.images[0]}" alt="${product.name_en}">
+                <div class="price-tag" id="price-tag">
+                    <span id="price">${(product.discount === 'yes' ? (product.price * (1 - product.discount_percent / 100)).toFixed(2) : product.price.toFixed(2))} EUR</span>
+                    <div id="discount-info" style="font-size:10px; line-height: 1.2;">
+                        ${product.discount === 'yes' ? `
+                            <span id="discount-text">${product.discount_percent}% off, originally ${product.price.toFixed(2)} EUR</span>
+                            <div id="countdown"></div>
+                        ` : ''}
                     </div>
                 </div>
             </div>
-        `;
+        </div>
+    `;
 
-        // Vložení vygenerovaného HTML do divu s id "product-show"
-        const productShow = document.getElementById('product-show');
-        productShow.innerHTML = productHTML;
+    // 🖼️ Vložení vygenerovaného HTML do divu s id "product-show"
+    const productShow = document.getElementById('product-show');
+    productShow.innerHTML = productHTML;
 
-        // Přepínání obrázků
-        const productImages = product.images;
-        const mainImage = document.getElementById('main-item-img');
-        let currentImageIndex = 0;
+    // 🔄 Přepínání obrázků při kliknutí
+    const productImages = product.images;
+    const mainImage = document.getElementById('main-item-img');
+    let currentImageIndex = 0;
 
-        mainImage.addEventListener('click', function () {
-            currentImageIndex = (currentImageIndex + 1) % productImages.length;
-            mainImage.src = productImages[currentImageIndex];
-        });
+    mainImage.addEventListener('click', function () {
+        currentImageIndex = (currentImageIndex + 1) % productImages.length;
+        mainImage.src = productImages[currentImageIndex];
+    });
 
-        // Zobrazení slevy a countdown (pokud existuje)
-        if (product.discount === 'yes') {
-            const countdownDate = new Date(product.discount_end_date).getTime();
-            function updateCountdown() {
-                const now = new Date().getTime();
-                const timeRemaining = countdownDate - now;
+    // ⏳ Zobrazení slevy a countdown (pokud existuje)
+    if (product.discount === 'yes' && product.discount_end_date) {
+        const countdownDate = new Date(product.discount_end_date).getTime();
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeRemaining = countdownDate - now;
 
-                const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-                const countdownElement = document.getElementById("countdown");
-                countdownElement.innerHTML = `ends in ${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-                if (timeRemaining < 0) {
-                    clearInterval(countdownInterval);
-                    countdownElement.innerHTML = "Sleva vypršela!";
-                }
+            if (timeRemaining < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown").innerHTML = "Sleva vypršela!";
+                return;
             }
 
-            const countdownInterval = setInterval(updateCountdown, 1000);
-        } else {
-            document.getElementById('discount-info').style.display = 'none';
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = `ends in ${days}d ${hours}h ${minutes}m ${seconds}s`;
         }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown();
     } else {
-        console.error("Product not found.");
+        document.getElementById('discount-info').style.display = 'none';
     }
 }
+
+// 🚀 Inicializace stránky
+document.addEventListener("DOMContentLoaded", fetchProductData);
+
 
 // Funkce pro inicializaci stránky a načítání obsahu podle URL
 async function initializePage() {
