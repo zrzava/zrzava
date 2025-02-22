@@ -267,6 +267,7 @@ footer a:hover {
                 flex-direction: column;
                 text-align: center;
         padding-top: 60px; /* Zvýšení odsazení od zhora */
+           padding: -30px;
             }
 
     .item img {
@@ -488,37 +489,6 @@ footer a:hover {
     background-color: rgba(240, 0, 0, 0.7); /* Polotransparentní tmavé pozadí pro lepší čitelnost */
 }
 
-#rss-feed {
-    margin-top: 20px;
-    background-color: none;
-}
-
-#rss-list {
-    list-style: none;
-    padding: 0;
-}
-
-#rss-list li {
-    margin-bottom: 10px;
-    font-size: 1.0rem;
-}
-
-#rss-list a {
-    text-decoration: none;
-    color: #ff5733;
-    font-weight: bold;
-    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.9);
-}
-
-#rss-list a:hover {
-    text-decoration: underline;
-}
-
-#rss-list .date {
-    color: #fff;
-    font-size: 0.8rem;
-}
-
         #random-text {
             font-size: 1.5rem;
             color: #fff;
@@ -675,7 +645,7 @@ footer a:hover {
       font-size: 1rem;
       display: flex;
       justify-content: space-between;
-      min-width: 100vh;
+      min-width: 100%;
       min-height: 70vh;
     }
     .column {
