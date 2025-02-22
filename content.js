@@ -175,7 +175,6 @@ async function fetchProductData() {
     }
 }
 
-
 // Funkce pro inicializaci stránky a načítání obsahu podle URL
 async function initializePage() {
     const listId = getQueryParam("list");
@@ -213,6 +212,7 @@ async function initializePage() {
         document.getElementById("product-show").style.display = "none";
     }
 }
+
 
 // Pomocná funkce pro získání parametru z URL
 function getQueryParam(param) {
