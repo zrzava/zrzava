@@ -197,7 +197,7 @@ function displayProduct(product) {
     }
 
     const productHTML = `
-        <div class="section item" style="margin-top: -40px;">
+        <div class="section item">
             <div class="section-content item-text">
                 <h1 id="product-name">${product.name_en}</h1>
                 <p id="product-description">${product.description_en}</p>
