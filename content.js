@@ -391,11 +391,12 @@ function addThumbnailClickEvents() {
     } else if (containerWidth < 600) {
         columns = 1;
     }
-    
+
     // Nastavení stylu pro obrázky
     thumbs.forEach((img) => {
-        img.style.width = '100%'; // Zajistí, že obrázky budou mít 100% šířky
+        img.style.width = '100%'; // Zajistí, že obrázky budou mít 100% šířky kontejneru
         img.style.height = 'auto'; // Udržuje správný poměr
+        img.style.maxWidth = '200px'; // Nastavení maximální šířky pro náhledy
         img.style.objectFit = 'cover';
         img.style.borderRadius = '5px';
         img.style.margin = '5px';
@@ -416,6 +417,7 @@ function addThumbnailClickEvents() {
         galleryFull.style.margin = "auto";
     }
 }
+
 
 
 
