@@ -376,13 +376,12 @@ function createThumbnail(imgSrc, tumblrId) {
 
 // Funkce pro zobrazení velkého obrázku
 function showImage(imgSrc, tumblrId) {
-    // Skrytí galerijního textu
-    document.getElementById('gallery-info').style.display = 'none';
-    
-    // Zobrazení obrázku
+    document.getElementById('gallery-info').style.display = 'none';  // Skrytí textu
+
+    // Zobrazení velkého obrázku
     document.getElementById('gallery-show').innerHTML += `
         <div class="section gallery">
-            <img src="${imgSrc}" class="gallery-full" id="full-image" onclick="showGalleryInfo()">
+            <img src="${imgSrc}" class="gallery-full">
             <div>
                 <p style="text-align: right; font-size: 0.8rem;">
                     <span id="tumblr-notes"></span>
@@ -391,29 +390,10 @@ function showImage(imgSrc, tumblrId) {
             </div>
         </div>`;
 
-    // Načtení počtu poznámek pro daný Tumblr obrázek
+    // Načtení počtu poznámek pro Tumblr obrázek
     if (tumblrId) {
         fetchTumblrNotes(tumblrId);
     }
-}
-
-// Funkce pro zobrazení informací o galerii při kliknutí na velký obrázek
-function showGalleryInfo() {
-    // Skrytí obrázku a zobrazení textového pole
-    document.getElementById('gallery-info').style.display = 'block';
-    document.getElementById('gallery-show').innerHTML = `
-        <div class="section gallery">
-            <div class="section-content gallery-text" id="gallery-info">
-                <h1>${document.querySelector('h1').textContent}</h1>
-                <p>${document.querySelector('p').textContent}</p>
-                <p style="text-align: right; font-size: 0.8rem;" id="gallery-date">${document.getElementById('gallery-date').textContent}</p>
-                <p style="text-align: right; font-size: 0.8rem;"><span id="tumblr-notes">0 notes</span> <a href="#" id="view-tumblr" target="_blank">View on Tumblr</a></p>
-            </div>
-            <div class="gallery-container" id="gallery-images"></div>
-        </div>`;
-
-    // Skrýt velký obrázek
-    document.querySelector('.gallery-full').style.display = 'none';
 }
 
 // Funkce pro načtení počtu Tumblr poznámek pro obrázek
@@ -455,6 +435,7 @@ function addThumbnailClickEvents() {
         galleryFull.style.margin = "auto";
     }
 }
+
 
 
 
