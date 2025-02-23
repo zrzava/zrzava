@@ -720,6 +720,18 @@ footer a:hover {
 }
 
 
+
+        .gallery {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1005px;
+            position: relative;
+            z-index: 3;
+            margin-top: -30px;
+        }
+
 .gallery-text {
     max-width: 50%;
     position: relative;
