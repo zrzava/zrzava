@@ -364,11 +364,11 @@ function loadLocalGallery(galleryId) {
 function imageExists(src) {
     const img = new Image();
     img.src = src;
-    return img.height !== 0;
+    return img.height !== 0; // Zkontroluje, zda obrázek existuje
 }
 
 function createThumbnail(imgSrc) {
-    return `<img src="${imgSrc}" class="gallery-thumb" onclick="showImage('${imgSrc}')">`;
+    return `<img src="${imgSrc}" loading="lazy" onerror="this.src='path/to/fallback-image.jpg';" class="gallery-thumb" onclick="showImage('${imgSrc}')">`;
 }
 
 function showImage(imgSrc) {
@@ -377,22 +377,16 @@ function showImage(imgSrc) {
 
 function addThumbnailClickEvents() {
     document.querySelectorAll(".gallery-thumb").forEach(img => {
-        img.style.width = "100px";
-        img.style.height = "150px";
-        img.style.objectFit = "cover";
-        img.style.borderRadius = "5px";
-        img.style.margin = "5px";
+        // Přesunout inline styly do CSS tříd (zachováno pro příklad)
+        img.classList.add('gallery-thumb');
     });
 
     const galleryFull = document.querySelector(".gallery-full");
     if (galleryFull) {
-        galleryFull.style.width = "100%";
-        galleryFull.style.maxWidth = "500px";
-        galleryFull.style.borderRadius = "10px";
-        galleryFull.style.display = "block";
-        galleryFull.style.margin = "auto";
+        galleryFull.classList.add('gallery-full');
     }
 }
+
 
 
 
