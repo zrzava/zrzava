@@ -269,19 +269,25 @@ function displayProduct(product) {
 
 
 // Funkce pro zobrazení seznamu galerií jako ?gallery=all
+// Funkce pro zobrazení seznamu galerií jako ?gallery=all
 document.addEventListener("DOMContentLoaded", fetchGalleryData);
 
 async function fetchGalleryData() {
     const urlParams = new URLSearchParams(window.location.search);
     const galleryId = urlParams.get('gallery');
 
+    console.log('galleryId:', galleryId);  // Debugovací výstup
+
     // Pokud je specifikován gallery=all, zobrazí se seznam galerií
     if (galleryId === 'all') {
+        console.log('Zobrazuji seznam galerií');  // Debugovací výstup
         showGalleryList();
     } else if (galleryId) {
+        console.log('Zobrazuji konkrétní galerii', galleryId);  // Debugovací výstup
         // Pokud je specifikován konkrétní gallery ID, zobrazí se konkrétní galerie
         showGallery(galleryId);
     } else {
+        console.log('Neexistuje parametr gallery, zobrazuji výchozí obsah');  // Debugovací výstup
         // Pokud není parametr gallery, zobrazí se výchozí obsah
         document.getElementById('gallery-show').innerHTML = '<p>Vyberte galerii z menu.</p>';
     }
@@ -292,7 +298,7 @@ async function showGalleryList() {
     try {
         const response = await fetch('galleries.json');
         if (!response.ok) throw new Error('Soubor nenalezen');
-
+        
         const data = await response.json();
         const galleries = data.galleries;
 
