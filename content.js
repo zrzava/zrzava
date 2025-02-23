@@ -300,13 +300,13 @@ async function fetchGalleryData() {
 function displayGallery(gallery) {
     document.getElementById('gallery-show').innerHTML = `
         <div class="section item">
-            <div class="section-content gallery-text" id="gallery-info">
+            <div class="section-content item-text" id="gallery-info">
                 <h1>${gallery.name}</h1>
                 <p>${gallery.description}</p>
                 <p>${gallery.date} <span id="tumblr-notes"> | 0 notes</span></p>
                 <div id="share-links"></div>
             </div>
-            <div class="gallery-container" id="gallery-images"></div>
+            <div class="item-container" id="gallery-images"></div>
         </div>`;
 
     if (gallery["tumblr-id"]) {
@@ -390,9 +390,7 @@ function showImage(imgSrc, tumblrId) {
     document.getElementById('gallery-info').innerHTML = `
         <img src="${imgSrc}" class="gallery-full">
         <div>
-            <h2>${galleryName}</h2>
-            <p>${galleryDescription}</p>
-            <p>${galleryDate} <span id="tumblr-notes"> | Loading...</span></p>
+            <p>${galleryDate} <span id="tumblr-notes">Loading...</span></p>
         </div>`;
 
     // Načtení počtu poznámek pro daný Tumblr obrázek
@@ -423,7 +421,7 @@ async function fetchTumblrNotes(tumblrId) {
 // Funkce pro přidání CSS stylů pro kliknutí na náhledy
 function addThumbnailClickEvents() {
     document.querySelectorAll(".gallery-thumb").forEach(img => {
-        img.style.width = "100%";
+        img.style.width = "200px;";
         img.style.height = "auto";
         img.style.objectFit = "cover";
         img.style.borderRadius = "5px";
