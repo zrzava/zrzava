@@ -305,7 +305,7 @@ function displayGallery(gallery) {
                 <h1>${gallery.name}</h1>
                 <p>${gallery.description}</p>
                 <p style="text-align: right; font-size: 0.8rem;">${gallery.date} <span id="tumblr-notes"> | 0 notes</span></p>
-                <div id="share-links"></div>
+                <!-- Odstranění sdílecích odkazů -->
             </div>
             <div class="gallery-container" id="gallery-images"></div>
         </div>`;
@@ -332,12 +332,6 @@ async function loadTumblrGallery(tumblrId) {
             if (images) {
                 document.getElementById('gallery-images').innerHTML = images;
                 document.getElementById('tumblr-notes').textContent = ` | ${post.note_count} notes`;
-                document.getElementById('share-links').innerHTML = `
-                    <a href="https://www.tumblr.com/like/${tumblrBlog}/${tumblrId}" target="_blank">Like on Tumblr</a> |
-                    <a href="https://www.tumblr.com/reblog/${tumblrBlog}/${tumblrId}" target="_blank">Reblog on Tumblr</a> |
-                    <a href="https://twitter.com/share?url=https://${tumblrBlog}/post/${tumblrId}" target="_blank">Share on X</a> |
-                    <a href="https://www.threads.net/share?url=https://${tumblrBlog}/post/${tumblrId}" target="_blank">Share on Threads</a> |
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://${tumblrBlog}/post/${tumblrId}" target="_blank">Share on Facebook</a>`;
                 addThumbnailClickEvents();
             } else {
                 document.getElementById('gallery-images').innerHTML = '<p>Galerie neobsahuje žádné obrázky.</p>';
@@ -391,7 +385,7 @@ function showImage(imgSrc, tumblrId) {
     document.getElementById('gallery-info').innerHTML = `
         <img src="${imgSrc}" class="gallery-full">
         <div>
-            <p style="text-align: right; font-size: 0.8rem;"><span id="tumblr-notes"></span></p>
+            <p style="text-align: right; font-size: 0.8rem;">${galleryDate} <span id="tumblr-notes"></span></p>
         </div>`;
 
     // Načtení počtu poznámek pro daný Tumblr obrázek
@@ -439,6 +433,7 @@ function addThumbnailClickEvents() {
         galleryFull.style.margin = "auto";
     }
 }
+
 
 
 
