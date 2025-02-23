@@ -304,8 +304,7 @@ function displayGallery(gallery) {
             <div class="section-content gallery-text" id="gallery-info">
                 <h1>${gallery.name}</h1>
                 <p>${gallery.description}</p>
-                <p style="text-align: right; font-size: 0.8rem;">${gallery.date} <span id="tumblr-notes"> | 0 notes</span></p>
-                <!-- Odstranění sdílecích odkazů -->
+                <p style="text-align: right; font-size: 0.8rem;">${gallery.date} | <span id="tumblr-notes">0 notes</span></p>
             </div>
             <div class="gallery-container" id="gallery-images"></div>
         </div>`;
@@ -385,7 +384,7 @@ function showImage(imgSrc, tumblrId) {
     document.getElementById('gallery-info').innerHTML = `
         <img src="${imgSrc}" class="gallery-full">
         <div>
-            <p style="text-align: right; font-size: 0.8rem;">${galleryDate} <span id="tumblr-notes"></span></p>
+            <p style="text-align: right; font-size: 0.8rem;">${galleryDate} <span id="tumblr-notes"></span> | <a href="">back to galleries</a></p>
         </div>`;
 
     // Načtení počtu poznámek pro daný Tumblr obrázek
@@ -405,7 +404,7 @@ async function fetchTumblrNotes(tumblrId) {
         if (data.response.posts && data.response.posts.length > 0) {
             const post = data.response.posts[0];
             const notes = post.note_count;
-            document.getElementById('tumblr-notes').textContent = ` | ${notes} notes`;
+            document.getElementById('tumblr-notes').textContent = `${notes} notes`;
         }
     } catch (error) {
         console.error("Chyba při načítání Tumblr poznámek:", error);
