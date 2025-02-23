@@ -268,6 +268,74 @@ function displayProduct(product) {
 
 
 
+// funkce pro zobrazení seznamu galerií jako ?gallery=all
+document.addEventListener("DOMContentLoaded", fetchGalleryData);
+
+async function fetchGalleryData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const galleryId = urlParams.get('gallery');
+
+    // Pokud je specifikován gallery=all, zobrazí se seznam galerií
+    if (galleryId === 'all') {
+        showGalleryList();
+    } else if (galleryId) {
+        // Pokud je specifikován konkrétní gallery ID, zobrazí se konkrétní galerie
+        showGallery(galleryId);
+    } else {
+        // Pokud není parametr gallery, můžeš třeba zobrazit defaultní obsah
+        document.getElementById('gallery-show').innerHTML = '<p>Vyberte galerii z menu.</p>';
+    }
+}
+
+// Funkce pro zobrazení seznamu galerií
+async function showGalleryList() {
+    try {
+        const response = await fetch('galleries.json');
+        if (!response.ok) throw new Error('Soubor nenalezen');
+
+        const data = await response.json();
+        const galleries = data.galleries;
+
+        // Generování seznamu galerií ve struktuře, jak jsi požadovala
+        const galleryListHtml = galleries.map(gallery => {
+            // Získání odkazu na galerii
+            const galleryUrl = `?gallery=${gallery.id}`;
+
+            // Získání prvního obrázku z galerií, pokud existuje
+            const firstImage = gallery.images && gallery.images.length > 0 ? gallery.images[0] : 'default-image.jpg';
+
+            return `
+                <div class="card-item">
+                    <a href="${galleryUrl}" target="_blank" class="card-link">
+                        <div class="card-image">
+                            <img src="${firstImage}" alt="${gallery.name}">
+                        </div>
+                        <div class="card-info">
+                            <div class="card-title">${gallery.name}</div>
+                            <div class="card-description">${gallery.description}</div>
+                        </div>
+                    </a>
+                </div>
+            `;
+        }).join('');
+
+        // Zobrazení seznamu na stránce
+        document.getElementById('gallery-show').innerHTML = `
+            <h1>Seznam Galerií</h1>
+            <div class="gallery-list">${galleryListHtml}</div>
+        `;
+    } catch (error) {
+        document.getElementById('gallery-show').innerHTML = `<p>Chyba při načítání seznamu galerií: ${error.message}</p>`;
+    }
+}
+
+
+
+
+
+
+
+
 // 🎨 Funkce pro načtení galerie
 document.addEventListener("DOMContentLoaded", fetchGalleryData);
 
