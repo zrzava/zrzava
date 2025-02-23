@@ -302,8 +302,8 @@ function displayGallery(gallery) {
             <div class="section-content gallery-text" id="gallery-info">
                 <h1>${gallery.name}</h1>
                 <p>${gallery.description}</p>
-                <p style="text-align: right; font-size: 0.8rem;">${gallery.date} <span id="tumblr-notes"> | 0 notes</span></p>
-                <div id="share-links"></div>
+                <p style="text-align: right; font-size: 0.8rem;" id="gallery-date">${gallery.date}</p>
+                <p style="text-align: right; font-size: 0.8rem;"><span id="tumblr-notes">0 notes</span> <a href="#" id="view-tumblr" target="_blank">View on Tumblr</a></p>
             </div>
             <div class="gallery-container" id="gallery-images"></div>
         </div>`;
@@ -329,7 +329,8 @@ async function loadTumblrGallery(tumblrId, gallery) {
 
             if (images) {
                 document.getElementById('gallery-images').innerHTML = images;
-                document.getElementById('tumblr-notes').textContent = ` | ${post.note_count} notes`;
+                document.getElementById('tumblr-notes').textContent = `${post.note_count} notes`;
+                document.getElementById('view-tumblr').setAttribute("href", `https://gabrielaprazska.tumblr.com/post/${tumblrId}`);
                 addThumbnailClickEvents(post.note_count, tumblrId);
             } else {
                 document.getElementById('gallery-images').innerHTML = '<p>Galerie neobsahuje žádné obrázky.</p>';
@@ -375,18 +376,19 @@ function createThumbnail(imgSrc, tumblrId) {
 
 // Funkce pro zobrazení velkého obrázku
 function showImage(imgSrc, tumblrId) {
-    const galleryName = document.querySelector('h1').textContent;
-    const galleryDescription = document.querySelector('p').textContent;
-    const galleryDate = document.querySelector('p:nth-child(3)').textContent;
-
+    // Skrytí galerijního textu
+    document.getElementById('gallery-info').style.display = 'none';
+    
     // Zobrazení obrázku
-    document.getElementById('gallery-info').innerHTML = `
-        <img src="${imgSrc}" class="gallery-full" onclick="showGalleryInfo()">
-        <div>
-            <p style="text-align: right; font-size: 0.8rem;">
-                <span id="tumblr-notes"></span>
-                <a href="https://gabrielaprazska.tumblr.com/post/${tumblrId}" target="_blank">View on Tumblr</a>
-            </p>
+    document.getElementById('gallery-show').innerHTML += `
+        <div class="section gallery">
+            <img src="${imgSrc}" class="gallery-full" id="full-image" onclick="showGalleryInfo()">
+            <div>
+                <p style="text-align: right; font-size: 0.8rem;">
+                    <span id="tumblr-notes"></span>
+                    <a href="https://gabrielaprazska.tumblr.com/post/${tumblrId}" target="_blank">View on Tumblr</a>
+                </p>
+            </div>
         </div>`;
 
     // Načtení počtu poznámek pro daný Tumblr obrázek
@@ -397,23 +399,21 @@ function showImage(imgSrc, tumblrId) {
 
 // Funkce pro zobrazení informací o galerii při kliknutí na velký obrázek
 function showGalleryInfo() {
-    const galleryName = document.querySelector('h1').textContent;
-    const galleryDescription = document.querySelector('p').textContent;
-    const galleryDate = document.querySelector('p:nth-child(3)').textContent;
+    // Skrytí obrázku a zobrazení textového pole
+    document.getElementById('gallery-info').style.display = 'block';
+    document.getElementById('gallery-show').innerHTML = `
+        <div class="section gallery">
+            <div class="section-content gallery-text" id="gallery-info">
+                <h1>${document.querySelector('h1').textContent}</h1>
+                <p>${document.querySelector('p').textContent}</p>
+                <p style="text-align: right; font-size: 0.8rem;" id="gallery-date">${document.getElementById('gallery-date').textContent}</p>
+                <p style="text-align: right; font-size: 0.8rem;"><span id="tumblr-notes">0 notes</span> <a href="#" id="view-tumblr" target="_blank">View on Tumblr</a></p>
+            </div>
+            <div class="gallery-container" id="gallery-images"></div>
+        </div>`;
 
-    // Zobrazení textového pole s informacemi o galerii
-    document.getElementById('gallery-info').innerHTML = `
-        <h1>${galleryName}</h1>
-        <p>${galleryDescription}</p>
-        <p style="text-align: right; font-size: 0.8rem;">${galleryDate} <span id="tumblr-notes"> | 0 notes</span></p>
-        <div id="share-links"></div>
-    `;
-    // Opětovné zobrazení obrázku
-    const img = document.createElement("img");
-    img.src = document.querySelector('.gallery-full').src;
-    img.classList.add("gallery-full");
-    img.onclick = () => showImage(img.src);
-    document.getElementById('gallery-info').appendChild(img);
+    // Skrýt velký obrázek
+    document.querySelector('.gallery-full').style.display = 'none';
 }
 
 // Funkce pro načtení počtu Tumblr poznámek pro obrázek
@@ -427,7 +427,7 @@ async function fetchTumblrNotes(tumblrId) {
         if (data.response.posts && data.response.posts.length > 0) {
             const post = data.response.posts[0];
             const notes = post.note_count;
-            document.getElementById('tumblr-notes').textContent = ` | ${notes} notes`;
+            document.getElementById('tumblr-notes').textContent = `${notes} notes`;
         }
     } catch (error) {
         console.error("Chyba při načítání Tumblr poznámek:", error);
