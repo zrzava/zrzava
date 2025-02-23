@@ -390,7 +390,9 @@ function showImage(imgSrc, tumblrId) {
     document.getElementById('gallery-info').innerHTML = `
         <img src="${imgSrc}" class="gallery-full">
         <div>
-            <p>${galleryDate} <span id="tumblr-notes"> | Loading...</span></p>
+            <h1>${gallery.name}</h1>
+            <p>${gallery.description}</p>
+            <p>${gallery.date} <span id="tumblr-notes"> | Loading...</span></p>
         </div>`;
 
     // Načtení počtu poznámek pro daný Tumblr obrázek
