@@ -754,10 +754,12 @@ footer a:hover {
 }
 
 .gallery-thumb {
-    max-width: 200px;
-    height: auto;
-    object-fit: cover;
+    width: 100%; /* Zajistí, že obrázek bude zabírat 100% šířky svého kontejneru */
+    height: 0;
+    padding-top: 150%; /* Poměr 2:3 (150% výšky k šířce) */
+    object-fit: cover; /* Oříznutí obrázku, pokud je potřeba, aby vyplnil celý prostor */
     border-radius: 5px;
+    display: block; /* Zajistí, že obrázek nebude plavat vedle textu */
 }
 
 .gallery-full {
@@ -766,4 +768,15 @@ footer a:hover {
     margin: 20px auto; /* Centrování obrázku */
     display: block; /* Zajistí, že obrázek nebude "plavat" vedle textu */
     border-radius: 10px; /* Zaoblení rohů obrázku */
+}
+
+.gallery h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.9);
+}
+
+.gallery p {
+    font-size: 1.2rem;
+    margin: 10px 0;
 }
