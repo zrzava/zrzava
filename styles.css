@@ -762,7 +762,7 @@ footer a:hover {
 
 .gallery-full {
     width: 100%; /* Šířka obrázku se přizpůsobí šířce kontejneru */
-    max-width: 460px; /* Maximální šířka pro velký obrázek */
+    min-width: 48%; /* Maximální šířka pro velký obrázek */
     margin: 20px auto; /* Centrování obrázku */
     display: block; /* Zajistí, že obrázek nebude "plavat" vedle textu */
     border-radius: 10px; /* Zaoblení rohů obrázku */
