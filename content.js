@@ -302,8 +302,8 @@ function displayGallery(gallery) {
             <div class="section-content gallery-text" id="gallery-info">
                 <h1>${gallery.name}</h1>
                 <p>${gallery.description}</p>
-                <p style="text-align: right; font-size: 0.8rem;" id="gallery-date">${gallery.date}</p>
-                <p style="text-align: right; font-size: 0.8rem;"><span id="tumblr-notes">0 notes</span> <a href="#" id="view-tumblr" target="_blank">View on Tumblr</a></p>
+                <p style="text-align: right; font-size: 0.8rem;">${gallery.date} <span id="tumblr-notes"> | 0 notes</span></p>
+                <div id="share-links"></div>
             </div>
             <div class="gallery-container" id="gallery-images"></div>
         </div>`;
@@ -329,8 +329,8 @@ async function loadTumblrGallery(tumblrId, gallery) {
 
             if (images) {
                 document.getElementById('gallery-images').innerHTML = images;
-                document.getElementById('tumblr-notes').textContent = `${post.note_count} notes`;
-                document.getElementById('view-tumblr').setAttribute("href", `https://gabrielaprazska.tumblr.com/post/${tumblrId}`);
+                document.getElementById('tumblr-notes').textContent = ` | ${post.note_count} notes`;
+                document.getElementById('tumblr-notes').innerHTML += ` <a href="https://${tumblrBlog}/post/${tumblrId}" target="_blank">View on Tumblr</a>`;
                 addThumbnailClickEvents(post.note_count, tumblrId);
             } else {
                 document.getElementById('gallery-images').innerHTML = '<p>Galerie neobsahuje žádné obrázky.</p>';
@@ -376,21 +376,21 @@ function createThumbnail(imgSrc, tumblrId) {
 
 // Funkce pro zobrazení velkého obrázku
 function showImage(imgSrc, tumblrId) {
-    document.getElementById('gallery-info').style.display = 'none';  // Skrytí textu
+    const galleryName = document.querySelector('h1').textContent;
+    const galleryDescription = document.querySelector('p').textContent;
+    const galleryDate = document.querySelector('p:nth-child(3)').textContent;
 
-    // Zobrazení velkého obrázku
-    document.getElementById('gallery-show').innerHTML += `
-        <div class="section gallery">
-            <img src="${imgSrc}" class="gallery-full">
-            <div>
-                <p style="text-align: right; font-size: 0.8rem;">
-                    <span id="tumblr-notes"></span>
-                    <a href="https://gabrielaprazska.tumblr.com/post/${tumblrId}" target="_blank">View on Tumblr</a>
-                </p>
-            </div>
+    // Zobrazení obrázku
+    document.getElementById('gallery-info').innerHTML = `
+        <img src="${imgSrc}" class="gallery-full">
+        <div>
+            <p style="text-align: right; font-size: 0.8rem;">
+                <span id="tumblr-notes"></span>
+                <a href="https://gabrielaprazska.tumblr.com/post/${tumblrId}" target="_blank">View on Tumblr</a>
+            </p>
         </div>`;
 
-    // Načtení počtu poznámek pro Tumblr obrázek
+    // Načtení počtu poznámek pro daný Tumblr obrázek
     if (tumblrId) {
         fetchTumblrNotes(tumblrId);
     }
@@ -407,7 +407,7 @@ async function fetchTumblrNotes(tumblrId) {
         if (data.response.posts && data.response.posts.length > 0) {
             const post = data.response.posts[0];
             const notes = post.note_count;
-            document.getElementById('tumblr-notes').textContent = `${notes} notes`;
+            document.getElementById('tumblr-notes').textContent = ` | ${notes} notes`;
         }
     } catch (error) {
         console.error("Chyba při načítání Tumblr poznámek:", error);
@@ -416,7 +416,7 @@ async function fetchTumblrNotes(tumblrId) {
 }
 
 // Funkce pro přidání CSS stylů pro kliknutí na náhledy
-function addThumbnailClickEvents() {
+function addThumbnailClickEvents(notes, tumblrId) {
     document.querySelectorAll(".gallery-thumb").forEach(img => {
         img.style.width = "100%";
         img.style.height = "auto";
@@ -434,9 +434,13 @@ function addThumbnailClickEvents() {
         galleryFull.style.display = "block";
         galleryFull.style.margin = "auto";
     }
+
+    // Přidání odkazu na originální post při zobrazení velkého obrázku
+    const tumblrNotes = document.querySelector("#tumblr-notes");
+    if (tumblrNotes) {
+        tumblrNotes.innerHTML += ` | <a href="https://gabrielaprazska.tumblr.com/post/${tumblrId}" target="_blank">View on Tumblr</a>`;
+    }
 }
-
-
 
 
 
@@ -521,4 +525,3 @@ document.addEventListener("DOMContentLoaded", initializePage);
 
 // Přidání event listeneru pro změnu šířky okna
 window.addEventListener("resize", onResize);
-
