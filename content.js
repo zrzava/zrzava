@@ -329,7 +329,7 @@ async function loadTumblrGallery(tumblrId, gallery) {
 
             if (images) {
                 document.getElementById('gallery-images').innerHTML = images;
-                document.getElementById('tumblr-notes').innerHTML = ` | ${post.note_count} notes <a href="https://${tumblrBlog}/post/${tumblrId}" target="_blank">View on Tumblr</a>`;
+                document.getElementById('tumblr-notes').innerHTML = ` | ${post.note_count} likes <a href="https://${tumblrBlog}/post/${tumblrId}" target="_blank">on Tumblr</a>`;
                 addThumbnailClickEvents(gallery.date, post.note_count, tumblrId);
             } else {
                 document.getElementById('gallery-images').innerHTML = '<p>Galerie neobsahuje žádné obrázky.</p>';
@@ -356,8 +356,7 @@ function showImage(imgSrc, tumblrId, notes) {
         <img src="${imgSrc}" class="gallery-full">
         <div>
             <p style="text-align: right; font-size: 0.8rem;">
-                ${galleryDate} | ${notes} notes
-                <a href="https://gabrielaprazska.tumblr.com/post/${tumblrId}" target="_blank">View on Tumblr</a>
+                ${galleryDate} | ${notes} likes
             </p>
         </div>`;
 }
