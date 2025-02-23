@@ -263,6 +263,10 @@ function displayProduct(product) {
 
 
 
+
+
+
+
 // 🎨 Funkce pro načtení galerie
 document.addEventListener("DOMContentLoaded", fetchGalleryData);
 
@@ -390,14 +394,14 @@ function addThumbnailClickEvents() {
     
     // Nastavení stylu pro obrázky
     thumbs.forEach((img) => {
-        img.style.width = `${100 / columns}%`; // Dynamické nastavení šířky podle počtu sloupců
-        img.style.height = 'auto';
+        img.style.width = '100%'; // Zajistí, že obrázky budou mít 100% šířky
+        img.style.height = 'auto'; // Udržuje správný poměr
         img.style.objectFit = 'cover';
         img.style.borderRadius = '5px';
         img.style.margin = '5px';
     });
 
-    // Dynamické nastavení počtu obrázků na řádek
+    // Dynamické nastavení počtu obrázků na řádek pomocí CSS Grid
     container.style.display = 'grid';
     container.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
     container.style.gap = '10px';
