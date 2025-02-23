@@ -754,10 +754,9 @@ footer a:hover {
 }
 
 .gallery-thumb {
-    width: 100%; /* Zajistí, že obrázek bude zabírat 100% šířky svého kontejneru */
-    height: 0;
-    padding-top: 150%; /* Poměr 2:3 (150% výšky k šířce) */
-    object-fit: cover; /* Oříznutí obrázku, pokud je potřeba, aby vyplnil celý prostor */
+    width: 100%; /* Zajistí, že obrázek vyplní šířku kontejneru */
+    aspect-ratio: 2 / 3; /* Poměr stran 2:3 */
+    object-fit: cover; /* Oříznutí obrázku, pokud nebude pasovat */
     border-radius: 5px;
     display: block; /* Zajistí, že obrázek nebude plavat vedle textu */
 }
