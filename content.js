@@ -299,7 +299,7 @@ async function fetchGalleryData() {
 // Funkce pro zobrazení galerie
 function displayGallery(gallery) {
     document.getElementById('gallery-show').innerHTML = `
-        <div class="section item">
+        <div class="section gallery">
             <div class="section-content gallery-text" id="gallery-info">
                 <h1>${gallery.name}</h1>
                 <p>${gallery.description}</p>
@@ -390,8 +390,6 @@ function showImage(imgSrc, tumblrId) {
     document.getElementById('gallery-info').innerHTML = `
         <img src="${imgSrc}" class="gallery-full">
         <div>
-            <h2>${galleryName}</h2>
-            <p>${galleryDescription}</p>
             <p>${galleryDate} <span id="tumblr-notes"> | Loading...</span></p>
         </div>`;
 
