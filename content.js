@@ -292,17 +292,17 @@ async function showGalleryList() {
     try {
         const response = await fetch('galleries.json');
         if (!response.ok) throw new Error('Soubor nenalezen');
-
+        
         const data = await response.json();
         const galleries = data.galleries;
 
         // Generování seznamu galerií ve struktuře, jak jsi požadovala
-        const galleryListHtml = galleries.map(gallery => {
+        const galleryListHtml = await Promise.all(galleries.map(async (gallery) => {
             // Získání odkazu na galerii
             const galleryUrl = `?gallery=${gallery.id}`;
 
-            // Získání prvního obrázku z galerií, pokud existuje
-            const firstImage = gallery.images && gallery.images.length > 0 ? gallery.images[0] : 'default-image.jpg';
+            // Načítání příspěvků z Tumblr API pro získání obrázku
+            const firstImage = await fetchFirstImageFromPost(gallery['tumblr-id']);
 
             return `
                 <div class="card-item">
@@ -317,17 +317,38 @@ async function showGalleryList() {
                     </a>
                 </div>
             `;
-        }).join('');
+        }));
 
         // Zobrazení seznamu na stránce
         document.getElementById('gallery-show').innerHTML = `
             <h1>Seznam Galerií</h1>
-            <div class="gallery-list">${galleryListHtml}</div>
+            <div class="gallery-list">${galleryListHtml.join('')}</div>
         `;
     } catch (error) {
         document.getElementById('gallery-show').innerHTML = `<p>Chyba při načítání seznamu galerií: ${error.message}</p>`;
     }
 }
+
+// Funkce pro načtení prvního obrázku z příspěvku Tumblr
+async function fetchFirstImageFromPost(tumblrId) {
+    try {
+        const response = await fetch(`https://api.tumblr.com/v2/blog/${tumblrId}/posts/photo?api_key=YOUR_API_KEY`);
+        if (!response.ok) throw new Error('Chyba při načítání příspěvku z Tumblr');
+
+        const data = await response.json();
+        if (data.response && data.response.posts.length > 0) {
+            // Načteme první obrázek z příspěvku
+            const firstPost = data.response.posts[0];
+            const firstImage = firstPost.photos && firstPost.photos[0] ? firstPost.photos[0].original_size.url : 'default-image.jpg';
+            return firstImage;
+        }
+        return 'default-image.jpg'; // Pokud nejsou žádné obrázky
+    } catch (error) {
+        console.error('Chyba při získávání obrázku z Tumblr:', error);
+        return 'default-image.jpg'; // Výchozí obrázek v případě chyby
+    }
+}
+
 
 
 
