@@ -376,7 +376,13 @@ function createThumbnail(imgSrc) {
 }
 
 function showImage(imgSrc) {
-    document.getElementById('gallery-info').innerHTML = `<img src="${imgSrc}" class="gallery-full">`;
+    document.getElementById('gallery-info').innerHTML = `
+        <img src="${imgSrc}" class="gallery-full">
+        <div>
+            <h2>${document.querySelector('h1').textContent}</h2>
+            <p>${document.querySelector('p').textContent}</p>
+            <p>${document.querySelector('p:nth-child(3)').textContent} <span id="tumblr-notes"> | 0 notes</span></p>
+        </div>`;
 }
 
 function addThumbnailClickEvents() {
@@ -411,12 +417,13 @@ function addThumbnailClickEvents() {
     const galleryFull = document.querySelector(".gallery-full");
     if (galleryFull) {
         galleryFull.style.width = "100%";
-        galleryFull.style.maxWidth = "500px";
+        galleryFull.style.maxWidth = "460px";
         galleryFull.style.borderRadius = "10px";
         galleryFull.style.display = "block";
         galleryFull.style.margin = "auto";
     }
 }
+
 
 
 
