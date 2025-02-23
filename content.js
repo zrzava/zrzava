@@ -269,27 +269,26 @@ function displayProduct(product) {
 
 
 // Funkce pro zobrazení seznamu galerií jako ?gallery=all
-// Funkce pro zobrazení seznamu galerií jako ?gallery=all
 document.addEventListener("DOMContentLoaded", fetchGalleryData);
 
 async function fetchGalleryData() {
     const urlParams = new URLSearchParams(window.location.search);
     const galleryId = urlParams.get('gallery');
 
-    console.log('galleryId:', galleryId);  // Debugovací výstup
+    console.log("galleryId:", galleryId);  // Zkontrolujeme hodnotu parametru gallery
 
-    // Pokud je specifikován gallery=all, zobrazí se seznam galerií
-    if (galleryId === 'all') {
-        console.log('Zobrazuji seznam galerií');  // Debugovací výstup
-        showGalleryList();
-    } else if (galleryId) {
-        console.log('Zobrazuji konkrétní galerii', galleryId);  // Debugovací výstup
-        // Pokud je specifikován konkrétní gallery ID, zobrazí se konkrétní galerie
-        showGallery(galleryId);
-    } else {
-        console.log('Neexistuje parametr gallery, zobrazuji výchozí obsah');  // Debugovací výstup
-        // Pokud není parametr gallery, zobrazí se výchozí obsah
+    if (galleryId === null) {
+        // Pokud není parametr gallery, zobrazí výchozí obsah
+        console.log("Žádný parametr 'gallery' v URL.");
         document.getElementById('gallery-show').innerHTML = '<p>Vyberte galerii z menu.</p>';
+    } else if (galleryId === 'all') {
+        // Pokud je specifikován 'all', zobrazí seznam galerií
+        console.log("Zobrazuji seznam galerií.");
+        showGalleryList();
+    } else {
+        // Pokud je specifikován konkrétní gallery ID, zobrazí konkrétní galerii
+        console.log("Zobrazuji konkrétní galerii s ID:", galleryId);
+        showGallery(galleryId);
     }
 }
 
@@ -302,15 +301,11 @@ async function showGalleryList() {
         const data = await response.json();
         const galleries = data.galleries;
 
+        // Pokud jsou galerie k dispozici
         if (galleries && galleries.length > 0) {
-            // Generování seznamu galerií ve struktuře
             const galleryListHtml = await Promise.all(galleries.map(async (gallery) => {
-                // Získání odkazu na galerii
                 const galleryUrl = `?gallery=${gallery.id}`;
-
-                // Načítání příspěvků z Tumblr API pro získání obrázku
                 const firstImage = await fetchFirstImageFromPost(gallery['tumblr-id']);
-
                 return `
                     <div class="card-item">
                         <a href="${galleryUrl}" target="_blank" class="card-link">
@@ -326,7 +321,6 @@ async function showGalleryList() {
                 `;
             }));
 
-            // Zobrazení seznamu na stránce
             document.getElementById('gallery-show').innerHTML = `
                 <h1>Seznam Galerií</h1>
                 <div class="gallery-list">${galleryListHtml.join('')}</div>
@@ -347,17 +341,17 @@ async function fetchFirstImageFromPost(tumblrId) {
 
         const data = await response.json();
         if (data.response && data.response.posts.length > 0) {
-            // Načteme první obrázek z příspěvku
             const firstPost = data.response.posts[0];
             const firstImage = firstPost.photos && firstPost.photos[0] ? firstPost.photos[0].original_size.url : 'default-image.jpg';
             return firstImage;
         }
-        return 'default-image.jpg'; // Pokud nejsou žádné obrázky
+        return 'default-image.jpg';
     } catch (error) {
         console.error('Chyba při získávání obrázku z Tumblr:', error);
-        return 'default-image.jpg'; // Výchozí obrázek v případě chyby
+        return 'default-image.jpg';
     }
 }
+
 
 
 
