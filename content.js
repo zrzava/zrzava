@@ -266,7 +266,6 @@ function displayProduct(product) {
 
 
 
-
 // 🎨 Funkce pro načtení galerie
 document.addEventListener("DOMContentLoaded", fetchGalleryData);
 
@@ -310,14 +309,14 @@ function displayGallery(gallery) {
         </div>`;
 
     if (gallery["tumblr-id"]) {
-        loadTumblrGallery(gallery["tumblr-id"]);
+        loadTumblrGallery(gallery["tumblr-id"], gallery);
     } else {
         loadLocalGallery(gallery.id);
     }
 }
 
 // Funkce pro načtení galerie z Tumblr API
-async function loadTumblrGallery(tumblrId) {
+async function loadTumblrGallery(tumblrId, gallery) {
     const apiKey = 'YuwtkxS7sYF0DOW41yK2rBeZaTgcZWMHHNhi1TNXht3Pf7Lkdf';
     const tumblrBlog = 'gabrielaprazska.tumblr.com';
 
@@ -331,13 +330,8 @@ async function loadTumblrGallery(tumblrId) {
             if (images) {
                 document.getElementById('gallery-images').innerHTML = images;
                 document.getElementById('tumblr-notes').textContent = ` | ${post.note_count} notes`;
-                document.getElementById('share-links').innerHTML = `
-                    <a href="https://www.tumblr.com/like/${tumblrBlog}/${tumblrId}" target="_blank">Like on Tumblr</a> |
-                    <a href="https://www.tumblr.com/reblog/${tumblrBlog}/${tumblrId}" target="_blank">Reblog on Tumblr</a> |
-                    <a href="https://twitter.com/share?url=https://${tumblrBlog}/post/${tumblrId}" target="_blank">Share on X</a> |
-                    <a href="https://www.threads.net/share?url=https://${tumblrBlog}/post/${tumblrId}" target="_blank">Share on Threads</a> |
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://${tumblrBlog}/post/${tumblrId}" target="_blank">Share on Facebook</a>`;
-                addThumbnailClickEvents();
+                document.getElementById('tumblr-notes').innerHTML += ` <a href="https://${tumblrBlog}/post/${tumblrId}" target="_blank">View on Tumblr</a>`;
+                addThumbnailClickEvents(post.note_count, tumblrId);
             } else {
                 document.getElementById('gallery-images').innerHTML = '<p>Galerie neobsahuje žádné obrázky.</p>';
             }
@@ -390,7 +384,10 @@ function showImage(imgSrc, tumblrId) {
     document.getElementById('gallery-info').innerHTML = `
         <img src="${imgSrc}" class="gallery-full">
         <div>
-            <p style="text-align: right; font-size: 0.8rem;"><span id="tumblr-notes"></span></p>
+            <p style="text-align: right; font-size: 0.8rem;">
+                <span id="tumblr-notes"></span>
+                <a href="https://gabrielaprazska.tumblr.com/post/${tumblrId}" target="_blank">View on Tumblr</a>
+            </p>
         </div>`;
 
     // Načtení počtu poznámek pro daný Tumblr obrázek
@@ -419,7 +416,7 @@ async function fetchTumblrNotes(tumblrId) {
 }
 
 // Funkce pro přidání CSS stylů pro kliknutí na náhledy
-function addThumbnailClickEvents() {
+function addThumbnailClickEvents(notes, tumblrId) {
     document.querySelectorAll(".gallery-thumb").forEach(img => {
         img.style.width = "100%";
         img.style.height = "auto";
@@ -436,6 +433,12 @@ function addThumbnailClickEvents() {
         galleryFull.style.borderRadius = "10px";
         galleryFull.style.display = "block";
         galleryFull.style.margin = "auto";
+    }
+
+    // Přidání odkazu na originální post při zobrazení velkého obrázku
+    const tumblrNotes = document.querySelector("#tumblr-notes");
+    if (tumblrNotes) {
+        tumblrNotes.innerHTML += ` | <a href="https://gabrielaprazska.tumblr.com/post/${tumblrId}" target="_blank">View on Tumblr</a>`;
     }
 }
 
