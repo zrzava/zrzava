@@ -719,18 +719,3 @@ footer a:hover {
     border-bottom: 3px solid #FF5733;
 }
 
-.gallery-thumb {
-    width: 100px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 5px;
-    margin: 5px;
-}
-
-.gallery-full {
-    width: 100%;
-    max-width: 500px;
-    border-radius: 10px;
-    display: block;
-    margin: auto;
-}
