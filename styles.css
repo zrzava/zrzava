@@ -741,10 +741,10 @@ footer a:hover {
 #gallery-images {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3 sloupce, každý s rovnou šířkou */
-    gap: 10px;
+    gap: 5px;
     justify-items: center;
     width: 100%;
-    padding-left: 15px;
+    padding-left: 20px;
 }
 
 @media (max-width: 900px) {
