@@ -738,18 +738,18 @@ footer a:hover {
     z-index: 2; /* Text bude pod obrázkem */
 }
 
-.gallery-container {
-    position: relative; /* Rodičovský element s pozicováním pro absolutní pozicování cenovky */
-    display: inline-block; /* Umožní obrázku i cenovce být v řadě */
-    z-index: 3; /* Umožní cenovce být nad obrázkem */
-    overflow: hidden; /* Skryje posuvníky při zvětšení obrázku */
-}
-
 #gallery-images {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(3, 1fr); /* 3 sloupce, každý s rovnou šířkou */
     gap: 10px;
     justify-items: center;
+    width: 100%;
+}
+
+@media (max-width: 900px) {
+    #gallery-images {
+        grid-template-columns: repeat(2, 1fr); /* 2 sloupce na menších obrazovkách */
+    }
 }
 
 .gallery-thumb {
@@ -758,3 +758,4 @@ footer a:hover {
     object-fit: cover;
     border-radius: 5px;
 }
+
