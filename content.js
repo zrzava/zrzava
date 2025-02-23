@@ -261,6 +261,146 @@ function displayProduct(product) {
     }
 }
 
+
+
+// 🎨 Funkce pro načtení galerie
+document.addEventListener("DOMContentLoaded", fetchGalleryData);
+
+async function fetchGalleryData() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const galleryId = urlParams.get('gallery');
+
+    if (!galleryId) {
+        document.getElementById('gallery-show').innerHTML = '<p>Galerie nebyla nalezena. Zkontrolujte ID v URL.</p>';
+        return;
+    }
+
+    try {
+        const response = await fetch('galleries.json');
+        if (!response.ok) throw new Error('Soubor nenalezen');
+
+        const data = await response.json();
+        const gallery = data.galleries.find(g => g.id === galleryId);
+
+        if (gallery) {
+            displayGallery(gallery);
+        } else {
+            document.getElementById('gallery-show').innerHTML = '<p>Galerie nenalezena.</p>';
+        }
+    } catch (error) {
+        document.getElementById('gallery-show').innerHTML = `<p>Chyba při načítání galerie: ${error.message}</p>`;
+    }
+}
+
+// 🎨 Funkce pro zobrazení galerie
+function displayGallery(gallery) {
+    document.getElementById('gallery-show').innerHTML = `
+        <div class="section item">
+            <div class="section-content gallery-text" id="gallery-info">
+                <h1>${gallery.name}</h1>
+                <p>${gallery.description}</p>
+                <p>${gallery.date} <span id="tumblr-notes"> | 0 notes</span></p>
+                <div id="share-links"></div>
+            </div>
+            <div class="gallery-container" id="gallery-images"></div>
+        </div>`;
+
+    if (gallery["tumblr-id"]) {
+        loadTumblrGallery(gallery["tumblr-id"]);
+    } else {
+        loadLocalGallery(gallery.id);
+    }
+}
+
+async function loadTumblrGallery(tumblrId) {
+    const apiKey = 'YuwtkxS7sYF0DOW41yK2rBeZaTgcZWMHHNhi1TNXht3Pf7Lkdf';
+    const tumblrBlog = 'gabrielaprazska.tumblr.com';
+    try {
+        const response = await fetch(`https://api.tumblr.com/v2/blog/${tumblrBlog}/posts?id=${tumblrId}&api_key=${apiKey}`);
+        const data = await response.json();
+        if (data.response.posts && data.response.posts.length > 0) {
+            const post = data.response.posts[0];
+            const images = post.photos ? post.photos.map(photo => createThumbnail(photo.original_size.url)).join('') : '';
+
+            if (images) {
+                document.getElementById('gallery-images').innerHTML = images;
+                document.getElementById('tumblr-notes').textContent = ` | ${post.note_count} notes`;
+                document.getElementById('share-links').innerHTML = `
+                    <a href="https://www.tumblr.com/like/${tumblrBlog}/${tumblrId}" target="_blank">Like on Tumblr</a> |
+                    <a href="https://www.tumblr.com/reblog/${tumblrBlog}/${tumblrId}" target="_blank">Reblog on Tumblr</a> |
+                    <a href="https://twitter.com/share?url=https://${tumblrBlog}/post/${tumblrId}" target="_blank">Share on X</a> |
+                    <a href="https://www.threads.net/share?url=https://${tumblrBlog}/post/${tumblrId}" target="_blank">Share on Threads</a> |
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=https://${tumblrBlog}/post/${tumblrId}" target="_blank">Share on Facebook</a>`;
+                addThumbnailClickEvents();
+            } else {
+                document.getElementById('gallery-images').innerHTML = '<p>Galerie neobsahuje žádné obrázky.</p>';
+            }
+        } else {
+            document.getElementById('gallery-images').innerHTML = '<p>Galerie nebyla nalezena na Tumblr.</p>';
+        }
+    } catch (error) {
+        console.error("Chyba při načítání z Tumblr API:", error);
+        document.getElementById('gallery-images').innerHTML = `<p>Chyba při načítání galerie z Tumblr: ${error.message}</p>`;
+    }
+}
+
+function loadLocalGallery(galleryId) {
+    let imagesHTML = "";
+    let i = 1;
+    while (true) {
+        const imgPath = `img/gallery/${galleryId}/${i}.webp`;
+        if (!imageExists(imgPath)) break;  // Konec, pokud obrázek neexistuje
+        imagesHTML += createThumbnail(imgPath);
+        i++;
+    }
+    if (imagesHTML) {
+        document.getElementById('gallery-images').innerHTML = imagesHTML;
+        addThumbnailClickEvents();
+    } else {
+        document.getElementById('gallery-images').innerHTML = '<p>Galerie neobsahuje žádné obrázky.</p>';
+    }
+}
+
+function imageExists(src) {
+    const img = new Image();
+    img.src = src;
+    return img.height !== 0;
+}
+
+function createThumbnail(imgSrc) {
+    return `<img src="${imgSrc}" class="gallery-thumb" onclick="showImage('${imgSrc}')">`;
+}
+
+function showImage(imgSrc) {
+    document.getElementById('gallery-info').innerHTML = `<img src="${imgSrc}" class="gallery-full">`;
+}
+
+function addThumbnailClickEvents() {
+    document.querySelectorAll(".gallery-thumb").forEach(img => {
+        img.style.width = "100px";
+        img.style.height = "150px";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "5px";
+        img.style.margin = "5px";
+    });
+
+    const galleryFull = document.querySelector(".gallery-full");
+    if (galleryFull) {
+        galleryFull.style.width = "100%";
+        galleryFull.style.maxWidth = "500px";
+        galleryFull.style.borderRadius = "10px";
+        galleryFull.style.display = "block";
+        galleryFull.style.margin = "auto";
+    }
+}
+
+
+
+
+
+
+
+
 // 🚀 Inicializace stránky
 document.addEventListener("DOMContentLoaded", fetchProductData);
 
@@ -270,19 +410,23 @@ async function initializePage() {
     const listId = getQueryParam("list");
     const articleId = getQueryParam("article");
     const productId = getQueryParam("product");
+    const galleryId = getQueryParam("gallery");
 
     // Skrytí statického obsahu, pokud je parametr 'list', 'article' nebo 'product' v URL
     if (articleId) {
         document.getElementById("static-content").style.display = "none";
         document.getElementById("dynamic-content").style.display = "none";
         document.getElementById("article-show").style.display = "block";
+        document.getElementById("product-show").style.display = "none";
+        document.getElementById("gallery-show").style.display = "none";
         await fetchArticleData(); // Načteme a zobrazíme článek
     } else if (listId) {
         document.getElementById("static-content").style.display = "none";
         document.getElementById("dynamic-content").style.display = "block";
         document.getElementById("article-show").style.display = "none";
         document.getElementById("product-show").style.display = "none";
-        const data = await fetchListData(listId);
+        document.getElementById("gallery-show").style.display = "none";
+        const data = await fetchListData(listId); // Načteme a zobrazíme seznam
         if (data) {
             allMovies = data;
             currentPage = 0;
@@ -294,14 +438,24 @@ async function initializePage() {
         document.getElementById("dynamic-content").style.display = "none";
         document.getElementById("article-show").style.display = "none";
         document.getElementById("product-show").style.display = "block";
+        document.getElementById("gallery-show").style.display = "none";
         await fetchProductData(); // Načteme a zobrazíme produkt
+    } else if (galleryId) {
+        document.getElementById("static-content").style.display = "none";
+        document.getElementById("dynamic-content").style.display = "none";
+        document.getElementById("article-show").style.display = "none";
+        document.getElementById("product-show").style.display = "none";
+        document.getElementById("gallery-show").style.display = "block";
+        await fetchProductData(); // Načteme a zobrazíme galerii
     } else {
         document.getElementById("static-content").style.display = "block";
         document.getElementById("dynamic-content").style.display = "none";
         document.getElementById("article-show").style.display = "none";
         document.getElementById("product-show").style.display = "none";
+        document.getElementById("gallery-show").style.display = "none";
     }
 }
+
 
 
 // Pomocná funkce pro získání parametru z URL
