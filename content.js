@@ -268,7 +268,7 @@ function displayProduct(product) {
 
 
 
-// funkce pro zobrazení seznamu galerií jako ?gallery=all
+// Funkce pro zobrazení seznamu galerií jako ?gallery=all
 document.addEventListener("DOMContentLoaded", fetchGalleryData);
 
 async function fetchGalleryData() {
@@ -282,7 +282,7 @@ async function fetchGalleryData() {
         // Pokud je specifikován konkrétní gallery ID, zobrazí se konkrétní galerie
         showGallery(galleryId);
     } else {
-        // Pokud není parametr gallery, můžeš třeba zobrazit defaultní obsah
+        // Pokud není parametr gallery, zobrazí se výchozí obsah
         document.getElementById('gallery-show').innerHTML = '<p>Vyberte galerii z menu.</p>';
     }
 }
@@ -292,38 +292,42 @@ async function showGalleryList() {
     try {
         const response = await fetch('galleries.json');
         if (!response.ok) throw new Error('Soubor nenalezen');
-        
+
         const data = await response.json();
         const galleries = data.galleries;
 
-        // Generování seznamu galerií ve struktuře, jak jsi požadovala
-        const galleryListHtml = await Promise.all(galleries.map(async (gallery) => {
-            // Získání odkazu na galerii
-            const galleryUrl = `?gallery=${gallery.id}`;
+        if (galleries && galleries.length > 0) {
+            // Generování seznamu galerií ve struktuře
+            const galleryListHtml = await Promise.all(galleries.map(async (gallery) => {
+                // Získání odkazu na galerii
+                const galleryUrl = `?gallery=${gallery.id}`;
 
-            // Načítání příspěvků z Tumblr API pro získání obrázku
-            const firstImage = await fetchFirstImageFromPost(gallery['tumblr-id']);
+                // Načítání příspěvků z Tumblr API pro získání obrázku
+                const firstImage = await fetchFirstImageFromPost(gallery['tumblr-id']);
 
-            return `
-                <div class="card-item">
-                    <a href="${galleryUrl}" target="_blank" class="card-link">
-                        <div class="card-image">
-                            <img src="${firstImage}" alt="${gallery.name}">
-                        </div>
-                        <div class="card-info">
-                            <div class="card-title">${gallery.name}</div>
-                            <div class="card-description">${gallery.description}</div>
-                        </div>
-                    </a>
-                </div>
+                return `
+                    <div class="card-item">
+                        <a href="${galleryUrl}" target="_blank" class="card-link">
+                            <div class="card-image">
+                                <img src="${firstImage}" alt="${gallery.name}">
+                            </div>
+                            <div class="card-info">
+                                <div class="card-title">${gallery.name}</div>
+                                <div class="card-description">${gallery.description}</div>
+                            </div>
+                        </a>
+                    </div>
+                `;
+            }));
+
+            // Zobrazení seznamu na stránce
+            document.getElementById('gallery-show').innerHTML = `
+                <h1>Seznam Galerií</h1>
+                <div class="gallery-list">${galleryListHtml.join('')}</div>
             `;
-        }));
-
-        // Zobrazení seznamu na stránce
-        document.getElementById('gallery-show').innerHTML = `
-            <h1>Seznam Galerií</h1>
-            <div class="gallery-list">${galleryListHtml.join('')}</div>
-        `;
+        } else {
+            document.getElementById('gallery-show').innerHTML = '<p>Žádné galerie nenalezeny.</p>';
+        }
     } catch (error) {
         document.getElementById('gallery-show').innerHTML = `<p>Chyba při načítání seznamu galerií: ${error.message}</p>`;
     }
@@ -332,7 +336,7 @@ async function showGalleryList() {
 // Funkce pro načtení prvního obrázku z příspěvku Tumblr
 async function fetchFirstImageFromPost(tumblrId) {
     try {
-        const response = await fetch(`https://api.tumblr.com/v2/blog/${tumblrId}/posts/photo?api_key=YOUR_API_KEY`);
+        const response = await fetch(`https://api.tumblr.com/v2/blog/${tumblrId}/posts/photo?api_key=YuwtkxS7sYF0DOW41yK2rBeZaTgcZWMHHNhi1TNXht3Pf7Lkdf`);
         if (!response.ok) throw new Error('Chyba při načítání příspěvku z Tumblr');
 
         const data = await response.json();
@@ -348,6 +352,7 @@ async function fetchFirstImageFromPost(tumblrId) {
         return 'default-image.jpg'; // Výchozí obrázek v případě chyby
     }
 }
+
 
 
 
