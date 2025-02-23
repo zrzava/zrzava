@@ -759,6 +759,7 @@ footer a:hover {
     object-fit: cover; /* Oříznutí obrázku, pokud nebude pasovat */
     border-radius: 5px;
     display: block; /* Zajistí, že obrázek nebude plavat vedle textu */
+    cursor: pointer;
 }
 
 .gallery-full {
