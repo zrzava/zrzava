@@ -719,3 +719,16 @@ footer a:hover {
     border-bottom: 3px solid #FF5733;
 }
 
+#gallery-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+    justify-items: center;
+}
+
+.gallery-thumb {
+    max-width: 200px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 5px;
+}
