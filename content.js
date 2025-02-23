@@ -330,7 +330,7 @@ async function loadTumblrGallery(tumblrId) {
 
             if (images) {
                 document.getElementById('gallery-images').innerHTML = images;
-                document.getElementById('tumblr-notes').textContent = ` | ${post.note_count} notes`;
+                document.getElementById('tumblr-notes').textContent = `${post.note_count} notes`;
                 addThumbnailClickEvents();
             } else {
                 document.getElementById('gallery-images').innerHTML = '<p>Galerie neobsahuje žádné obrázky.</p>';
