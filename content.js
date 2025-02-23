@@ -296,13 +296,13 @@ async function fetchGalleryData() {
 function displayGallery(gallery) {
     document.getElementById('gallery-show').innerHTML = `
         <div class="section item">
-            <div class="section-content item-text" id="gallery-info">
+            <div class="section-content gallery-text" id="gallery-info">
                 <h1>${gallery.name}</h1>
                 <p>${gallery.description}</p>
                 <p>${gallery.date} <span id="tumblr-notes"> | 0 notes</span></p>
                 <div id="share-links"></div>
             </div>
-            <div class="item-container" id="gallery-images"></div>
+            <div class="gallery-container" id="gallery-images"></div>
         </div>`;
 
     if (gallery["tumblr-id"]) {
@@ -376,14 +376,40 @@ function showImage(imgSrc) {
 }
 
 function addThumbnailClickEvents() {
-    document.querySelectorAll(".gallery-thumb").forEach(img => {
-        // Přesunout inline styly do CSS tříd (zachováno pro příklad)
-        img.classList.add('gallery-thumb');
+    const container = document.getElementById('gallery-images');
+    const thumbs = container.querySelectorAll('.gallery-thumb');
+    
+    // Dynamické nastavení rozložení podle šířky kontejneru
+    const containerWidth = container.offsetWidth;
+    let columns = 2;  // Počet sloupců podle šířky
+    if (containerWidth >= 900) {
+        columns = 3;
+    } else if (containerWidth < 600) {
+        columns = 1;
+    }
+    
+    // Nastavení stylu pro obrázky
+    thumbs.forEach((img) => {
+        img.style.width = `${100 / columns}%`; // Dynamické nastavení šířky podle počtu sloupců
+        img.style.height = 'auto';
+        img.style.objectFit = 'cover';
+        img.style.borderRadius = '5px';
+        img.style.margin = '5px';
     });
 
+    // Dynamické nastavení počtu obrázků na řádek
+    container.style.display = 'grid';
+    container.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
+    container.style.gap = '10px';
+
+    // Fullscreen obrázek stylování
     const galleryFull = document.querySelector(".gallery-full");
     if (galleryFull) {
-        galleryFull.classList.add('gallery-full');
+        galleryFull.style.width = "100%";
+        galleryFull.style.maxWidth = "500px";
+        galleryFull.style.borderRadius = "10px";
+        galleryFull.style.display = "block";
+        galleryFull.style.margin = "auto";
     }
 }
 
