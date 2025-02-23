@@ -726,6 +726,13 @@ footer a:hover {
     z-index: 2; /* Text bude pod obrázkem */
 }
 
+.gallery-container {
+    position: relative; /* Rodičovský element s pozicováním pro absolutní pozicování cenovky */
+    display: inline-block; /* Umožní obrázku i cenovce být v řadě */
+    z-index: 3; /* Umožní cenovce být nad obrázkem */
+    overflow: hidden; /* Skryje posuvníky při zvětšení obrázku */
+}
+
 #gallery-images {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
