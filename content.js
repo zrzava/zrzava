@@ -303,7 +303,7 @@ function displayGallery(gallery) {
             <div class="section-content gallery-text" id="gallery-info">
                 <h1>${gallery.name}</h1>
                 <p>${gallery.description}</p>
-                <p>${gallery.date} <span id="tumblr-notes"> | 0 notes</span></p>
+                <p style="text-align: right; font-size: 0.8rem;">${gallery.date} <span id="tumblr-notes"> | 0 notes</span></p>
                 <div id="share-links"></div>
             </div>
             <div class="gallery-container" id="gallery-images"></div>
@@ -390,7 +390,7 @@ function showImage(imgSrc, tumblrId) {
     document.getElementById('gallery-info').innerHTML = `
         <img src="${imgSrc}" class="gallery-full">
         <div>
-            <p><span id="tumblr-notes"> | Loading...</span></p>
+            <p style="text-align: right; font-size: 0.8rem;"><span id="tumblr-notes"></span></p>
         </div>`;
 
     // Načtení počtu poznámek pro daný Tumblr obrázek
