@@ -296,13 +296,13 @@ async function fetchGalleryData() {
 function displayGallery(gallery) {
     document.getElementById('gallery-show').innerHTML = `
         <div class="section item">
-            <div class="section-content gallery-text" id="gallery-info">
+            <div class="section-content item-text" id="gallery-info">
                 <h1>${gallery.name}</h1>
                 <p>${gallery.description}</p>
                 <p>${gallery.date} <span id="tumblr-notes"> | 0 notes</span></p>
                 <div id="share-links"></div>
             </div>
-            <div class="gallery-container" id="gallery-images"></div>
+            <div class="item-container" id="gallery-images"></div>
         </div>`;
 
     if (gallery["tumblr-id"]) {
