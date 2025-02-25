@@ -156,6 +156,7 @@ function displayArticle(article) {
 
 
 // Funkce pro načtení shopu
+// Funkce pro načtení shopu
 document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const shopId = urlParams.get('shop') || "pictures"; // Defaultní hodnota "pictures"
@@ -234,21 +235,18 @@ function displayItems(shopId, productGroups, galleriesData) {
     let allItems = [];
 
     if (shopId === "pictures") {
-        // Seřazujeme produkty a galerie podle data
         allItems = [
             ...productGroups["pictures"] || [],
             ...galleriesData.galleries.map(gallery => ({
                 ...gallery,
                 product_group: "gallery",
-                price: "FREE", // Pro galerie místo ceny
+                price: "FREE", 
                 is_gallery: true
             }))
         ];
 
-        // Seřadit od nejnovějšího k nejstaršímu podle data (pouze pro galerii a obrázky)
         allItems.sort((a, b) => new Date(b.date) - new Date(a.date)); 
     } else {
-        // Filtrovat produkty podle kategorie tabulky
         allItems = productGroups[shopId] || [];
     }
 
@@ -256,6 +254,10 @@ function displayItems(shopId, productGroups, galleriesData) {
         container.innerHTML = `<p>Žádné produkty v této kategorii.</p>`;
         return;
     }
+
+    // Vytvoření obalujícího divu pro obsah
+    const contentWrapper = document.createElement("div");
+    contentWrapper.style.minHeight = "calc(75vh - 45px)"; // Určený minimální výška
 
     const cardContainer = document.createElement("div");
     cardContainer.className = "card-item";
@@ -265,14 +267,10 @@ function displayItems(shopId, productGroups, galleriesData) {
         productCard.href = item.is_gallery ? `?gallery=${item.id}` : `?product=${item.id}`;
         productCard.className = "card-link";
         
-        // Pokud není obrázek pro produkt/galerii, ponecháme místo prázdné
         const itemImage = item.images && item.images[0] ? item.images[0] : "";
-        
-        // Výběr správného názvu a popisu pro angličtinu
         const name = item.is_gallery ? item.name : item.name_en;
         const description = item.is_gallery ? item.description : item.description_en;
         
-        // Výpočet ceny: Pokud je sleva, zobrazí se původní cena jako přeškrtnutá a nová cena
         let priceHTML = "";
         if (!item.is_gallery && item.discount === "yes" && item.discount_percent > 0) {
             const originalPrice = item.price;
@@ -301,10 +299,11 @@ function displayItems(shopId, productGroups, galleriesData) {
         `;
         cardContainer.appendChild(productCard);
     });
-    
-    container.appendChild(cardContainer);
-}
 
+    // Přidání k obalujícímu divu
+    contentWrapper.appendChild(cardContainer);
+    container.appendChild(contentWrapper); // A přidání obalujícího divu do hlavního kontejneru
+}
 
 
 
