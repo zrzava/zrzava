@@ -158,7 +158,7 @@ function displayArticle(article) {
 // Funkce pro načtení shopu
 document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
-    const shopId = urlParams.get('shop') || "gallery"; // Defaultní hodnota
+    const shopId = urlParams.get('shop') || "pictures"; // Defaultní hodnota
     
     const shopShow = document.getElementById("shop-show");
     if (!document.getElementById("tabs")) {
@@ -242,6 +242,7 @@ function displayProducts(products, shopId) {
         container.appendChild(productCard);
     });
 }
+
 
 
 
