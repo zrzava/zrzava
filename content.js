@@ -193,7 +193,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
 
         generateTabs(productGroups, shopId);
-        displayItems(productsData, galleriesData, shopId);
+        displayItems(shopId, productGroups, galleriesData);  // Upraveno pro vykreslení produktů
     } catch (error) {
         shopShow.innerHTML = `<p>Chyba při načítání shop: ${error.message}</p>`;
     }
@@ -218,7 +218,7 @@ function generateTabs(groups, activeShop) {
             tab.onclick = (event) => {
                 event.preventDefault();
                 history.pushState({}, "", `?shop=${group}`);
-                displayItems([], [], group);  // Zavolání pro jiný tab
+                displayItems(group, groups, []);  // Zavolání pro jiný tab
                 document.querySelectorAll("#tabs a").forEach(el => el.classList.remove("active"));
                 tab.classList.add("active");
             };
@@ -227,21 +227,16 @@ function generateTabs(groups, activeShop) {
     });
 }
 
-function displayItems(productsData, galleriesData, shopId) {
+function displayItems(shopId, productGroups, galleriesData) {
     const container = document.getElementById("tab-content");
     container.innerHTML = "";
-    
-    if (!productsData.products.length && !galleriesData.galleries.length) {
-        container.innerHTML = `<p>Žádné produkty v této kategorii.</p>`;
-        return;
-    }
-    
+
     let allItems = [];
 
     if (shopId === "pictures") {
-        // Seřadíme produkty a galerie podle data (pouze pro řazení)
+        // Seřazujeme produkty a galerie podle data
         allItems = [
-            ...productsData.products.filter(product => product.product_group === "pictures"),
+            ...productGroups["pictures"] || [],
             ...galleriesData.galleries.map(gallery => ({
                 ...gallery,
                 product_group: "gallery",
@@ -253,8 +248,13 @@ function displayItems(productsData, galleriesData, shopId) {
         // Seřadit od nejnovějšího k nejstaršímu podle data (pouze pro galerii a obrázky)
         allItems.sort((a, b) => new Date(b.date) - new Date(a.date)); 
     } else {
-        // Pro ostatní kategorie zobrazujeme pouze produkty
-        allItems = productsData.products.filter(product => product.product_group === shopId);
+        // Filtrovat produkty podle kategorie tabulky
+        allItems = productGroups[shopId] || [];
+    }
+
+    if (allItems.length === 0) {
+        container.innerHTML = `<p>Žádné produkty v této kategorii.</p>`;
+        return;
     }
 
     const cardContainer = document.createElement("div");
@@ -304,6 +304,7 @@ function displayItems(productsData, galleriesData, shopId) {
     
     container.appendChild(cardContainer);
 }
+
 
 
 
