@@ -156,73 +156,79 @@ function displayArticle(article) {
 
 
 // Funkce pro načtení shopu
-async function fetchShopData() {
-    const urlParams = new URLSearchParams(window.location.search);  // Načteme parametry URL
-    const shopId = urlParams.get('shop');  // Získáme hodnotu parametru "article"
-
-    if (!articleId) {
-        document.getElementById('shop-show').innerHTML = '<p>Shop nebyl nalezen. Zkontrolujte ID v URL.</p>';
-        return;
-    }
-
+document.addEventListener("DOMContentLoaded", async function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const shopId = urlParams.get('shop') || "gallery"; // Defaultní hodnota
+    
     try {
         const response = await fetch('products.json');
-        if (!response.ok) {
-            throw new Error('Soubor nenalezen');
-        }
+        if (!response.ok) throw new Error('Soubor nenalezen');
+        
         const data = await response.json();
-        const article = data.Shop.find(a => a.id === shopId); // Hledání článku podle ID
-
-        if (shop) {
-            displayShop(shop);  // Zobrazení článku
-        } else {
-            document.getElementById('shop-show').innerHTML = '<p>Shop nenalezen.</p>';
-        }
+        const productGroups = {}; // Seskupení produktů podle jejich skupiny
+        
+        data.products.forEach(product => {
+            if (!productGroups[product.product_group]) {
+                productGroups[product.product_group] = [];
+            }
+            productGroups[product.product_group].push(product);
+        });
+        
+        generateTabs(productGroups, shopId);
+        displayProducts(productGroups[shopId] || [], shopId);
     } catch (error) {
         document.getElementById('shop-show').innerHTML = `<p>Chyba při načítání shop: ${error.message}</p>`;
     }
+});
+
+function generateTabs(groups, activeShop) {
+    const tabsContainer = document.getElementById("tabs");
+    tabsContainer.innerHTML = "";
+    
+    Object.keys(groups).forEach(group => {
+        const tab = document.createElement("a");
+        tab.href = `?shop=${group}`;
+        tab.className = group === activeShop ? "active" : "";
+        tab.textContent = group.charAt(0).toUpperCase() + group.slice(1);
+        tab.onclick = (event) => {
+            event.preventDefault();
+            history.pushState({}, "", `?shop=${group}`);
+            displayProducts(groups[group], group);
+            document.querySelectorAll("#tabs a").forEach(el => el.classList.remove("active"));
+            tab.classList.add("active");
+        };
+        tabsContainer.appendChild(tab);
+    });
 }
 
-// Funkce pro zobrazení shopu
-function displayShop(shop) {
-    if (shop) {
-        const shopHTML = `
-                    <div id="tabs" style="margin-bottom: 1px; margin-top: 15px; width: 100%;">
-                        <a href="?shop=gallery" class="active" onclick="showTab(event, 'gallery')">Gallery</a>
-                        <a href="?shop=ebooks" class="" onclick="showTab(event, 'ebooks')">Ebooks</a>
-                        <a href="?shop=goals" class="" onclick="showTab(event, 'goals')">Fund My Goals</a>
-                    </div>
-                    <div id="tab-content">
-                        <div class="spacer">Lorem ipsum dolor sit amet consectetuer Donec Vestibulum Cum nec Nam. Orci Curabitur id cursus Phasellus dis Curabitur turpis Fusce justo justo. Pretium metus sapien Nam porta sit Cras malesuada Vestibulum vel sodales. Pretium pede est sed Aenean a montes elit Aenean tempor malesuada. Proin sapien consequat nec laoreet lacinia Curabitur adipiscing congue eu Maecenas. Pede Duis sapien quis urna vel Mauris mi adipiscing eros est.</div>
-                        <div id="gallery" class="tab" style="min-height: calc(75vh - 45px);">
-                            <p style="text-align: justify;">gallery</p>
-                        </div>
-                        <div id="ebooks" class="tab" style="min-height: calc(75vh - 45px);">
-                            <p style="text-align: justify;">ebooks</p>
-                        </div>
-                        <div id="goals" class="tab" style="min-height: calc(75vh - 45px);">
-                            <div class="card">
-                                <div class="card-item">
-                                    <a href="" class="card-link">
-                                        <div class="card-image">
-                                            <img src="${product.images[0]}" alt="eshop">
-                                        </div>
-                                        <div class="card-info">
-                                            <div class="card-title">${product.name_en}</div>
-                                            <div class="card-description">${product.description_en}</div>
-                                            <div class="card-description" style="text-align: right;"><strong>${product.price}</strong></div>
-                                        </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-        `;
-        document.getElementById('shop-show').innerHTML = articleHTML;
-        document.getElementById('shop-show').style.display = 'block'; // Zobrazení článku
-    } else {
-        console.error("Shop not found.");
+function displayProducts(products, shopId) {
+    const container = document.getElementById("tab-content");
+    container.innerHTML = "";
+    
+    if (!products.length) {
+        container.innerHTML = `<p>Žádné produkty v této kategorii.</p>`;
+        return;
     }
+    
+    products.forEach(product => {
+        const productCard = document.createElement("div");
+        productCard.className = "card";
+        productCard.innerHTML = `
+            <div class="card-item">
+                <a href="?product=${product.id}" class="card-link">
+                    <div class="card-image">
+                        <img src="${product.images[0]}" alt="${product.name_en}">
+                    </div>
+                    <div class="card-info">
+                        <div class="card-title">${product.name_en}</div>
+                        <div class="card-description">${product.description_en}</div>
+                        <div class="card-price" style="text-align: right;"><strong>${product.price}</strong></div>
+                    </div>
+                </a>
+            </div>
+        `;
+        container.appendChild(productCard);
+    });
 }
 
 
