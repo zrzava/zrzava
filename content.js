@@ -179,6 +179,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         const data = await response.json();
         const productGroups = {}; // Seskupení produktů podle jejich skupiny
         
+        // Seřadíme kategorie, aby 'pictures' bylo první
+        const groups = ['pictures', ...Object.keys(data.products.reduce((acc, product) => {
+            if (!acc[product.product_group]) acc[product.product_group] = true;
+            return acc;
+        }, {}))];
+
         data.products.forEach(product => {
             if (!productGroups[product.product_group]) {
                 productGroups[product.product_group] = [];
@@ -186,18 +192,18 @@ document.addEventListener("DOMContentLoaded", async function () {
             productGroups[product.product_group].push(product);
         });
         
-        generateTabs(productGroups, shopId);
+        generateTabs(productGroups, shopId, groups);
         displayProducts(productGroups[shopId] || [], shopId);
     } catch (error) {
         shopShow.innerHTML = `<p>Chyba při načítání shop: ${error.message}</p>`;
     }
 });
 
-function generateTabs(groups, activeShop) {
+function generateTabs(groups, activeShop, orderedGroups) {
     const tabsContainer = document.getElementById("tabs");
     tabsContainer.innerHTML = "";
     
-    Object.keys(groups).forEach(group => {
+    orderedGroups.forEach(group => {
         const tab = document.createElement("a");
         tab.href = `?shop=${group}`;
         tab.className = group === activeShop ? "active" : "";
@@ -230,7 +236,7 @@ function displayProducts(products, shopId) {
         productCard.href = `?product=${product.id}`;
         productCard.className = "card-link";
         
-        // Nastavení obrázku, pokud není, použije se náhradní
+        // Pokud není obrázek pro produkt, použije se náhradní obrázek
         const productImage = product.images && product.images[0] ? product.images[0] : "img/zrzava.webp";
         
         productCard.innerHTML = `
@@ -248,6 +254,7 @@ function displayProducts(products, shopId) {
     
     container.appendChild(cardContainer);
 }
+
 
 
 
