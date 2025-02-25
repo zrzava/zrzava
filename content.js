@@ -179,20 +179,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         const data = await response.json();
         const productGroups = {}; // Seskupení produktů podle jejich skupiny
         
-        // Seřadíme kategorie, aby 'pictures' bylo první
-        const groups = ['pictures', ...Object.keys(data.products.reduce((acc, product) => {
-            if (!acc[product.product_group]) acc[product.product_group] = true;
-            return acc;
-        }, {}))];
-
+        // Seskupíme produkty podle jejich skupiny
         data.products.forEach(product => {
             if (!productGroups[product.product_group]) {
                 productGroups[product.product_group] = [];
             }
             productGroups[product.product_group].push(product);
         });
+
+        // Seřadíme kategorie, ale zajistíme, že 'pictures' bude na začátku, pokud existuje
+        const orderedGroups = ['pictures', ...Object.keys(productGroups).filter(group => group !== 'pictures')];
         
-        generateTabs(productGroups, shopId, groups);
+        generateTabs(productGroups, shopId, orderedGroups);
         displayProducts(productGroups[shopId] || [], shopId);
     } catch (error) {
         shopShow.innerHTML = `<p>Chyba při načítání shop: ${error.message}</p>`;
@@ -236,12 +234,12 @@ function displayProducts(products, shopId) {
         productCard.href = `?product=${product.id}`;
         productCard.className = "card-link";
         
-        // Pokud není obrázek pro produkt, použije se náhradní obrázek
-        const productImage = product.images && product.images[0] ? product.images[0] : "img/zrzava.webp";
+        // Pokud není obrázek pro produkt, ponecháme místo prázdné
+        const productImage = product.images && product.images[0] ? product.images[0] : "";
         
         productCard.innerHTML = `
             <div class="card-image">
-                <img src="${productImage}" alt="${product.name_en}" loading="lazy">
+                ${productImage ? `<img src="${productImage}" alt="${product.name_en}" loading="lazy">` : ""}
             </div>
             <div class="card-info">
                 <div class="card-title">${product.name_en}</div>
