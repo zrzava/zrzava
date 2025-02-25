@@ -218,7 +218,7 @@ function generateTabs(groups, activeShop) {
             tab.onclick = (event) => {
                 event.preventDefault();
                 history.pushState({}, "", `?shop=${group}`);
-                displayItems([], [], group);
+                displayItems([], [], group);  // Zavolání pro jiný tab
                 document.querySelectorAll("#tabs a").forEach(el => el.classList.remove("active"));
                 tab.classList.add("active");
             };
@@ -304,10 +304,6 @@ function displayItems(productsData, galleriesData, shopId) {
     
     container.appendChild(cardContainer);
 }
-
-
-
-
 
 
 
