@@ -12,7 +12,7 @@
       "discount": "yes",
       "discount_percent": 20,
       "discount_end_date": "2025-04-13",
-      "product_group": "ebook",
+      "product_group": "ebooks",
       "images": ["img/products/01.png", "img/products/01a.png"],
       "link": "https://example.com/product-1",
       "is_main": true
@@ -61,7 +61,7 @@
       "discount": "no",
       "discount_percent": 0,
       "discount_end_date": "null",
-      "product_group": "gallery",
+      "product_group": "pictures",
       "images": ["watch/logo.webp"],
       "link": "https://example.com/product-2"
     }
