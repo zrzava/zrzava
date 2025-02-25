@@ -259,7 +259,6 @@ function displayItems(shopId, productGroups, galleriesData) {
     // Vytvoření obalujícího divu pro obsah
     const contentWrapper = document.createElement("div");
     contentWrapper.style.minHeight = "calc(75vh - 45px)"; // Určený minimální výška
-    contentWrapper.style.marginTop = "40px"; // Přidání margin-top
 
     const cardContainer = document.createElement("div");
     cardContainer.className = "card-item";
