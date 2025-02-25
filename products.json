@@ -62,7 +62,7 @@
       "discount_percent": 0,
       "discount_end_date": "null",
       "product_group": "pictures",
-      "images": ["watch/logo.webp"],
+      "images": ["img/zrzava.webp"],
       "link": "https://example.com/product-2"
     }
   ]
