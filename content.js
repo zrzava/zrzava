@@ -1,4 +1,5 @@
 
+
 ﻿// Mapa pro různé seznamy
 const listMap = {
     "lists": "lists.json", // Mapa pro různé seznamy
@@ -541,9 +542,7 @@ function showImage(imgSrc, tumblrId) {
     document.getElementById('gallery-info').innerHTML = `
         <img src="${imgSrc}" class="gallery-full">
         <div>
-            <h1><a href="?shop=pictures" title="go back" style="color: white; text-decoration: none;" onmouseover="this.style.color='#FF5733'; this.style.textDecoration='none'" onmouseout="this.style.color='white'; this.style.textDecoration='none'">&vltri;</a> ${gallery.name}</h1>
-            <p>${gallery.description}</p>
-            <p font-size: 0.8rem;">${galleryDate} <span id="tumblr-notes"></span> | <a href="">back to galleries</a></p>
+            <p style="text-align: right; font-size: 0.8rem;">${galleryDate} <span id="tumblr-notes"></span> | <a href="">back to galleries</a></p>
         </div>`;
 
     // Načtení počtu poznámek pro daný Tumblr obrázek
