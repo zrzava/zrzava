@@ -100,8 +100,6 @@ function goToNext() {
 }
 
 
-
-
 // Funkce pro načtení článku
 async function fetchArticleData() {
     const urlParams = new URLSearchParams(window.location.search);  // Načteme parametry URL
@@ -149,7 +147,85 @@ function displayArticle(article) {
     }
 }
 
-// Funkce pro zobrazení produktu
+
+
+
+
+
+
+
+
+// Funkce pro načtení shopu
+async function fetchShopData() {
+    const urlParams = new URLSearchParams(window.location.search);  // Načteme parametry URL
+    const shopId = urlParams.get('shop');  // Získáme hodnotu parametru "article"
+
+    if (!articleId) {
+        document.getElementById('shop-show').innerHTML = '<p>Shop nebyl nalezen. Zkontrolujte ID v URL.</p>';
+        return;
+    }
+
+    try {
+        const response = await fetch('products.json');
+        if (!response.ok) {
+            throw new Error('Soubor nenalezen');
+        }
+        const data = await response.json();
+        const article = data.Shop.find(a => a.id === shopId); // Hledání článku podle ID
+
+        if (shop) {
+            displayShop(shop);  // Zobrazení článku
+        } else {
+            document.getElementById('shop-show').innerHTML = '<p>Shop nenalezen.</p>';
+        }
+    } catch (error) {
+        document.getElementById('shop-show').innerHTML = `<p>Chyba při načítání shop: ${error.message}</p>`;
+    }
+}
+
+// Funkce pro zobrazení shopu
+function displayShop(shop) {
+    if (shop) {
+        const shopHTML = `
+                    <div id="tabs" style="margin-bottom: 1px; margin-top: 15px; width: 100%;">
+                        <a href="?shop=gallery" class="active" onclick="showTab(event, 'gallery')">Gallery</a>
+                        <a href="?shop=ebooks" class="" onclick="showTab(event, 'ebooks')">Ebooks</a>
+                        <a href="?shop=goals" class="" onclick="showTab(event, 'goals')">Fund My Goals</a>
+                    </div>
+                    <div id="tab-content">
+                        <div class="spacer">Lorem ipsum dolor sit amet consectetuer Donec Vestibulum Cum nec Nam. Orci Curabitur id cursus Phasellus dis Curabitur turpis Fusce justo justo. Pretium metus sapien Nam porta sit Cras malesuada Vestibulum vel sodales. Pretium pede est sed Aenean a montes elit Aenean tempor malesuada. Proin sapien consequat nec laoreet lacinia Curabitur adipiscing congue eu Maecenas. Pede Duis sapien quis urna vel Mauris mi adipiscing eros est.</div>
+                        <div id="gallery" class="tab" style="min-height: calc(75vh - 45px);">
+                            <p style="text-align: justify;">gallery</p>
+                        </div>
+                        <div id="ebooks" class="tab" style="min-height: calc(75vh - 45px);">
+                            <p style="text-align: justify;">ebooks</p>
+                        </div>
+                        <div id="goals" class="tab" style="min-height: calc(75vh - 45px);">
+                            <div class="card">
+                                <div class="card-item">
+                                    <a href="" class="card-link">
+                                        <div class="card-image">
+                                            <img src="${product.images[0]}" alt="eshop">
+                                        </div>
+                                        <div class="card-info">
+                                            <div class="card-title">${product.name_en}</div>
+                                            <div class="card-description">${product.description_en}</div>
+                                            <div class="card-description" style="text-align: right;"><strong>${product.price}</strong></div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        `;
+        document.getElementById('shop-show').innerHTML = articleHTML;
+        document.getElementById('shop-show').style.display = 'block'; // Zobrazení článku
+    } else {
+        console.error("Shop not found.");
+    }
+}
+
+
 
 
 
@@ -261,22 +337,6 @@ function displayProduct(product) {
         document.getElementById('discount-info').style.display = 'none';
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // 🎨 Funkce pro načtení galerie
@@ -445,19 +505,8 @@ function addThumbnailClickEvents() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
 // 🚀 Inicializace stránky
 document.addEventListener("DOMContentLoaded", fetchProductData);
-
 
 // Funkce pro inicializaci stránky a načítání obsahu podle URL
 async function initializePage() {
@@ -465,6 +514,7 @@ async function initializePage() {
     const articleId = getQueryParam("article");
     const productId = getQueryParam("product");
     const galleryId = getQueryParam("gallery");
+    const galleryId = getQueryParam("shop");
 
     // Skrytí statického obsahu, pokud je parametr 'list', 'article' nebo 'product' v URL
     if (articleId) {
@@ -473,6 +523,7 @@ async function initializePage() {
         document.getElementById("article-show").style.display = "block";
         document.getElementById("product-show").style.display = "none";
         document.getElementById("gallery-show").style.display = "none";
+        document.getElementById("shop-show").style.display = "none";
         await fetchArticleData(); // Načteme a zobrazíme článek
     } else if (listId) {
         document.getElementById("static-content").style.display = "none";
@@ -480,6 +531,7 @@ async function initializePage() {
         document.getElementById("article-show").style.display = "none";
         document.getElementById("product-show").style.display = "none";
         document.getElementById("gallery-show").style.display = "none";
+        document.getElementById("shop-show").style.display = "none";
         const data = await fetchListData(listId); // Načteme a zobrazíme seznam
         if (data) {
             allMovies = data;
@@ -487,12 +539,21 @@ async function initializePage() {
             document.getElementById("list-title").innerText = allMovies.title;
             renderItems(); // První vykreslení seznamu
         }
+    } else if (shopId) {
+        document.getElementById("static-content").style.display = "none";
+        document.getElementById("dynamic-content").style.display = "none";
+        document.getElementById("article-show").style.display = "none";
+        document.getElementById("product-show").style.display = "none";
+        document.getElementById("gallery-show").style.display = "none";
+        document.getElementById("shop-show").style.display = "block";
+        await fetchProductData(); // Načteme a zobrazíme shop
     } else if (productId) {
         document.getElementById("static-content").style.display = "none";
         document.getElementById("dynamic-content").style.display = "none";
         document.getElementById("article-show").style.display = "none";
         document.getElementById("product-show").style.display = "block";
         document.getElementById("gallery-show").style.display = "none";
+        document.getElementById("shop-show").style.display = "none";
         await fetchProductData(); // Načteme a zobrazíme produkt
     } else if (galleryId) {
         document.getElementById("static-content").style.display = "none";
@@ -500,6 +561,7 @@ async function initializePage() {
         document.getElementById("article-show").style.display = "none";
         document.getElementById("product-show").style.display = "none";
         document.getElementById("gallery-show").style.display = "block";
+        document.getElementById("shop-show").style.display = "none";
         await fetchProductData(); // Načteme a zobrazíme galerii
     } else {
         document.getElementById("static-content").style.display = "block";
@@ -507,6 +569,7 @@ async function initializePage() {
         document.getElementById("article-show").style.display = "none";
         document.getElementById("product-show").style.display = "none";
         document.getElementById("gallery-show").style.display = "none";
+        document.getElementById("shop-show").style.display = "none";
     }
 }
 
