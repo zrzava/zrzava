@@ -526,7 +526,7 @@ function addThumbnailClickEvents() {
 
 
 // 🚀 Inicializace stránky
-document.addEventListener("DOMContentLoaded", fetchProductData);
+document.addEventListener("DOMContentLoaded", initializePage);
 
 // Funkce pro inicializaci stránky a načítání obsahu podle URL
 async function initializePage() {
@@ -534,64 +534,48 @@ async function initializePage() {
     const articleId = getQueryParam("article");
     const productId = getQueryParam("product");
     const galleryId = getQueryParam("gallery");
-    const galleryId = getQueryParam("shop");
+    const shopId = getQueryParam("shop"); // Opravená deklarace
 
     // Skrytí statického obsahu, pokud je parametr 'list', 'article' nebo 'product' v URL
     if (articleId) {
-        document.getElementById("static-content").style.display = "none";
-        document.getElementById("dynamic-content").style.display = "none";
-        document.getElementById("article-show").style.display = "block";
-        document.getElementById("product-show").style.display = "none";
-        document.getElementById("gallery-show").style.display = "none";
-        document.getElementById("shop-show").style.display = "none";
-        await fetchArticleData(); // Načteme a zobrazíme článek
+        showSection("article-show");
+        await fetchArticleData();
     } else if (listId) {
-        document.getElementById("static-content").style.display = "none";
-        document.getElementById("dynamic-content").style.display = "block";
-        document.getElementById("article-show").style.display = "none";
-        document.getElementById("product-show").style.display = "none";
-        document.getElementById("gallery-show").style.display = "none";
-        document.getElementById("shop-show").style.display = "none";
-        const data = await fetchListData(listId); // Načteme a zobrazíme seznam
+        showSection("dynamic-content");
+        const data = await fetchListData(listId);
         if (data) {
             allMovies = data;
             currentPage = 0;
             document.getElementById("list-title").innerText = allMovies.title;
-            renderItems(); // První vykreslení seznamu
+            renderItems();
         }
     } else if (shopId) {
-        document.getElementById("static-content").style.display = "none";
-        document.getElementById("dynamic-content").style.display = "none";
-        document.getElementById("article-show").style.display = "none";
-        document.getElementById("product-show").style.display = "none";
-        document.getElementById("gallery-show").style.display = "none";
-        document.getElementById("shop-show").style.display = "block";
-        await fetchProductData(); // Načteme a zobrazíme shop
+        showSection("shop-show");
+        await fetchProductData();
     } else if (productId) {
-        document.getElementById("static-content").style.display = "none";
-        document.getElementById("dynamic-content").style.display = "none";
-        document.getElementById("article-show").style.display = "none";
-        document.getElementById("product-show").style.display = "block";
-        document.getElementById("gallery-show").style.display = "none";
-        document.getElementById("shop-show").style.display = "none";
-        await fetchProductData(); // Načteme a zobrazíme produkt
+        showSection("product-show");
+        await fetchProductData();
     } else if (galleryId) {
-        document.getElementById("static-content").style.display = "none";
-        document.getElementById("dynamic-content").style.display = "none";
-        document.getElementById("article-show").style.display = "none";
-        document.getElementById("product-show").style.display = "none";
-        document.getElementById("gallery-show").style.display = "block";
-        document.getElementById("shop-show").style.display = "none";
-        await fetchProductData(); // Načteme a zobrazíme galerii
+        showSection("gallery-show");
+        await fetchProductData();
     } else {
-        document.getElementById("static-content").style.display = "block";
-        document.getElementById("dynamic-content").style.display = "none";
-        document.getElementById("article-show").style.display = "none";
-        document.getElementById("product-show").style.display = "none";
-        document.getElementById("gallery-show").style.display = "none";
-        document.getElementById("shop-show").style.display = "none";
+        showSection("static-content");
     }
 }
+
+// Pomocná funkce pro získání hodnoty parametru z URL
+function getQueryParam(param) {
+    return new URLSearchParams(window.location.search).get(param);
+}
+
+// Pomocná funkce pro zobrazení správné sekce
+function showSection(sectionId) {
+    const sections = ["static-content", "dynamic-content", "article-show", "product-show", "gallery-show", "shop-show"];
+    sections.forEach(id => {
+        document.getElementById(id).style.display = (id === sectionId) ? "block" : "none";
+    });
+}
+
 
 
 
