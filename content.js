@@ -206,7 +206,7 @@ function generateTabs(groups, activeShop) {
     const picturesTab = document.createElement("a");
     picturesTab.href = `?shop=pictures`;
     picturesTab.className = activeShop === "pictures" ? "active" : "";
-    picturesTab.textContent = "Pictures";
+    picturesTab.textContent = "Pics & Vids";
     tabsContainer.appendChild(picturesTab);
     
     Object.keys(groups).forEach(group => {
@@ -262,7 +262,7 @@ function displayItems(shopId, productGroups, galleriesData) {
     
     allItems.forEach(item => {
         const productCard = document.createElement("a");
-        productCard.href = item.is_gallery ? `?gallery=${item.id}` : `?product=${item.id}`;
+        productCard.href = item.is_gallery ? `/gallery=${item.id}` : `?product=${item.id}`;
         productCard.className = "card-link";
         
         // Pokud není obrázek pro produkt/galerii, ponecháme místo prázdné
@@ -280,7 +280,7 @@ function displayItems(shopId, productGroups, galleriesData) {
             priceHTML = `
                 <div class="price-container">
                     <span class="original-price" style="text-decoration: line-through;">${originalPrice.toFixed(2)} €</span>
-                    <span class="discount-price"><strong>${discountPrice.toFixed(2)} €</strong></span>
+                    <span class="discount-price">${discountPrice.toFixed(2)} €</span>
                 </div>
             `;
         } else {
@@ -304,12 +304,15 @@ function displayItems(shopId, productGroups, galleriesData) {
     
     container.appendChild(cardContainer);
 
-    // Přidání min-height pro všechny otevřené taby
-    const tabs = document.querySelectorAll(".tab");
-    tabs.forEach(tab => {
-        tab.style.minHeight = "calc(75vh - 45px)"; // Přidání min-height pro všechny taby
+    // Vytvoříme taby s požadovaným stylem
+    const tabsContainer = document.getElementById("tab-content");
+    const allTabs = tabsContainer.querySelectorAll(".tab");
+    
+    allTabs.forEach(tab => {
+        tab.style.minHeight = "calc(75vh - 45px)"; // Přidání požadovaného min-height na všechny taby
     });
 }
+
 
 
 
