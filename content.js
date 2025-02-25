@@ -237,6 +237,13 @@ function displayProducts(products, shopId) {
         // Pokud není obrázek pro produkt, ponecháme místo prázdné
         const productImage = product.images && product.images[0] ? product.images[0] : "";
         
+        // Vypočítání ceny po slevě, pokud je sleva
+        let displayPrice = product.price;
+        if (product.discount === "yes") {
+            const discountAmount = product.price * (product.discount_percent / 100);
+            displayPrice = product.price - discountAmount;
+        }
+
         productCard.innerHTML = `
             <div class="card-image">
                 ${productImage ? `<img src="${productImage}" alt="${product.name_en}" loading="lazy">` : ""}
@@ -244,7 +251,9 @@ function displayProducts(products, shopId) {
             <div class="card-info">
                 <div class="card-title">${product.name_en}</div>
                 <div class="card-description">${product.description_en}</div>
-                <div class="card-price" style="text-align: right;"><strong>${product.price} €</strong></div>
+                <div class="card-price" style="text-align: right;">
+                    <strong>${displayPrice.toFixed(2)} €</strong>
+                </div>
             </div>
         `;
         cardContainer.appendChild(productCard);
