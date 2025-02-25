@@ -239,7 +239,7 @@ function displayProducts(products, shopId, galleriesData) {
     let allItems = [];
 
     if (shopId === "pictures") {
-        // Seřadíme produkty a galerie podle data
+        // Seřadíme produkty a galerie podle data (pouze pro řazení)
         allItems = [
             ...products.filter(product => product.product_group === "pictures"),
             ...galleriesData.galleries.map(gallery => ({
@@ -268,16 +268,20 @@ function displayProducts(products, shopId, galleriesData) {
         // Pokud není obrázek pro produkt/galerii, ponecháme místo prázdné
         const itemImage = item.images && item.images[0] ? item.images[0] : "";
         
-        // Vypočítání ceny, pokud jde o produkt
-        let priceHTML = item.price === "FREE" ? `<strong>FREE</strong>` : `<strong>${item.price.toFixed(2)} €</strong>`;
-
-        // Pokud jde o galerii, místo ceny bude "FREE"
-        if (item.is_gallery) {
-            priceHTML = `<strong>FREE</strong>`;
+        // Výpočet ceny: Pokud je sleva, zobrazí se původní cena jako přeškrtnutá a nová cena
+        let priceHTML = "";
+        if (item.discount === "yes" && item.discount_percent > 0) {
+            const originalPrice = item.price;
+            const discountPrice = originalPrice - (originalPrice * (item.discount_percent / 100));
+            priceHTML = `
+                <div class="price-container">
+                    <span class="original-price" style="text-decoration: line-through;">${originalPrice.toFixed(2)} €</span>
+                    <span class="discount-price">${discountPrice.toFixed(2)} €</span>
+                </div>
+            `;
+        } else {
+            priceHTML = item.price === "FREE" ? `<strong>FREE</strong>` : `<strong>${item.price.toFixed(2)} €</strong>`;
         }
-
-        // HTML pro zobrazení datumu
-        const itemDate = item.date ? `<div class="product-date">Date: ${new Date(item.date).toLocaleDateString()}</div>` : '';
 
         productCard.innerHTML = `
             <div class="card-image">
@@ -286,7 +290,6 @@ function displayProducts(products, shopId, galleriesData) {
             <div class="card-info">
                 <div class="card-title">${item.name}</div>
                 <div class="card-description">${item.description}</div>
-                ${item.is_gallery ? '' : itemDate} <!-- Datum se zobrazuje pouze u produktů, ne galerií -->
                 <div class="card-price" style="text-align: right;">
                     ${priceHTML}
                 </div>
@@ -297,6 +300,7 @@ function displayProducts(products, shopId, galleriesData) {
     
     container.appendChild(cardContainer);
 }
+
 
 
 
