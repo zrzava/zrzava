@@ -160,6 +160,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const shopId = urlParams.get('shop') || "gallery"; // Defaultní hodnota
     
+    const shopShow = document.getElementById("shop-show");
+    if (!document.getElementById("tabs")) {
+        const tabsDiv = document.createElement("div");
+        tabsDiv.id = "tabs";
+        shopShow.appendChild(tabsDiv);
+    }
+    if (!document.getElementById("tab-content")) {
+        const contentDiv = document.createElement("div");
+        contentDiv.id = "tab-content";
+        shopShow.appendChild(contentDiv);
+    }
+    
     try {
         const response = await fetch('products.json');
         if (!response.ok) throw new Error('Soubor nenalezen');
@@ -177,7 +189,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         generateTabs(productGroups, shopId);
         displayProducts(productGroups[shopId] || [], shopId);
     } catch (error) {
-        document.getElementById('shop-show').innerHTML = `<p>Chyba při načítání shop: ${error.message}</p>`;
+        shopShow.innerHTML = `<p>Chyba při načítání shop: ${error.message}</p>`;
     }
 });
 
@@ -230,6 +242,7 @@ function displayProducts(products, shopId) {
         container.appendChild(productCard);
     });
 }
+
 
 
 
