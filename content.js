@@ -179,41 +179,47 @@ document.addEventListener("DOMContentLoaded", async function () {
         const data = await response.json();
         const productGroups = {}; // Seskupení produktů podle jejich skupiny
         
-        // Seskupíme produkty podle jejich skupiny
         data.products.forEach(product => {
             if (!productGroups[product.product_group]) {
                 productGroups[product.product_group] = [];
             }
             productGroups[product.product_group].push(product);
         });
-
-        // Seřadíme kategorie, ale zajistíme, že 'pictures' bude na začátku, pokud existuje
-        const orderedGroups = ['pictures', ...Object.keys(productGroups).filter(group => group !== 'pictures')];
         
-        generateTabs(productGroups, shopId, orderedGroups);
+        generateTabs(productGroups, shopId);
         displayProducts(productGroups[shopId] || [], shopId);
     } catch (error) {
         shopShow.innerHTML = `<p>Chyba při načítání shop: ${error.message}</p>`;
     }
 });
 
-function generateTabs(groups, activeShop, orderedGroups) {
+function generateTabs(groups, activeShop) {
     const tabsContainer = document.getElementById("tabs");
     tabsContainer.innerHTML = "";
     
-    orderedGroups.forEach(group => {
-        const tab = document.createElement("a");
-        tab.href = `?shop=${group}`;
-        tab.className = group === activeShop ? "active" : "";
-        tab.textContent = group.charAt(0).toUpperCase() + group.slice(1);
-        tab.onclick = (event) => {
-            event.preventDefault();
-            history.pushState({}, "", `?shop=${group}`);
-            displayProducts(groups[group], group);
-            document.querySelectorAll("#tabs a").forEach(el => el.classList.remove("active"));
-            tab.classList.add("active");
-        };
-        tabsContainer.appendChild(tab);
+    // Přidání tab pro "pictures" jako první
+    const picturesTab = document.createElement("a");
+    picturesTab.href = `?shop=pictures`;
+    picturesTab.className = activeShop === "pictures" ? "active" : "";
+    picturesTab.textContent = "Pictures";
+    tabsContainer.appendChild(picturesTab);
+    
+    // Generování ostatních tabů
+    Object.keys(groups).forEach(group => {
+        if (group !== "pictures") { // Zamezíme duplikování tabů pro Pictures
+            const tab = document.createElement("a");
+            tab.href = `?shop=${group}`;
+            tab.className = group === activeShop ? "active" : "";
+            tab.textContent = group.charAt(0).toUpperCase() + group.slice(1);
+            tab.onclick = (event) => {
+                event.preventDefault();
+                history.pushState({}, "", `?shop=${group}`);
+                displayProducts(groups[group], group);
+                document.querySelectorAll("#tabs a").forEach(el => el.classList.remove("active"));
+                tab.classList.add("active");
+            };
+            tabsContainer.appendChild(tab);
+        }
     });
 }
 
@@ -239,9 +245,22 @@ function displayProducts(products, shopId) {
         
         // Vypočítání ceny po slevě, pokud je sleva
         let displayPrice = product.price;
+        let originalPrice = null;
         if (product.discount === "yes") {
             const discountAmount = product.price * (product.discount_percent / 100);
             displayPrice = product.price - discountAmount;
+            originalPrice = product.price; // Původní cena bude zobrazená jako přeškrtnutá
+        }
+
+        // HTML pro zobrazení ceny
+        let priceHTML = `<strong>${displayPrice.toFixed(2)} €</strong>`; // Cena po slevě
+        if (originalPrice !== null) {
+            priceHTML = `
+                <div>
+                    <span style="text-decoration: line-through; color: #888;">${originalPrice.toFixed(2)} €</span>
+                    <span> <strong>${displayPrice.toFixed(2)} €</strong></span>
+                </div>
+            `; // Původní cena je přeškrtnutá
         }
 
         productCard.innerHTML = `
@@ -252,7 +271,7 @@ function displayProducts(products, shopId) {
                 <div class="card-title">${product.name_en}</div>
                 <div class="card-description">${product.description_en}</div>
                 <div class="card-price" style="text-align: right;">
-                    <strong>${displayPrice.toFixed(2)} €</strong>
+                    ${priceHTML}
                 </div>
             </div>
         `;
@@ -261,6 +280,7 @@ function displayProducts(products, shopId) {
     
     container.appendChild(cardContainer);
 }
+
 
 
 
