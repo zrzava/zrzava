@@ -253,7 +253,7 @@ function displayProducts(products, shopId, galleriesData) {
         // Seřadit od nejnovějšího k nejstaršímu podle data (pouze pro galerii a obrázky)
         allItems.sort((a, b) => new Date(b.date) - new Date(a.date)); 
     } else {
-        // Pro ostatní kategorie zobrazujeme pouze produkty, bez galerií
+        // Pro ostatní kategorie zobrazujeme pouze produkty
         allItems = products;
     }
 
@@ -267,6 +267,10 @@ function displayProducts(products, shopId, galleriesData) {
         
         // Pokud není obrázek pro produkt/galerii, ponecháme místo prázdné
         const itemImage = item.images && item.images[0] ? item.images[0] : "";
+        
+        // Výběr správného názvu a popisu pro angličtinu
+        const name = item.name_en || "Unknown Product";
+        const description = item.description_en || "No description available";
         
         // Výpočet ceny: Pokud je sleva, zobrazí se původní cena jako přeškrtnutá a nová cena
         let priceHTML = "";
@@ -285,11 +289,11 @@ function displayProducts(products, shopId, galleriesData) {
 
         productCard.innerHTML = `
             <div class="card-image">
-                ${itemImage ? `<img src="${itemImage}" alt="${item.name}" loading="lazy">` : ""}
+                ${itemImage ? `<img src="${itemImage}" alt="${name}" loading="lazy">` : ""}
             </div>
             <div class="card-info">
-                <div class="card-title">${item.name}</div>
-                <div class="card-description">${item.description}</div>
+                <div class="card-title">${name}</div>
+                <div class="card-description">${description}</div>
                 <div class="card-price" style="text-align: right;">
                     ${priceHTML}
                 </div>
@@ -300,6 +304,7 @@ function displayProducts(products, shopId, galleriesData) {
     
     container.appendChild(cardContainer);
 }
+
 
 
 
