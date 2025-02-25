@@ -1,1 +1,72 @@
 https://en.wikipedia.org/wiki/List_of_feature_films_with_transgender_characters
+
+původní products.json včetně slev na produkty atp:
+﻿{
+  "products": [
+    {
+      "id": "001",
+      "name_cz": "Podpatky jsou hlasitější než slova (english)",
+      "name_en": "Heels Are Louder Than Words (english)",
+      "prefix_cz": "Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et.",
+      "prefix_en": "Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et.",
+      "description_cz": "Dlouhý popis produktu 1 v CZ. Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum. Augue convallis enim pede non lorem Nulla eu.",
+      "description_en": "Long description of product 1 in EN. Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum. Augue convallis enim pede non lorem Nulla eu.",
+      "price": 19.99,
+      "discount": "yes",
+      "discount_percent": 20,
+      "discount_end_date": "2025-04-13",
+      "product_group": "ebooks",
+      "images": ["img/products/01.png", "img/products/01a.png"],
+      "link": "https://example.com/product-1",
+      "is_main": true
+    },
+    {
+      "id": "002",
+      "name_cz": "Produkt 2 v CZ",
+      "name_en": "Product 2 in EN",
+      "prefix_cz": "Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et.",
+      "prefix_en": "Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et.",
+      "description_cz": "Dlouhý popis produktu 2 v CZ. Lorem ipsum dolor sit amet consectetuer Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum.",
+      "description_en": "Long description of product 2 in EN. Lorem ipsum dolor sit amet consectetuer Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum.",
+      "price": 14.99,
+      "discount": "no",
+      "discount_percent": 0,
+      "discount_end_date": null,
+      "product_group": "merch",
+      "images": ["img/products/02.png"],
+      "link": "https://example.com/product-2"
+    },
+    {
+      "id": "003",
+      "name_cz": "Produkt 3 v CZ",
+      "name_en": "Product 3 in EN",
+      "prefix_cz": "Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et.",
+      "prefix_en": "Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et.",
+      "description_cz": "Dlouhý popis produktu 3 v CZ. Lorem ipsum dolor sit amet consectetuer Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum.",
+      "description_en": "Long description of product 3 in EN. Lorem ipsum dolor sit amet consectetuer Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum.",
+      "price": 14.99,
+      "discount": "no",
+      "discount_percent": 0,
+      "discount_end_date": "null",
+      "product_group": "merch",
+      "images": ["img/products/tyrkysovy-hrnek.png"],
+      "link": "https://example.com/product-2"
+    },
+    {
+      "id": "004",
+      "name_cz": "Produkt galerie 1 v CZ",
+      "name_en": "Product gallery 1 in EN",
+      "prefix_cz": "Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et.",
+      "prefix_en": "Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et.",
+      "description_cz": "Dlouhý popis galerie 1 v CZ. Lorem ipsum dolor sit amet consectetuer Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum.",
+      "description_en": "Long description of gallery 1 in EN. Lorem ipsum dolor sit amet consectetuer Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum.",
+      "price": 4.99,
+      "discount": "no",
+      "discount_percent": 0,
+      "discount_end_date": "null",
+      "product_group": "pictures",
+      "images": ["img/zrzava.webp"],
+      "link": "https://example.com/product-2"
+    }
+  ]
+}
