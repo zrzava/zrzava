@@ -250,7 +250,11 @@ function displayProducts(products, shopId, galleriesData) {
             }))
         ];
 
-        allItems.sort((a, b) => new Date(b.date) - new Date(a.date)); // Seřadit od nejnovějšího k nejstaršímu
+        // Seřadit od nejnovějšího k nejstaršímu podle data (pouze pro galerii a obrázky)
+        allItems.sort((a, b) => new Date(b.date) - new Date(a.date)); 
+    } else {
+        // Pro ostatní kategorie zobrazujeme pouze produkty, bez galerií
+        allItems = products;
     }
 
     const cardContainer = document.createElement("div");
@@ -282,7 +286,7 @@ function displayProducts(products, shopId, galleriesData) {
             <div class="card-info">
                 <div class="card-title">${item.name}</div>
                 <div class="card-description">${item.description}</div>
-                ${itemDate}
+                ${item.is_gallery ? '' : itemDate} <!-- Datum se zobrazuje pouze u produktů, ne galerií -->
                 <div class="card-price" style="text-align: right;">
                     ${priceHTML}
                 </div>
