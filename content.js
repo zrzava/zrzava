@@ -458,7 +458,7 @@ function displayGallery(gallery) {
     document.getElementById('gallery-show').innerHTML = `
         <div class="section gallery">
             <div class="section-content gallery-text" id="gallery-info">
-                <h1><a href="?shop=pictures">&#8592;</a> ${gallery.name}</h1>
+                <h1><a href="?shop=pictures" title="go back" style="color: white; text-decoration: none;" onmouseover="this.style.textDecoration='none'" onmouseout="this.style.textDecoration='none'">&vltri;</a> ${gallery.name}</h1>
                 <p>${gallery.description}</p>
                 <p style="text-align: right; font-size: 0.8rem;">${gallery.date} | <span id="tumblr-notes">0 notes</span></p>
             </div>
