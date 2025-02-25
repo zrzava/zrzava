@@ -484,34 +484,33 @@ function displayGallery(gallery) {
     }
 }
 
-// 🟢 Načtení galerie z Tumblr API včetně vložených obrázků
+// 🟢 Opravená funkce pro načtení galerie z Tumblr API
 async function loadTumblrGallery(tumblrId) {
     const apiKey = 'YuwtkxS7sYF0DOW41yK2rBeZaTgcZWMHHNhi1TNXht3Pf7Lkdf';
     const tumblrBlog = 'gabrielaprazska.tumblr.com';
 
     try {
-        const response = await fetch(`https://api.tumblr.com/v2/blog/${tumblrBlog}/posts?id=${tumblrId}&api_key=${apiKey}`);
+        const response = await fetch(`https://api.tumblr.com/v2/blog/${tumblrBlog}/posts?type=photo&id=${tumblrId}&api_key=${apiKey}`);
         const data = await response.json();
         
-        console.log("Získaná data z Tumblr API:", data);
+        console.log("Získaná data z Tumblr API:", data); // 🟢 Debugging
 
         if (data.response.posts && data.response.posts.length > 0) {
             const post = data.response.posts[0];
-            let images = [];
 
-            // Extrahování obrázků z `photos`
+            let images = "";
+            
             if (post.photos) {
-                images = post.photos.map(photo => photo.original_size.url);
+                images = post.photos.map(photo => createThumbnail(photo.original_size.url)).join('');
+            } else if (post.body) {
+                const matches = post.body.match(/<img[^>]+src=\"([^\"]+)\"/g);
+                if (matches) {
+                    images = matches.map(match => createThumbnail(match.match(/src=\"([^\"]+)\"/)[1])).join('');
+                }
             }
 
-            // Extrahování obrázků z `body`
-            const embeddedImages = post.body.match(/<img[^>]+src="([^"]+)"/g);
-            if (embeddedImages) {
-                images = images.concat(embeddedImages.map(imgTag => imgTag.match(/src="([^"]+)"/)[1]));
-            }
-
-            if (images.length > 0) {
-                document.getElementById('gallery-images').innerHTML = images.map(createThumbnail).join('');
+            if (images) {
+                document.getElementById('gallery-images').innerHTML = images;
                 document.getElementById('tumblr-notes').textContent = `${post.note_count} notes`;
                 addThumbnailClickEvents();
             } else {
@@ -526,14 +525,14 @@ async function loadTumblrGallery(tumblrId) {
     }
 }
 
-// 🟢 Načtení galerie z lokálních souborů
+// 🟢 Opravená funkce pro načtení galerie z lokálních souborů
 function loadLocalGallery(galleryId) {
     let imagesHTML = "";
     let i = 1;
 
     while (true) {
         const imgPath = `img/gallery/${galleryId}/${i}.webp`;
-        if (!doesImageExist(imgPath)) break;
+        if (!doesImageExist(imgPath)) break;  // Konec, pokud obrázek neexistuje
         imagesHTML += createThumbnail(imgPath);
         i++;
     }
@@ -546,19 +545,19 @@ function loadLocalGallery(galleryId) {
     }
 }
 
-// 🟢 Kontrola existence obrázku
+// 🟢 Lepší kontrola existence obrázku
 function doesImageExist(src) {
     var img = new Image();
     img.src = src;
     return img.complete && img.naturalWidth !== 0;
 }
 
-// 🟢 Vytvoření náhledu obrázku
+// Funkce pro vytvoření náhledu obrázku
 function createThumbnail(imgSrc) {
     return `<img src="${imgSrc}" class="gallery-thumb" onclick="showImage('${imgSrc}')">`;
 }
 
-// 🟢 Zobrazení velkého obrázku
+// Funkce pro zobrazení velkého obrázku
 function showImage(imgSrc) {
     document.getElementById('gallery-info').innerHTML = `
         <img src="${imgSrc}" class="gallery-full">
@@ -567,7 +566,7 @@ function showImage(imgSrc) {
         </div>`;
 }
 
-// 🟢 Stylizace náhledů
+// 🟢 CSS styl pro náhledy
 function addThumbnailClickEvents() {
     document.querySelectorAll(".gallery-thumb").forEach(img => {
         img.style.width = "100%";
@@ -577,16 +576,8 @@ function addThumbnailClickEvents() {
         img.style.margin = "5px";
         img.style.maxWidth = "200px";  
     });
-
-    const galleryFull = document.querySelector(".gallery-full");
-    if (galleryFull) {
-        galleryFull.style.width = "100%";
-        galleryFull.style.maxWidth = "460px";
-        galleryFull.style.borderRadius = "10px";
-        galleryFull.style.display = "block";
-        galleryFull.style.margin = "auto";
-    }
 }
+
 
 
 
