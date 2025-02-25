@@ -688,6 +688,11 @@ footer a:hover {
     user-select: none;
 }
 
+.tab {
+    display: flex;
+    padding: 0;
+    min-height: calc(75vh - 45px);
+}
 
 #tabs {
     display: flex;
