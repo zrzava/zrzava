@@ -1,10 +1,11 @@
-﻿{
+{
   "galleries": [
     {
       "id": "002",
       "tumblr-id": "620224657114710016",
       "date": "2020-04-24",
       "name": "Name of the Gallery 2",
+      "images": ["img/zrzava.webp"],
       "description": "Dlouhý popis galerie 2. Lorem ipsum dolor sit amet consectetuer Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum."
     },
     {
@@ -12,8 +13,8 @@
       "tumblr-id": "614908521645047808",
       "date": "2020-04-08",
       "name": "Name of the Gallery 1",
+      "images": ["img/zrzava.webp"],
       "description": "Dlouhý popis galerie 1. Lorem ipsum dolor sit amet consectetuer Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum."
     }
   ]
 }
-
