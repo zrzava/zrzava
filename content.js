@@ -262,7 +262,7 @@ function displayItems(shopId, productGroups, galleriesData) {
     
     allItems.forEach(item => {
         const productCard = document.createElement("a");
-        productCard.href = item.is_gallery ? `/gallery=${item.id}` : `?product=${item.id}`;
+        productCard.href = item.is_gallery ? `?gallery=${item.id}` : `?product=${item.id}`;
         productCard.className = "card-link";
         
         // Pokud není obrázek pro produkt/galerii, ponecháme místo prázdné
@@ -280,7 +280,7 @@ function displayItems(shopId, productGroups, galleriesData) {
             priceHTML = `
                 <div class="price-container">
                     <span class="original-price" style="text-decoration: line-through;">${originalPrice.toFixed(2)} €</span>
-                    <span class="discount-price">${discountPrice.toFixed(2)} €</span>
+                    <span class="discount-price"><strong>${discountPrice.toFixed(2)} €</strong></span>
                 </div>
             `;
         } else {
