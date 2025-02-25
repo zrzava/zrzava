@@ -426,6 +426,16 @@ function displayProduct(product) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
 // 🎨 Funkce pro načtení galerie
 document.addEventListener("DOMContentLoaded", fetchGalleryData);
 
@@ -474,19 +484,22 @@ function displayGallery(gallery) {
     }
 }
 
-// Funkce pro načtení galerie z Tumblr API
+// 🟢 Opravená funkce pro načtení galerie z Tumblr API
 async function loadTumblrGallery(tumblrId) {
     const apiKey = 'YuwtkxS7sYF0DOW41yK2rBeZaTgcZWMHHNhi1TNXht3Pf7Lkdf';
     const tumblrBlog = 'gabrielaprazska.tumblr.com';
 
     try {
-        const response = await fetch(`https://api.tumblr.com/v2/blog/${tumblrBlog}/posts?id=${tumblrId}&api_key=${apiKey}`);
+        const response = await fetch(`https://api.tumblr.com/v2/blog/${tumblrBlog}/posts?type=photo&id=${tumblrId}&api_key=${apiKey}`);
         const data = await response.json();
+        
+        console.log("Získaná data z Tumblr API:", data); // 🟢 Debugging
+
         if (data.response.posts && data.response.posts.length > 0) {
             const post = data.response.posts[0];
-            const images = post.photos ? post.photos.map(photo => createThumbnail(photo.original_size.url, tumblrId)).join('') : '';
 
-            if (images) {
+            if (post.photos) {
+                const images = post.photos.map(photo => createThumbnail(photo.original_size.url)).join('');
                 document.getElementById('gallery-images').innerHTML = images;
                 document.getElementById('tumblr-notes').textContent = `${post.note_count} notes`;
                 addThumbnailClickEvents();
@@ -502,16 +515,18 @@ async function loadTumblrGallery(tumblrId) {
     }
 }
 
-// Funkce pro načtení galerie z lokálních souborů
+// 🟢 Opravená funkce pro načtení galerie z lokálních souborů
 function loadLocalGallery(galleryId) {
     let imagesHTML = "";
     let i = 1;
+
     while (true) {
         const imgPath = `img/gallery/${galleryId}/${i}.webp`;
-        if (!imageExists(imgPath)) break;  // Konec, pokud obrázek neexistuje
+        if (!doesImageExist(imgPath)) break;  // Konec, pokud obrázek neexistuje
         imagesHTML += createThumbnail(imgPath);
         i++;
     }
+
     if (imagesHTML) {
         document.getElementById('gallery-images').innerHTML = imagesHTML;
         addThumbnailClickEvents();
@@ -520,57 +535,28 @@ function loadLocalGallery(galleryId) {
     }
 }
 
-// Funkce pro kontrolu existence obrázku
-function imageExists(src) {
-    const img = new Image();
+// 🟢 Lepší kontrola existence obrázku
+function doesImageExist(src) {
+    var img = new Image();
     img.src = src;
-    return img.height !== 0;
+    return img.complete && img.naturalWidth !== 0;
 }
 
 // Funkce pro vytvoření náhledu obrázku
-function createThumbnail(imgSrc, tumblrId) {
-    return `<img src="${imgSrc}" class="gallery-thumb" onclick="showImage('${imgSrc}', '${tumblrId}')">`;
+function createThumbnail(imgSrc) {
+    return `<img src="${imgSrc}" class="gallery-thumb" onclick="showImage('${imgSrc}')">`;
 }
 
 // Funkce pro zobrazení velkého obrázku
-function showImage(imgSrc, tumblrId) {
-    const galleryName = document.querySelector('h1').textContent;
-    const galleryDescription = document.querySelector('p').textContent;
-    const galleryDate = document.querySelector('p:nth-child(3)').textContent;
-
-    // Zobrazení obrázku
+function showImage(imgSrc) {
     document.getElementById('gallery-info').innerHTML = `
         <img src="${imgSrc}" class="gallery-full">
         <div>
-            <p style="text-align: right; font-size: 0.8rem;">${galleryDate} <span id="tumblr-notes"></span> | <a href="">back to galleries</a></p>
+            <p style="text-align: right; font-size: 0.8rem;"><span id="tumblr-notes"></span> | <a href="">back to galleries</a></p>
         </div>`;
-
-    // Načtení počtu poznámek pro daný Tumblr obrázek
-    if (tumblrId) {
-        fetchTumblrNotes(tumblrId);
-    }
 }
 
-// Funkce pro načtení počtu Tumblr poznámek pro obrázek
-async function fetchTumblrNotes(tumblrId) {
-    const apiKey = 'YuwtkxS7sYF0DOW41yK2rBeZaTgcZWMHHNhi1TNXht3Pf7Lkdf';
-    const tumblrBlog = 'gabrielaprazska.tumblr.com';
-
-    try {
-        const response = await fetch(`https://api.tumblr.com/v2/blog/${tumblrBlog}/posts?id=${tumblrId}&api_key=${apiKey}`);
-        const data = await response.json();
-        if (data.response.posts && data.response.posts.length > 0) {
-            const post = data.response.posts[0];
-            const notes = post.note_count;
-            document.getElementById('tumblr-notes').textContent = `${notes} notes`;
-        }
-    } catch (error) {
-        console.error("Chyba při načítání Tumblr poznámek:", error);
-        document.getElementById('tumblr-notes').textContent = ` | Chyba při načítání poznámek`;
-    }
-}
-
-// Funkce pro přidání CSS stylů pro kliknutí na náhledy
+// 🟢 CSS styl pro náhledy
 function addThumbnailClickEvents() {
     document.querySelectorAll(".gallery-thumb").forEach(img => {
         img.style.width = "100%";
@@ -578,7 +564,7 @@ function addThumbnailClickEvents() {
         img.style.objectFit = "cover";
         img.style.borderRadius = "5px";
         img.style.margin = "5px";
-        img.style.maxWidth = "200px";  // Nastavení maximální šířky pro náhledy
+        img.style.maxWidth = "200px";  
     });
 
     const galleryFull = document.querySelector(".gallery-full");
@@ -590,6 +576,15 @@ function addThumbnailClickEvents() {
         galleryFull.style.margin = "auto";
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 // 🚀 Inicializace stránky
