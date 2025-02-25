@@ -536,8 +536,12 @@ function showImage(imgSrc, tumblrId) {
     const galleryDescription = document.querySelector('p').textContent;
     const galleryDate = document.querySelector('p:nth-child(3)').textContent;
 
-    // Zobrazení obrázku
+    // Přidání tlačítka pro zpět
     document.getElementById('gallery-info').innerHTML = `
+        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+            <button onclick="goBack()" style="border: none; background: none; font-size: 1.5rem; cursor: pointer;">&#8592;</button>
+            <h1 style="margin: 0 0 0 10px;">${galleryName}</h1>
+        </div>
         <img src="${imgSrc}" class="gallery-full">
         <div>
             <p style="text-align: right; font-size: 0.8rem;">${galleryDate} <span id="tumblr-notes"></span> | <a href="">back to galleries</a></p>
@@ -546,8 +550,13 @@ function showImage(imgSrc, tumblrId) {
     // Načtení počtu poznámek pro daný Tumblr obrázek
     if (tumblrId) {
         fetchTumblrNotes(tumblrId);
-    }
 }
+
+// Funkce pro návrat zpět
+function goBack() {
+    window.history.back();  // Tento příkaz vrátí uživatele na předchozí stránku
+}
+
 
 // Funkce pro načtení počtu Tumblr poznámek pro obrázek
 async function fetchTumblrNotes(tumblrId) {
