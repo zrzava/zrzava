@@ -173,21 +173,27 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     
     try {
-        const response = await fetch('products.json');
-        if (!response.ok) throw new Error('Soubor nenalezen');
+        const [productsResponse, galleriesResponse] = await Promise.all([
+            fetch('products.json'),
+            fetch('galleries.json')
+        ]);
         
-        const data = await response.json();
+        if (!productsResponse.ok || !galleriesResponse.ok) throw new Error('Soubor nenalezen');
+        
+        const productsData = await productsResponse.json();
+        const galleriesData = await galleriesResponse.json();
+        
         const productGroups = {}; // Seskupení produktů podle jejich skupiny
         
-        data.products.forEach(product => {
+        productsData.products.forEach(product => {
             if (!productGroups[product.product_group]) {
                 productGroups[product.product_group] = [];
             }
             productGroups[product.product_group].push(product);
         });
-        
+
         generateTabs(productGroups, shopId);
-        displayProducts(productGroups[shopId] || [], shopId);
+        displayProducts(productGroups[shopId] || [], shopId, galleriesData);
     } catch (error) {
         shopShow.innerHTML = `<p>Chyba při načítání shop: ${error.message}</p>`;
     }
@@ -197,16 +203,14 @@ function generateTabs(groups, activeShop) {
     const tabsContainer = document.getElementById("tabs");
     tabsContainer.innerHTML = "";
     
-    // Přidání tab pro "pictures" jako první
     const picturesTab = document.createElement("a");
     picturesTab.href = `?shop=pictures`;
     picturesTab.className = activeShop === "pictures" ? "active" : "";
     picturesTab.textContent = "Pictures";
     tabsContainer.appendChild(picturesTab);
     
-    // Generování ostatních tabů
     Object.keys(groups).forEach(group => {
-        if (group !== "pictures") { // Zamezíme duplikování tabů pro Pictures
+        if (group !== "pictures") {
             const tab = document.createElement("a");
             tab.href = `?shop=${group}`;
             tab.className = group === activeShop ? "active" : "";
@@ -214,7 +218,7 @@ function generateTabs(groups, activeShop) {
             tab.onclick = (event) => {
                 event.preventDefault();
                 history.pushState({}, "", `?shop=${group}`);
-                displayProducts(groups[group], group);
+                displayProducts(groups[group], group, []);
                 document.querySelectorAll("#tabs a").forEach(el => el.classList.remove("active"));
                 tab.classList.add("active");
             };
@@ -223,53 +227,62 @@ function generateTabs(groups, activeShop) {
     });
 }
 
-function displayProducts(products, shopId) {
+function displayProducts(products, shopId, galleriesData) {
     const container = document.getElementById("tab-content");
     container.innerHTML = "";
     
-    if (!products.length) {
+    if (!products.length && !galleriesData.galleries.length) {
         container.innerHTML = `<p>Žádné produkty v této kategorii.</p>`;
         return;
     }
     
+    let allItems = [];
+
+    if (shopId === "pictures") {
+        // Seřadíme produkty a galerie podle data
+        allItems = [
+            ...products.filter(product => product.product_group === "pictures"),
+            ...galleriesData.galleries.map(gallery => ({
+                ...gallery,
+                product_group: "gallery",
+                price: "FREE", // Pro galerie místo ceny
+                is_gallery: true
+            }))
+        ];
+
+        allItems.sort((a, b) => new Date(b.date) - new Date(a.date)); // Seřadit od nejnovějšího k nejstaršímu
+    }
+
     const cardContainer = document.createElement("div");
     cardContainer.className = "card-item";
     
-    products.forEach(product => {
+    allItems.forEach(item => {
         const productCard = document.createElement("a");
-        productCard.href = `?product=${product.id}`;
+        productCard.href = item.is_gallery ? `/gallery=${item.id}` : `?product=${item.id}`;
         productCard.className = "card-link";
         
-        // Pokud není obrázek pro produkt, ponecháme místo prázdné
-        const productImage = product.images && product.images[0] ? product.images[0] : "";
+        // Pokud není obrázek pro produkt/galerii, ponecháme místo prázdné
+        const itemImage = item.images && item.images[0] ? item.images[0] : "";
         
-        // Vypočítání ceny po slevě, pokud je sleva
-        let displayPrice = product.price;
-        let originalPrice = null;
-        if (product.discount === "yes") {
-            const discountAmount = product.price * (product.discount_percent / 100);
-            displayPrice = product.price - discountAmount;
-            originalPrice = product.price; // Původní cena bude zobrazená jako přeškrtnutá
+        // Vypočítání ceny, pokud jde o produkt
+        let priceHTML = item.price === "FREE" ? `<strong>FREE</strong>` : `<strong>${item.price.toFixed(2)} €</strong>`;
+
+        // Pokud jde o galerii, místo ceny bude "FREE"
+        if (item.is_gallery) {
+            priceHTML = `<strong>FREE</strong>`;
         }
 
-        // HTML pro zobrazení ceny
-        let priceHTML = `<strong>${displayPrice.toFixed(2)} €</strong>`; // Cena po slevě
-        if (originalPrice !== null) {
-            priceHTML = `
-                <div>
-                    <span style="text-decoration: line-through; color: #888;">${originalPrice.toFixed(2)} €</span>
-                    <span> <strong>${displayPrice.toFixed(2)} €</strong></span>
-                </div>
-            `; // Původní cena je přeškrtnutá
-        }
+        // HTML pro zobrazení datumu
+        const itemDate = item.date ? `<div class="product-date">Date: ${new Date(item.date).toLocaleDateString()}</div>` : '';
 
         productCard.innerHTML = `
             <div class="card-image">
-                ${productImage ? `<img src="${productImage}" alt="${product.name_en}" loading="lazy">` : ""}
+                ${itemImage ? `<img src="${itemImage}" alt="${item.name}" loading="lazy">` : ""}
             </div>
             <div class="card-info">
-                <div class="card-title">${product.name_en}</div>
-                <div class="card-description">${product.description_en}</div>
+                <div class="card-title">${item.name}</div>
+                <div class="card-description">${item.description}</div>
+                ${itemDate}
                 <div class="card-price" style="text-align: right;">
                     ${priceHTML}
                 </div>
