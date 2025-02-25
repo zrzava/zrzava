@@ -303,11 +303,17 @@ function displayItems(shopId, productGroups, galleriesData) {
     });
     
     container.appendChild(cardContainer);
+
+    // Přidání min-height pro všechny otevřené taby
+    const tabs = document.querySelectorAll(".tab");
+    tabs.forEach(tab => {
+        tab.style.minHeight = "calc(75vh - 45px)"; // Přidání min-height pro všechny taby
+    });
 }
 
 
 
-
+    
 
 
 
