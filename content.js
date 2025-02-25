@@ -222,26 +222,29 @@ function displayProducts(products, shopId) {
         return;
     }
     
+    const cardContainer = document.createElement("div");
+    cardContainer.className = "card-item";
+    
     products.forEach(product => {
-        const productCard = document.createElement("div");
-        productCard.className = "card";
+        const productCard = document.createElement("a");
+        productCard.href = `?product=${product.id}`;
+        productCard.className = "card-link";
         productCard.innerHTML = `
-            <div class="card-item">
-                <a href="?product=${product.id}" class="card-link">
-                    <div class="card-image">
-                        <img src="${product.images[0]}" alt="${product.name_en}">
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title">${product.name_en}</div>
-                        <div class="card-description">${product.description_en}</div>
-                        <div class="card-price" style="text-align: right;"><strong>${product.price}</strong></div>
-                    </div>
-                </a>
+            <div class="card-image">
+                <img src="${product.images[0]}" alt="${product.name_en}" loading="lazy">
+            </div>
+            <div class="card-info">
+                <div class="card-title">${product.name_en}</div>
+                <div class="card-description">${product.description_en}</div>
+                <div class="card-price" style="text-align: right;"><strong>${product.price} €</strong></div>
             </div>
         `;
-        container.appendChild(productCard);
+        cardContainer.appendChild(productCard);
     });
+    
+    container.appendChild(cardContainer);
 }
+
 
 
 
