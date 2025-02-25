@@ -159,7 +159,12 @@ function displayArticle(article) {
 document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const shopId = urlParams.get('shop') || "pictures"; // Defaultní hodnota
-    
+
+    // Přesměrování pokud není shop definováno
+    if (window.location.href.indexOf('?shop') === -1) {
+        window.location.href = window.location.origin + window.location.pathname + "?shop=pictures";
+    }
+
     const shopShow = document.getElementById("shop-show");
     if (!document.getElementById("tabs")) {
         const tabsDiv = document.createElement("div");
@@ -171,7 +176,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         contentDiv.id = "tab-content";
         shopShow.appendChild(contentDiv);
     }
-    
+
     try {
         const response = await fetch('products.json');
         if (!response.ok) throw new Error('Soubor nenalezen');
@@ -196,8 +201,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 function generateTabs(groups, activeShop) {
     const tabsContainer = document.getElementById("tabs");
     tabsContainer.innerHTML = "";
-    
-    Object.keys(groups).forEach(group => {
+
+    // Nastavení první sekce "pictures" jako aktivní
+    Object.keys(groups).forEach((group, index) => {
         const tab = document.createElement("a");
         tab.href = `?shop=${group}`;
         tab.className = group === activeShop ? "active" : "";
@@ -210,28 +216,35 @@ function generateTabs(groups, activeShop) {
             tab.classList.add("active");
         };
         tabsContainer.appendChild(tab);
+
+        // První tab bude Pictures
+        if (index === 0 && !activeShop) {
+            tab.classList.add("active");
+        }
     });
 }
 
 function displayProducts(products, shopId) {
     const container = document.getElementById("tab-content");
     container.innerHTML = "";
-    
+
     if (!products.length) {
         container.innerHTML = `<p>Žádné produkty v této kategorii.</p>`;
         return;
     }
-    
+
     const cardContainer = document.createElement("div");
     cardContainer.className = "card-item";
-    
+
     products.forEach(product => {
         const productCard = document.createElement("a");
         productCard.href = `?product=${product.id}`;
         productCard.className = "card-link";
+        const imageUrl = product.images && product.images.length > 0 ? product.images[0] : "img/zrzava.webp"; // Výchozí obrázek
+
         productCard.innerHTML = `
             <div class="card-image">
-                <img src="${product.images[0]}" alt="${product.name_en}" loading="lazy">
+                <img src="${imageUrl}" alt="${product.name_en}" loading="lazy">
             </div>
             <div class="card-info">
                 <div class="card-title">${product.name_en}</div>
@@ -241,9 +254,10 @@ function displayProducts(products, shopId) {
         `;
         cardContainer.appendChild(productCard);
     });
-    
+
     container.appendChild(cardContainer);
 }
+
 
 
 
