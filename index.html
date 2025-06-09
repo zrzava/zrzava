@@ -55,7 +55,6 @@
     <div class="section-content product-text" id="content-container">
         <!-- Statická část -->
         <div id="static-content">
-            <div id="random-text"></div>
             <p>
                 Feel free to follow me on 
                 <a href="https://instagram.com/gabriellaellena_" class="icon instagram" target="_blank">Instagram</a> 
@@ -124,31 +123,6 @@ e(s.colorDepth)+'" width="1" height="1" border="0" alt="TOPlist" />';
 </footer>
 
 <script src="content.js" defer></script>
-
-        <script>
-        // Předdefinované texty s autory
-        const texts = [
-            "When a woman has to undress to prove her sex appeal, she doesn't have any. ~ Mae West",
-            "Too bad that all the people who know how to run the country are busy driving taxicabs and cutting hair. ~ George Burns",
-            "You can wear jeans and look like you just stepped off the cover of a rich person's fashion magazine. I only have two options – either I look like a slut, or like a boy with delayed puberty. ~ from my upcoming book",
-            "Tarik, I’m a woman. For us, there’s no 'comfortable,' just different levels of suffering. I assume this has never happened to your polo shirt.. ~ from my upcoming book",
-            "The most important sex organ is the brain. ~ Dr. Ruth Westheimer"
-        ];
-
-        // Funkce pro generování náhodného textu
-        function generateRandomText() {
-            const randomIndex = Math.floor(Math.random() * texts.length);
-            const [quote, author] = texts[randomIndex].split('~');
-            return { quote, author };
-        }
-
-        // Zobrazení náhodného textu a autora při načtení stránky
-        const randomText = generateRandomText();
-        document.getElementById('random-text').innerHTML = `
-            ${randomText.quote}
-            <span class="random-text-author">~ ${randomText.author}</span>
-        `;
-    </script>
            
     <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
 <script>
