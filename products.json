@@ -11,9 +11,9 @@
       "price": 12.49,
       "discount": "yes",
       "discount_percent": 20,
-      "discount_end_date": "2025-06-21",
+      "discount_end_date": "2025-07-01",
       "product_group": "books",
-      "date": "2025-07-01",
+      "date": "2025-06-18",
       "images": ["https://i.imgur.com/6JuIsH4.jpeg"],
       "link": "https://example.com/product-2"
     }
