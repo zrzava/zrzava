@@ -1,20 +1,20 @@
 ﻿{
   "products": [
     {
-      "id": "001",
+      "id": "book",
       "name_cz": "Produkt galerie 1 v CZ",
-      "name_en": "Product gallery 1 in EN",
+      "name_en": "Way To Embracing Feminine Sexuality",
       "prefix_cz": "Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et.",
-      "prefix_en": "Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et.",
+      "prefix_en": "Ebook, My Kinky Guide to Long-Term Chastity and Submission ",
       "description_cz": "Dlouhý popis galerie 1 v CZ. Lorem ipsum dolor sit amet consectetuer Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum.",
       "description_en": "Long description of gallery 1 in EN. Lorem ipsum dolor sit amet consectetuer Sed Quisque id Curabitur semper. Ac netus quis elit Praesent ligula sem vitae eu et et. Dui platea Nulla laoreet auctor justo Nullam nec tellus malesuada est. Quis et et consequat at porta velit lobortis pede dui ipsum.",
-      "price": 4.99,
+      "price": 12.49,
       "discount": "no",
       "discount_percent": 0,
       "discount_end_date": "null",
       "product_group": "pictures",
-      "date": "2023-02-23",
-      "images": ["img/zrzava.webp"],
+      "date": "2025-06-18",
+      "images": ["img/book1.jpg"],
       "link": "https://example.com/product-2"
     }
   ]
