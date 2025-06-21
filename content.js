@@ -362,8 +362,7 @@ function displayProduct(product) {
     const productHTML = `
         <div class="section item">
             <div class="section-content item-text">
-                <h1 id="product-name"><a href="?shop=pictures" title="go back" style="color: white; text-decoration: none;" onmouseover="this.style.color='#FF5733'; this.style.textDecoration='none'" onmouseout="this.style.color='white'; this.style.textDecoration='none'">&vltri;</a>
-                ${product.name_en}</h1>
+                <h1 id="product-name">${product.name_en}</h1>
                 <p id="product-description">${product.description_en}</p>
                 <a id="buy-link" href="${product.link}" class="hero">Buy now!</a>
                 <a id="shop-link" href="${product.link}" class="hero blue">More information</a>
