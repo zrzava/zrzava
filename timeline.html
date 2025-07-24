@@ -1,55 +1,49 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Timeline Galerie</title>
   <style>
-    :root {
-      --timeline-aspect-ratio: 2 / 3;
-      --timeline-gap: 8px;
-      --timeline-overlay-bg: rgba(0, 0, 0, 0.4);
-    }
-
-    body, html {
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
       overflow: hidden;
       font-family: sans-serif;
-      background: #111;
     }
 
     .timeline-container {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      height: 90vh;
-      padding: 5vh 0;
-      gap: var(--timeline-gap);
+      height: 100vh;
       scroll-behavior: smooth;
-    }
-
-    .timeline-container::-webkit-scrollbar {
-      display: none;
     }
 
     .timeline-photo {
       flex: 0 0 auto;
       scroll-snap-align: center;
-      aspect-ratio: var(--timeline-aspect-ratio);
-      height: 100%;
       position: relative;
+      margin: 0 8px;
+      max-height: 100vh;
+      aspect-ratio: 2 / 3;
+      max-width: 100vw;
       overflow: hidden;
       border-radius: 10px;
-      background: #000;
+      transition: transform 0.3s ease;
     }
 
     .timeline-photo img {
+      width: 100%;
       height: 100%;
-      width: auto;
       object-fit: cover;
       object-position: center;
       display: block;
+      border-radius: 10px;
     }
 
     .timeline-caption {
@@ -57,104 +51,120 @@
       bottom: 0;
       left: 0;
       width: 100%;
-      color: white;
-      background: var(--timeline-overlay-bg);
-      backdrop-filter: blur(6px);
-      padding: 0.5em 1em;
-      font-size: 0.95em;
       max-height: 4.5em;
       overflow: hidden;
       text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
+      padding: 1em;
+      font-size: 1em;
+      line-height: 1.5em;
+      color: white;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
+      backdrop-filter: blur(6px);
       transition: max-height 0.3s ease;
-      cursor: pointer;
     }
 
     .timeline-caption.expanded {
-      max-height: 70%;
-      -webkit-line-clamp: unset;
+      max-height: none;
+      background: rgba(0,0,0,0.7);
     }
 
     .timeline-caption::after {
-      content: '…';
-      display: block;
+      content: '...';
       position: absolute;
       bottom: 0;
-      right: 0;
-      background: linear-gradient(to top, var(--timeline-overlay-bg), transparent);
-      height: 1.5em;
-      width: 100%;
-      pointer-events: none;
+      right: 1em;
+      background: rgba(0, 0, 0, 0.5);
+      padding-left: 5px;
     }
 
     .timeline-caption.expanded::after {
       display: none;
     }
-
-    @media (max-width: 768px) {
-      .timeline-container {
-        height: 85vh;
-      }
-    }
   </style>
 </head>
 <body>
 
-  <div class="timeline-container" id="timeline">
-    <div class="timeline-photo">
-      <img src="https://picsum.photos/id/1011/400/600" loading="lazy" alt="Obrázek 1" />
-      <div class="timeline-caption">Popis fotografie jedna s velmi dlouhým textem který přesahuje tři řádky a proto bude možné ho rozkliknout.</div>
-    </div>
-    <div class="timeline-photo">
-      <img src="https://picsum.photos/id/1012/400/600" loading="lazy" alt="Obrázek 2" />
-      <div class="timeline-caption">Kratší popis fotografie dvě.</div>
-    </div>
-    <div class="timeline-photo">
-      <img src="https://picsum.photos/id/1013/400/600" loading="lazy" alt="Obrázek 3" />
-      <div class="timeline-caption">Třetí obrázek má taky dlouhý popisek který potřebuje víc prostoru a rozkliknutí.</div>
-    </div>
-    <!-- Přidej víc fotek podle potřeby -->
+<div class="timeline-container" id="timeline">
+  <div class="timeline-photo">
+    <img src="https://picsum.photos/id/1011/600/900" loading="lazy" alt="">
+    <div class="timeline-caption" onclick="toggleCaption(this)">Krásná krajina, která se rozprostírá do nekonečna, zalitá ranním sluncem a potemnělá mlhou přicházejícího dne.</div>
   </div>
+  <div class="timeline-photo">
+    <img src="https://picsum.photos/id/1015/600/900" loading="lazy" alt="">
+    <div class="timeline-caption" onclick="toggleCaption(this)">Druhá fotografie, možná i krásnější, určitě ale jiná. Ta tě nutí zastavit se.</div>
+  </div>
+  <div class="timeline-photo">
+    <img src="https://picsum.photos/id/1016/600/900" loading="lazy" alt="">
+    <div class="timeline-caption" onclick="toggleCaption(this)">Třetí obrázek s dlouhým textem, který by mohl zabrat i víc než tři řádky. A právě tehdy se hodí mít možnost ho rozkliknout.</div>
+  </div>
+  <!-- Přidej další fotky dle potřeby -->
+</div>
 
-  <script>
-    // Rozkliknutí popisku
-    document.querySelectorAll('.timeline-caption').forEach(caption => {
-      caption.addEventListener('click', () => {
-        caption.classList.toggle('expanded');
-      });
+<script>
+  function toggleCaption(caption) {
+    caption.classList.toggle("expanded");
+  }
+
+  const timeline = document.getElementById('timeline');
+
+  let isDown = false;
+  let startX, scrollLeft;
+
+  timeline.addEventListener('mousedown', (e) => {
+    isDown = true;
+    timeline.classList.add('active');
+    startX = e.pageX - timeline.offsetLeft;
+    scrollLeft = timeline.scrollLeft;
+  });
+
+  timeline.addEventListener('mouseleave', () => {
+    isDown = false;
+    timeline.classList.remove('active');
+  });
+
+  timeline.addEventListener('mouseup', () => {
+    isDown = false;
+    timeline.classList.remove('active');
+    snapToCenter();
+  });
+
+  timeline.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - timeline.offsetLeft;
+    const walk = (x - startX) * 1; // scroll speed
+    timeline.scrollLeft = scrollLeft - walk;
+  });
+
+  timeline.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    timeline.scrollLeft += e.deltaY;
+    clearTimeout(timeline.snapTimeout);
+    timeline.snapTimeout = setTimeout(snapToCenter, 150);
+  }, { passive: false });
+
+  function snapToCenter() {
+    const photos = timeline.querySelectorAll('.timeline-photo');
+    let closest = null;
+    let closestDistance = Infinity;
+
+    const center = timeline.scrollLeft + timeline.offsetWidth / 2;
+
+    photos.forEach(photo => {
+      const rect = photo.getBoundingClientRect();
+      const photoCenter = rect.left + rect.width / 2;
+      const distance = Math.abs(photoCenter - window.innerWidth / 2);
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closest = photo;
+      }
     });
 
-    // Scroll snap na střed fotky po scrollu
-    const container = document.getElementById('timeline');
-    let isScrolling;
-    
-    container.addEventListener('scroll', () => {
-      window.clearTimeout(isScrolling);
-      isScrolling = setTimeout(() => {
-        const photos = document.querySelectorAll('.timeline-photo');
-        let closest = null;
-        let closestDist = Infinity;
-        const center = container.scrollLeft + container.offsetWidth / 2;
-
-        photos.forEach(photo => {
-          const box = photo.getBoundingClientRect();
-          const photoCenter = box.left + box.width / 2;
-          const dist = Math.abs(photoCenter - container.offsetWidth / 2);
-
-          if (dist < closestDist) {
-            closestDist = dist;
-            closest = photo;
-          }
-        });
-
-        if (closest) {
-          closest.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-        }
-      }, 100);
-    });
-  </script>
+    if (closest) {
+      closest.scrollIntoView({ behavior: 'smooth', inline: 'center' });
+    }
+  }
+</script>
 
 </body>
 </html>
