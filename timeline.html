@@ -52,22 +52,23 @@
     }
 
     .timeline-caption {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      max-height: 4.0em;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      padding: 1em;
-      padding-bottom: 1.5em;
-      font-size: 1em;
-      line-height: 1.5em;
-      color: white;
-      background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
-      backdrop-filter: blur(6px);
-      transition: max-height 0.3s ease;
-    }
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  max-height: 4.0em;
+  overflow: hidden;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
+  backdrop-filter: blur(6px);
+  transition: max-height 0.3s ease;
+}
+
+.timeline-caption-inner {
+  padding: 1em 1em 1.5em 1em;
+  color: white;
+  font-size: 1em;
+  line-height: 1.5em;
+}
 
     .timeline-caption.expanded {
       max-height: none;
@@ -92,9 +93,9 @@
 <div class="timeline-container" id="timeline">
   <div class="timeline-photo">
     <img src="https://picsum.photos/id/1011/600/900" loading="lazy" alt="">
-    <div class="timeline-caption" onclick="toggleCaption(this)">
+    <div class="timeline-caption" onclick="toggleCaption(this)"><div class="timeline-caption-inner">
       i Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu rhoncus sem. Sed egestas quis leo eu finibus. Praesent vitae purus sapien. Donec rhoncus felis diam, quis faucibus elit egestas luctus. Sed et euismod elit. In consectetur eros lacus, eget vulputate felis porttitor ut. In sit amet varius eros.
-    </div>
+    </div></div>
   </div>
   <div class="timeline-photo">
     <img src="https://picsum.photos/id/1015/600/900" loading="lazy" alt="">
