@@ -52,22 +52,37 @@ body {
 }
 
 .timeline-caption {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 1em;
-  padding-bottom: 3em; /* vizuální prostor pro 2 řádky "navíc" */
-  font-size: 1em;
-  line-height: 1.5em;
   color: white;
   background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3));
   backdrop-filter: blur(6px);
+  padding: 1em;
+  font-size: 1em;
+  line-height: 1.5em;
   transition: max-height 0.3s ease;
+}
+
+/* Text je ořezaný na 2 řádky */
+.timeline-caption:not(.expanded) .timeline-caption-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Spacer jen pokud není expanded */
+.timeline-caption:not(.expanded) .timeline-caption-spacer {
+  height: 3em; /* 2 řádky */
+}
+
+/* Když je rozbalený, skryj spacer */
+.timeline-caption.expanded .timeline-caption-spacer {
+  display: none;
+}: max-height 0.3s ease;
 }
 
 /* Zobrazení teček ve zkráceném stavu */
@@ -97,7 +112,10 @@ body {
   <div class="timeline-photo">
     <img src="https://picsum.photos/id/1011/600/900" loading="lazy" alt="">
     <div class="timeline-caption" onclick="toggleCaption(this)">
+      <div class="timeline-caption-text">
       i Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu rhoncus sem. Sed egestas quis leo eu finibus. Praesent vitae purus sapien. Donec rhoncus felis diam, quis faucibus elit egestas luctus. Sed et euismod elit. In consectetur eros lacus, eget vulputate felis porttitor ut. In sit amet varius eros.
+      </div>
+      <div class="timeline-caption-spacer"></div>
     </div>
   </div>
   <div class="timeline-photo">
