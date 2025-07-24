@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Horizontální Timeline Galerie</title>
+  <title>Horizontální Galerie</title>
   <style>
     * {
       box-sizing: border-box;
@@ -11,156 +11,127 @@
       padding: 0;
     }
 
-    html, body {
-      height: 100%;
+    body {
+      background-color: #000;
       overflow: hidden;
       font-family: sans-serif;
-      background: #000;
-    }
-
-    .timeline-container {
-      display: flex;
-      height: 100vh;
-      overflow-x: auto;
-      scroll-behavior: smooth;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    .timeline-container::-webkit-scrollbar {
-      display: none;
     }
 
     .timeline-gallery {
       display: flex;
-      gap: 10px;
-      padding: 10px;
-      height: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-behavior: smooth;
+      height: 80vh;
+      padding: 0;
+      scroll-snap-type: x mandatory;
     }
 
-    .timeline-photo {
+    .timeline-gallery::-webkit-scrollbar {
+      display: none;
+    }
+
+    .timeline-item {
       position: relative;
+      flex: 0 0 auto;
       aspect-ratio: 2 / 3;
       height: 100%;
-      flex-shrink: 0;
-      max-width: 400px;
-      min-width: 200px;
-      width: auto;
-      background-color: #111;
-      overflow: hidden;
-      border-radius: 10px;
+      margin-right: 10px;
+      scroll-snap-align: start;
     }
 
-    .timeline-photo img {
+    .timeline-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
+      border-radius: 8px;
     }
 
     .timeline-caption {
       position: absolute;
       bottom: 0;
       width: 100%;
-      padding: 10px;
       background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
       color: white;
-      font-size: 14px;
-      line-height: 1.4em;
-      max-height: 4.2em; /* 3 řádky */
+      font-size: 0.9rem;
+      padding: 0.6em;
+      max-height: 4.8em; /* 3 řádky */
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+      transition: max-height 0.3s ease;
       cursor: pointer;
-      transition: all 0.3s ease;
     }
 
     .timeline-caption.expanded {
       max-height: 100%;
-      -webkit-line-clamp: unset;
-      backdrop-filter: blur(20px);
-      background: rgba(0, 0, 0, 0.7);
+      padding-bottom: 2em;
+    }
+
+    .timeline-caption::after {
+      content: '...';
+      position: absolute;
+      bottom: 0.6em;
+      right: 1em;
+      background: rgba(0,0,0,0.3);
+      padding: 0 0.4em;
+      border-radius: 4px;
+      font-size: 0.8em;
+      display: none;
+    }
+
+    .timeline-caption.truncated::after {
+      display: block;
+    }
+
+    /* Smooth scroll wheel horizontal override */
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body:has(.timeline-gallery:hover) {
+      overflow-y: hidden;
     }
   </style>
 </head>
 <body>
-
-<div class="timeline-container" id="timeline">
-  <div class="timeline-gallery">
-    <div class="timeline-photo">
-      <img src="https://picsum.photos/id/1011/400/600" loading="lazy" alt=""/>
-      <div class="timeline-caption">Toto je dlouhý popisek, který ukazuje možnosti rozbalení. Může pokračovat přes více řádků a po kliknutí se celý rozbalí.</div>
+  <div class="timeline-gallery" id="timelineGallery">
+    <div class="timeline-item">
+      <img class="timeline-img" src="https://placehold.co/400x600?text=1" alt="Obrázek 1" loading="lazy">
+      <div class="timeline-caption">Krátký text pro obrázek.</div>
     </div>
-    <div class="timeline-photo">
-      <img src="https://picsum.photos/id/1015/400/600" loading="lazy" alt=""/>
-      <div class="timeline-caption">Krátký popisek.</div>
+    <div class="timeline-item">
+      <img class="timeline-img" src="https://placehold.co/400x600?text=2" alt="Obrázek 2" loading="lazy">
+      <div class="timeline-caption truncated">Toto je velmi dlouhý text, který popisuje fotku podrobněji a má více než tři řádky, takže se zobrazí se zkrácením a uživatel si jej může rozkliknout pro celý obsah.</div>
     </div>
-    <div class="timeline-photo">
-      <img src="https://picsum.photos/id/1021/400/600" loading="lazy" alt=""/>
-      <div class="timeline-caption">Další ukázka s velmi dlouhým textem, který je delší než tři řádky a měl by být zkrácen. Kliknutím lze zobrazit celý.</div>
+    <div class="timeline-item">
+      <img class="timeline-img" src="https://placehold.co/400x600?text=3" alt="Obrázek 3" loading="lazy">
+      <div class="timeline-caption">Středně dlouhý text, který se možná vejde.</div>
     </div>
-    <!-- Přidej víc fotek dle potřeby -->
+    <!-- Další položky můžeš přidat stejně -->
   </div>
-</div>
 
-<script>
-  const timeline = document.getElementById("timeline");
-
-  let isDown = false;
-  let startX;
-  let scrollLeft;
-
-  timeline.addEventListener("mousedown", (e) => {
-    isDown = true;
-    startX = e.pageX - timeline.offsetLeft;
-    scrollLeft = timeline.scrollLeft;
-  });
-
-  timeline.addEventListener("mouseleave", () => {
-    isDown = false;
-  });
-
-  timeline.addEventListener("mouseup", () => {
-    isDown = false;
-  });
-
-  timeline.addEventListener("mousemove", (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - timeline.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    timeline.scrollLeft = scrollLeft - walk;
-  });
-
-  // touch support
-  timeline.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].pageX - timeline.offsetLeft;
-    scrollLeft = timeline.scrollLeft;
-  });
-
-  timeline.addEventListener("touchmove", (e) => {
-    const x = e.touches[0].pageX - timeline.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    timeline.scrollLeft = scrollLeft - walk;
-  });
-
-  // caption expand toggle
-  document.querySelectorAll(".timeline-caption").forEach((caption) => {
-    caption.addEventListener("click", () => {
-      caption.classList.toggle("expanded");
+  <script>
+    // Kliknutí na caption pro rozbalení
+    document.querySelectorAll('.timeline-caption').forEach(caption => {
+      caption.addEventListener('click', () => {
+        caption.classList.toggle('expanded');
+      });
     });
-  });
 
-  // blokace scrollu kolečkem myši (pouze vertikální)
-  window.addEventListener("wheel", (e) => {
-    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+    // Odchytni wheel a převeď na horizontal scroll
+    document.getElementById('timelineGallery').addEventListener('wheel', function (e) {
+      if (e.deltaY === 0) return;
       e.preventDefault();
-    }
-  }, { passive: false });
-</script>
-
+      this.scrollLeft += e.deltaY;
+    }, { passive: false });
+  </script>
 </body>
 </html>
