@@ -69,10 +69,10 @@ backdrop-filter: blur(6px);
 transition: max-height 0.3s ease;
 }
 
-.timeline-caption-inner::after {
-  content: "\00a0\n\00a0"; /* dvě mezery + řádky */
-  white-space: pre;
+.timeline-caption::after {
+  content: '';
   display: block;
+  height: 1.5em; /* výška jednoho řádku */
 }
 
     .timeline-caption.expanded {
