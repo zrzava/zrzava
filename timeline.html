@@ -25,7 +25,7 @@ body {
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
-  height: calc(var(--vh, 1vh) * 100);
+  height: calc(var(--vh) * 100);
   padding: 0;
 }
 
@@ -34,10 +34,9 @@ body {
   scroll-snap-align: center;
   position: relative;
   aspect-ratio: 2 / 3;
-  max-height: 100vh;
+  max-height: calc(var(--vh) * 100);
   max-width: 100vw;
   overflow: hidden;
-  transition: transform 0.3s ease;
 }
 
 .timeline-photo img {
@@ -59,56 +58,55 @@ body {
   padding: 1em;
   font-size: 1em;
   line-height: 1.5em;
-  transition: max-height 0.3s ease;
+  max-height: calc(1.5em * 2 + 1em * 2 + 0.15em); /* výška 2 řádků + padding + spacer */
   overflow: hidden;
-  max-height: calc(1.5em * 2 + 1em * 2 + 0.15em); /* 2 řádky + padding + spacer */
+  transition: max-height 0.3s ease;
 }
 
-/* TEXT: zkrácený */
-.timeline-caption:not(.expanded) .timeline-caption-text {
+/* Zkrácený text na 2 řádky */
+.timeline-caption-text {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* SPACER: jen ve zkráceném stavu */
-.timeline-caption:not(.expanded) .timeline-caption-spacer {
+/* Spacer ve zkráceném režimu */
+.timeline-caption-spacer {
   height: 0.15em;
+}
+
+/* Přidáme "..." vizuálně */
+.timeline-caption::after {
+  content: '...';
+  white-space: pre;
+  position: absolute;
+  bottom: 0.8em;
+  right: 1em;
+  color: white;
+  pointer-events: none;
 }
 
 /* Po rozbalení */
 .timeline-caption.expanded {
-  max-height: none;
+  max-height: 100%;
   background: rgba(0, 0, 0, 0.7);
   overflow-y: auto;
 }
 
+/* Zrušíme zkrácení textu */
 .timeline-caption.expanded .timeline-caption-text {
   display: block;
+  -webkit-line-clamp: unset;
   overflow: visible;
-  text-overflow: unset;
 }
 
-/* Schovej spacer při rozbalení */
+/* Schováme spacer a ... */
 .timeline-caption.expanded .timeline-caption-spacer {
   display: none;
 }
 
-/* Tečky "..." při zkrácení */
-.timeline-caption:not(.expanded)::after {
-  content: '...';
-  position: absolute;
-  bottom: 0.5em;
-  right: 1em;
-  color: white;
-  pointer-events: none;
-  background: linear-gradient(to left, rgba(0,0,0,0.7), transparent);
-  padding-left: 0.5em;
-}
-
-/* Schovej tečky po rozbalení */
 .timeline-caption.expanded::after {
   display: none;
 }
