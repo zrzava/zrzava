@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Horizontální Galerie</title>
+  <title>Horizontální Timeline Galerie</title>
   <style>
     * {
       box-sizing: border-box;
@@ -11,154 +11,155 @@
       padding: 0;
     }
 
-    body, html {
+    html, body {
       height: 100%;
       overflow: hidden;
       font-family: sans-serif;
-      background-color: #111;
+      background: #000;
     }
 
-    .gallery-container {
+    .timeline-container {
       display: flex;
-      overflow-x: auto;
-      overflow-y: hidden;
       height: 100vh;
+      overflow-x: auto;
       scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      gap: 10px;
-      padding: 10px;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
 
-    .gallery-container::-webkit-scrollbar {
+    .timeline-container::-webkit-scrollbar {
       display: none;
     }
 
-    .photo-card {
-      position: relative;
-      flex: 0 0 auto;
-      aspect-ratio: 3 / 4;
+    .timeline-gallery {
+      display: flex;
+      gap: 10px;
+      padding: 10px;
       height: 100%;
-      max-width: 320px;
-      min-width: 180px;
-      background-color: #222;
-      border-radius: 8px;
-      overflow: hidden;
     }
 
-    .photo-card img {
+    .timeline-photo {
+      position: relative;
+      aspect-ratio: 2 / 3;
+      height: 100%;
+      flex-shrink: 0;
+      max-width: 400px;
+      min-width: 200px;
+      width: auto;
+      background-color: #111;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    .timeline-photo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
 
-    .photo-caption {
+    .timeline-caption {
       position: absolute;
       bottom: 0;
-      left: 0;
-      right: 0;
-      max-height: 4.5em; /* ~3 lines */
-      overflow: hidden;
+      width: 100%;
       padding: 10px;
       background: rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(6px);
-      color: #fff;
-      font-size: 0.9em;
-      transition: max-height 0.3s ease, background 0.3s ease;
+      backdrop-filter: blur(10px);
+      color: white;
+      font-size: 14px;
+      line-height: 1.4em;
+      max-height: 4.2em; /* 3 řádky */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
       cursor: pointer;
+      transition: all 0.3s ease;
     }
 
-    .photo-caption.expanded {
+    .timeline-caption.expanded {
       max-height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-    }
-
-    .photo-caption::after {
-      content: '...';
-      position: absolute;
-      bottom: 5px;
-      right: 10px;
-      background: linear-gradient(to right, transparent, rgba(0,0,0,0.5));
-      padding-left: 10px;
-    }
-
-    .photo-caption.expanded::after {
-      content: '';
-      display: none;
+      -webkit-line-clamp: unset;
+      backdrop-filter: blur(20px);
+      background: rgba(0, 0, 0, 0.7);
     }
   </style>
 </head>
 <body>
 
-<div class="gallery-container" id="gallery">
-  <div class="photo-card">
-    <img loading="lazy" src="https://64.media.tumblr.com/759fb4fbc1469efd0556bc91219eae1c/c3bfe99ac591fab0-b9/s640x960/0bee40f51f1b3ec93dbfdb5a8ae7c1600f6bcf9c.gifv" alt="Kočka 1" />
-    <div class="photo-caption">
-      Tahle kočka je naprosto kouzelná, jako by věděla, že je focená, a nastavila se přesně tak, jak má!
+<div class="timeline-container" id="timeline">
+  <div class="timeline-gallery">
+    <div class="timeline-photo">
+      <img src="https://picsum.photos/id/1011/400/600" loading="lazy" alt=""/>
+      <div class="timeline-caption">Toto je dlouhý popisek, který ukazuje možnosti rozbalení. Může pokračovat přes více řádků a po kliknutí se celý rozbalí.</div>
     </div>
-  </div>
-  <div class="photo-card">
-    <img loading="lazy" src="https://placekitten.com/401/601" alt="Kočka 2" />
-    <div class="photo-caption">
-      Někdy se prostě díváš na kočku a víš, že ona je hlavní hvězdou dne. Přesně jako tahle.
+    <div class="timeline-photo">
+      <img src="https://picsum.photos/id/1015/400/600" loading="lazy" alt=""/>
+      <div class="timeline-caption">Krátký popisek.</div>
     </div>
-  </div>
-  <div class="photo-card">
-    <img loading="lazy" src="https://placekitten.com/402/602" alt="Kočka 3" />
-    <div class="photo-caption">
-      Jedno slovo: elegance. A možná trocha nadřazenosti, ale kdo by jí to vyčítal?
+    <div class="timeline-photo">
+      <img src="https://picsum.photos/id/1021/400/600" loading="lazy" alt=""/>
+      <div class="timeline-caption">Další ukázka s velmi dlouhým textem, který je delší než tři řádky a měl by být zkrácen. Kliknutím lze zobrazit celý.</div>
     </div>
+    <!-- Přidej víc fotek dle potřeby -->
   </div>
-  <!-- Můžeš přidat další fotky ve stejném stylu -->
 </div>
 
 <script>
-  const gallery = document.getElementById('gallery');
+  const timeline = document.getElementById("timeline");
 
-  // Horizontální scroll kolečkem
-  gallery.addEventListener('wheel', (e) => {
-    if (e.deltaY !== 0) {
-      e.preventDefault();
-      gallery.scrollLeft += e.deltaY;
-    }
-  }, { passive: false });
-
-  // Drag-scroll
   let isDown = false;
   let startX;
   let scrollLeft;
 
-  gallery.addEventListener('mousedown', (e) => {
+  timeline.addEventListener("mousedown", (e) => {
     isDown = true;
-    startX = e.pageX - gallery.offsetLeft;
-    scrollLeft = gallery.scrollLeft;
-    gallery.style.cursor = 'grabbing';
+    startX = e.pageX - timeline.offsetLeft;
+    scrollLeft = timeline.scrollLeft;
   });
 
-  gallery.addEventListener('mouseleave', () => {
+  timeline.addEventListener("mouseleave", () => {
     isDown = false;
-    gallery.style.cursor = 'default';
   });
 
-  gallery.addEventListener('mouseup', () => {
+  timeline.addEventListener("mouseup", () => {
     isDown = false;
-    gallery.style.cursor = 'default';
   });
 
-  gallery.addEventListener('mousemove', (e) => {
+  timeline.addEventListener("mousemove", (e) => {
     if (!isDown) return;
     e.preventDefault();
-    const x = e.pageX - gallery.offsetLeft;
-    const walk = (x - startX) * 1.2;
-    gallery.scrollLeft = scrollLeft - walk;
+    const x = e.pageX - timeline.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    timeline.scrollLeft = scrollLeft - walk;
   });
 
-  // Expand/Collapse caption
-  document.querySelectorAll('.photo-caption').forEach(caption => {
-    caption.addEventListener('click', () => {
-      caption.classList.toggle('expanded');
+  // touch support
+  timeline.addEventListener("touchstart", (e) => {
+    startX = e.touches[0].pageX - timeline.offsetLeft;
+    scrollLeft = timeline.scrollLeft;
+  });
+
+  timeline.addEventListener("touchmove", (e) => {
+    const x = e.touches[0].pageX - timeline.offsetLeft;
+    const walk = (x - startX) * 1.5;
+    timeline.scrollLeft = scrollLeft - walk;
+  });
+
+  // caption expand toggle
+  document.querySelectorAll(".timeline-caption").forEach((caption) => {
+    caption.addEventListener("click", () => {
+      caption.classList.toggle("expanded");
     });
   });
+
+  // blokace scrollu kolečkem myši (pouze vertikální)
+  window.addEventListener("wheel", (e) => {
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      e.preventDefault();
+    }
+  }, { passive: false });
 </script>
 
 </body>
