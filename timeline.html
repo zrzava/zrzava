@@ -70,20 +70,13 @@ body {
   position: absolute;
 }
 
-.timeline-caption .spacer-line {
-  display: block;
-  visibility: hidden;
-  line-height: 1.5em;
-  height: 1.5em; /* optional fallback if line-height isn't respected */
-}
-
 /* Zobrazení teček ve zkráceném stavu */
 .timeline-caption::after {
-  content: '...';
+  content: '...\A\A';
+  white-space: pre;
   position: absolute;
   bottom: 0;
   right: 1em;
-  padding-left: 5px;
   color: white;
 }
 
@@ -104,7 +97,7 @@ body {
   <div class="timeline-photo">
     <img src="https://picsum.photos/id/1011/600/900" loading="lazy" alt="">
     <div class="timeline-caption" onclick="toggleCaption(this)">
-      i Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu rhoncus sem. Sed egestas quis leo eu finibus. Praesent vitae purus sapien. Donec rhoncus felis diam, quis faucibus elit egestas luctus. Sed et euismod elit. In consectetur eros lacus, eget vulputate felis porttitor ut. In sit amet varius eros.<span class="spacer-line" aria-hidden="true">.</span>
+      i Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eu rhoncus sem. Sed egestas quis leo eu finibus. Praesent vitae purus sapien. Donec rhoncus felis diam, quis faucibus elit egestas luctus. Sed et euismod elit. In consectetur eros lacus, eget vulputate felis porttitor ut. In sit amet varius eros.
     </div>
   </div>
   <div class="timeline-photo">
