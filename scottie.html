@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Euro Progress Line</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .scroll-area {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .scroll-area::-webkit-scrollbar {
+    display: none;
+  }
+
+  .line {
+    position: relative;
+    height: 2px;
+    background: rgba(255,255,255,0.3);
+    flex: none;
+  }
+
+  .fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: limegreen;
+    z-index: 1;
+  }
+
+  .point {
+    position: absolute;
+    top: -8px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+  }
+
+  .point span {
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    white-space: nowrap;
+    color: #fff;
+  }
+
+  /* Tooltip bublina */
+  .tooltip {
+    position: absolute;
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    display: none;
+    z-index: 20;
+    transform: translateX(-50%);
+  }
+  .tooltip::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: rgba(0,0,0,0.85) transparent transparent transparent;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="scroll-area">
+    <div class="line" id="line">
+      <div class="fill" id="fill"></div>
+    </div>
+  </div>
+  <div class="tooltip" id="tooltip"></div>
+</div>
+
+<script>
+  const milestones = [
+    { amount: 300, text: "První cíl – základní částka" },
+    { amount: 400, text: "Druhý cíl – bonus navíc" },
+    { amount: 500, text: "Třetí cíl – extra reward" },
+    { amount: 600, text: "Čtvrtý cíl – vyšší level" },
+    { amount: 700, text: "Pátý cíl – velký upgrade" }
+  ];
+
+  const currentAmount = 520;
+
+  const line = document.getElementById("line");
+  const fill = document.getElementById("fill");
+  const tooltip = document.getElementById("tooltip");
+  const scrollArea = document.querySelector(".scroll-area");
+
+  const spacing = 200;
+  const lineLength = (milestones.length - 1) * spacing + 200;
+  line.style.width = lineLength + "px";
+
+  milestones.forEach((m, i) => {
+    const point = document.createElement("div");
+    point.classList.add("point");
+    point.style.left = (i * spacing + 100) + "px";
+    point.innerHTML = "<span>" + m.amount + "€</span>";
+
+    point.addEventListener("click", (e) => {
+      tooltip.textContent = m.text;
+      tooltip.style.display = "block";
+
+      // Pozice tooltipu nad bodem
+      const rect = point.getBoundingClientRect();
+      tooltip.style.left = rect.left + rect.width / 2 + "px";
+      tooltip.style.top = rect.top - 35 + "px";
+    });
+
+    line.appendChild(point);
+  });
+
+  // Zelený fill
+  let max = milestones[milestones.length-1].amount;
+  let percent = currentAmount / max;
+  let fillWidth = percent * lineLength;
+  fill.style.width = fillWidth + "px";
+
+  // Najít poslední dosažený bod
+  let index = milestones.findIndex(m => m.amount > currentAmount);
+  if (index === -1) index = milestones.length - 1;
+  else index = index - 1;
+  let targetX = index * spacing;
+  
+  setTimeout(() => {
+    scrollArea.scrollLeft = targetX - (window.innerWidth/2 - 100);
+  }, 100);
+
+  // Kliknutí mimo tooltip/bod = schovat tooltip
+  document.addEventListener("click", (e) => {
+    if (!e.target.classList.contains("point") && e.target !== tooltip) {
+      tooltip.style.display = "none";
+    }
+  });
+</script>
+
+</body>
+</html>
