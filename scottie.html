@@ -121,7 +121,7 @@
     { amount: 700, text: "Pátý cíl – velký upgrade" }
   ];
 
-  const currentAmount = 250;
+  const currentAmount = 250; // <- změň na libovolné číslo
 
   const line = document.getElementById("line");
   const fill = document.getElementById("fill");
@@ -132,13 +132,14 @@
   const lineLength = (milestones.length - 1) * spacing + 200;
   line.style.width = lineLength + "px";
 
+  // Přidat body
   milestones.forEach((m, i) => {
     const point = document.createElement("div");
     point.classList.add("point");
     point.style.left = (i * spacing + 100) + "px";
     point.innerHTML = "<span>" + m.amount + "€</span>";
 
-    point.addEventListener("click", (e) => {
+    point.addEventListener("click", () => {
       tooltip.textContent = m.text;
       tooltip.style.display = "block";
 
@@ -151,23 +152,45 @@
     line.appendChild(point);
   });
 
-  // Zelený fill
-  let max = milestones[milestones.length-1].amount;
-  let percent = currentAmount / max;
-  let fillWidth = percent * lineLength;
+  // Funkce na výpočet skutečné šířky zeleného progressu
+  function getFillWidth(amount) {
+    if (amount <= 0) return 0;
+
+    // Pokud je menší než první milestone
+    if (amount <= milestones[0].amount) {
+      let ratio = amount / milestones[0].amount;
+      return 100 + ratio * spacing;
+    }
+
+    // Pokud je mezi milestone[i] a milestone[i+1]
+    for (let i = 0; i < milestones.length - 1; i++) {
+      let a = milestones[i].amount;
+      let b = milestones[i+1].amount;
+      if (amount <= b) {
+        let ratio = (amount - a) / (b - a);
+        return 100 + i * spacing + ratio * spacing;
+      }
+    }
+
+    // Pokud je víc než poslední milestone → konec linky
+    return lineLength;
+  }
+
+  // Nastavit délku zeleného pruhu
+  let fillWidth = getFillWidth(currentAmount);
   fill.style.width = fillWidth + "px";
 
-  // Najít poslední dosažený bod
+  // Posunout scroll na poslední dosažený bod
   let index = milestones.findIndex(m => m.amount > currentAmount);
   if (index === -1) index = milestones.length - 1;
   else index = index - 1;
   let targetX = index * spacing;
-  
+
   setTimeout(() => {
     scrollArea.scrollLeft = targetX - (window.innerWidth/2 - 100);
   }, 100);
 
-  // Kliknutí mimo tooltip/bod = schovat tooltip
+  // Kliknutí mimo schová tooltip
   document.addEventListener("click", (e) => {
     if (!e.target.classList.contains("point") && e.target !== tooltip) {
       tooltip.style.display = "none";
