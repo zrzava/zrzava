@@ -113,6 +113,7 @@
 </div>
 
 <script>
+  // Milestones – můžeš libovolně přidávat nebo měnit hodnoty
   const milestones = [
     { amount: 300, text: "První cíl – základní částka" },
     { amount: 400, text: "Druhý cíl – bonus navíc" },
@@ -121,16 +122,20 @@
     { amount: 700, text: "Pátý cíl – velký upgrade" }
   ];
 
-  const currentAmount = 250; // <- změň libovolně
+  const currentAmount = 250; // Změň na libovolnou částku
 
   const line = document.getElementById("line");
   const fill = document.getElementById("fill");
   const tooltip = document.getElementById("tooltip");
   const scrollArea = document.querySelector(".scroll-area");
 
-  const spacing = 200; // px mezi body
+  const spacing = 200; // px mezi body (rovnoměrně pro vizuální rozestup)
   const lineLength = (milestones.length - 1) * spacing;
   line.style.width = lineLength + "px";
+
+  // Určit min a max hodnotu milestone
+  const minAmount = milestones[0].amount;
+  const maxAmount = milestones[milestones.length - 1].amount;
 
   // Přidat body
   milestones.forEach((m, i) => {
@@ -151,13 +156,11 @@
     line.appendChild(point);
   });
 
-  // Funkce na výpočet progressu
+  // Funkce pro fill podle skutečných hodnot milestone
   function getFillWidth(amount) {
-    if (amount <= 0) return 0;
-
-    if (amount <= milestones[0].amount) {
-      let ratio = amount / milestones[0].amount;
-      return ratio * spacing;
+    if (amount <= minAmount) {
+      let ratio = amount / minAmount;
+      return ratio * spacing; // mezi 0 a prvním bodem
     }
 
     for (let i = 0; i < milestones.length - 1; i++) {
@@ -169,10 +172,10 @@
       }
     }
 
-    return lineLength;
+    return lineLength; // pokud víc než poslední milestone
   }
 
-  // Nastavit délku progressu
+  // Nastavit délku zeleného pruhu
   let fillWidth = getFillWidth(currentAmount);
   fill.style.width = fillWidth + "px";
 
@@ -186,7 +189,7 @@
     scrollArea.scrollLeft = targetX - (window.innerWidth/2);
   }, 100);
 
-  // Kliknutí mimo = zavře tooltip
+  // Kliknutí mimo schová tooltip
   document.addEventListener("click", (e) => {
     if (!e.target.classList.contains("point") && e.target !== tooltip) {
       tooltip.style.display = "none";
