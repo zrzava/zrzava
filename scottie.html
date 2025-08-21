@@ -121,29 +121,28 @@
     { amount: 700, text: "Pátý cíl – velký upgrade" }
   ];
 
-  const currentAmount = 250; // <- změň na libovolné číslo
+  const currentAmount = 250; // <- změň libovolně
 
   const line = document.getElementById("line");
   const fill = document.getElementById("fill");
   const tooltip = document.getElementById("tooltip");
   const scrollArea = document.querySelector(".scroll-area");
 
-  const spacing = 200;
-  const lineLength = (milestones.length - 1) * spacing + 200;
+  const spacing = 200; // px mezi body
+  const lineLength = (milestones.length - 1) * spacing;
   line.style.width = lineLength + "px";
 
   // Přidat body
   milestones.forEach((m, i) => {
     const point = document.createElement("div");
     point.classList.add("point");
-    point.style.left = (i * spacing + 100) + "px";
+    point.style.left = (i * spacing) + "px";
     point.innerHTML = "<span>" + m.amount + "€</span>";
 
     point.addEventListener("click", () => {
       tooltip.textContent = m.text;
       tooltip.style.display = "block";
 
-      // Pozice tooltipu nad bodem
       const rect = point.getBoundingClientRect();
       tooltip.style.left = rect.left + rect.width / 2 + "px";
       tooltip.style.top = rect.top - 35 + "px";
@@ -152,45 +151,42 @@
     line.appendChild(point);
   });
 
-  // Funkce na výpočet skutečné šířky zeleného progressu
+  // Funkce na výpočet progressu
   function getFillWidth(amount) {
     if (amount <= 0) return 0;
 
-    // Pokud je menší než první milestone
     if (amount <= milestones[0].amount) {
       let ratio = amount / milestones[0].amount;
-      return 100 + ratio * spacing;
+      return ratio * spacing;
     }
 
-    // Pokud je mezi milestone[i] a milestone[i+1]
     for (let i = 0; i < milestones.length - 1; i++) {
       let a = milestones[i].amount;
       let b = milestones[i+1].amount;
       if (amount <= b) {
         let ratio = (amount - a) / (b - a);
-        return 100 + i * spacing + ratio * spacing;
+        return i * spacing + ratio * spacing;
       }
     }
 
-    // Pokud je víc než poslední milestone → konec linky
     return lineLength;
   }
 
-  // Nastavit délku zeleného pruhu
+  // Nastavit délku progressu
   let fillWidth = getFillWidth(currentAmount);
   fill.style.width = fillWidth + "px";
 
-  // Posunout scroll na poslední dosažený bod
+  // Posunout scroll k poslednímu dosaženému bodu
   let index = milestones.findIndex(m => m.amount > currentAmount);
   if (index === -1) index = milestones.length - 1;
   else index = index - 1;
   let targetX = index * spacing;
 
   setTimeout(() => {
-    scrollArea.scrollLeft = targetX - (window.innerWidth/2 - 100);
+    scrollArea.scrollLeft = targetX - (window.innerWidth/2);
   }, 100);
 
-  // Kliknutí mimo schová tooltip
+  // Kliknutí mimo = zavře tooltip
   document.addEventListener("click", (e) => {
     if (!e.target.classList.contains("point") && e.target !== tooltip) {
       tooltip.style.display = "none";
